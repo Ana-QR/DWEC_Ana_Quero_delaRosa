@@ -134,8 +134,8 @@ class Estudiante{
 #asignaturas;
 
 constructor(id, nombre, edad, direccion){
-    if (/^([a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+)$/.test(nombre)) { //el gorrito indica una negacion, coincidirá con cualquier carácter que no esté dentro de los corchetes y el \s es para que coincida con cualquier caracter de espacio en blanco
-        throw new Error("El nombre solo debe contener letras y espacios")
+    if (!/^([a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+)$/.test(nombre)) { //el gorrito indica una negacion, coincidirá con cualquier carácter que no esté dentro de los corchetes y el \s es para que coincida con cualquier caracter de espacio en blanco
+        throw new Error("El nombre solo debe contener letras y espacios");
     }
     this.#id = id;
     this.#nombre = nombre;
@@ -153,7 +153,7 @@ get nombre() {
 }
 
 set nombre(nuevoNombre) {
-    if (/^([a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+)$/.test(nuevoNombre)) {
+    if (!/^([a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+)$/.test(nuevoNombre)) {
         throw new Error("El nombre solo debe contener letras y espacios");
     }
     this.#nombre = nuevoNombre;
@@ -266,12 +266,13 @@ class Asignatura{
     #nombre;
     #calificaciones;
     constructor(nombre){
-        if(!/^([a-zA-Z\sIVXLCDM]+)$/.test(nombre)){
+        if(!/^([a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+)$/.test(nombre)){
             throw new Error("El nombre de la asignatura solo puede contener letras, números y espacios.");
         }
         this.#nombre = nombre;
         this.#calificaciones = [];
     }
+
 
     addEstudiante(estudiante) {
         this.estudiantes.set(estudiante, []);
@@ -476,9 +477,9 @@ class ListaEstudiantes extends Lista{
     }
 
     mostrarDatos(){
-        const promedioAsignatura = estudiante.asignatura.calificaciones.reduce((a,b)=> a+b,0) / (estudiante.asignatura.calificaciones.lenght || 1); //promedio de una asignatura
         console.log("Reporte de estudiantes \n");
-        this.lista.forEach(estudiante =>{
+        this._getElementos().forEach(estudiante =>{
+            const promedioAsignatura = estudiante.asignatura.calificaciones.reduce((a,b)=> a+b,0) / (estudiante.asignatura.calificaciones.lenght || 1); //promedio de una asignatura
             console.log(`ID: ${estudiante.id}\n`);
             console.log(`Nombre: ${estudiante.nombre}\n`);
             console.log(`Edad: ${estudiante.edad}\n`);
