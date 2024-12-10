@@ -380,7 +380,7 @@ class ListaEstudiantes extends Lista {
 
         for (const estudiante of estudiantes) {
 
-            this.añadirEstudiante(estudiante);
+            this.addEstudiante(estudiante);
 
         }
     }
