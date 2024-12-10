@@ -2,6 +2,8 @@
  * Hecho por: Ana Quero de la Rosa
  */
 
+/*https://ana-qr.github.io/DWEC_QueroDeLaRosa_Ana-tareas/primertrimestre/index.html */
+
 /**
  * 2. Definición de Clases
  * 
@@ -239,7 +241,7 @@ calcularPromedio(){
     for(let asignatura in this.#asignaturas){
         const calificaciones = this.#asignaturas[asignatura].calificaciones;
         totalNotas += calificaciones.reduce((a,b)=> a + b, 0);
-        cantidadNotas += calificaciones.lenght;
+        cantidadNotas += calificaciones.length;
     }
 
     return cantidadNotas > 0 ? (totalNotas / cantidadNotas).toFixed(2) : 0;
@@ -264,18 +266,48 @@ buscarAsignaturas(patron) {
 
 class Asignatura{
     #nombre;
-    #calificaciones;
+    #calificaciones; //son las calificaciones generales, no están asociadas a ningún estudiante
+    #estudiantes;
+
     constructor(nombre){
         if(!/^([a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+)$/.test(nombre)){
-            throw new Error("El nombre de la asignatura solo puede contener letras, números y espacios.");
+            throw new Error("El nombre de la asignatura solo puede contener letras y espacios.");
         }
         this.#nombre = nombre;
-        this.#calificaciones = [];
+        this.#calificaciones = []; //calificaciones generales
+        this.#estudiantes = new Map() // map para asociar los estudiantes son sus calificaciones
     }
 
+    get nombre() {
+        return this.#nombre;
+    }
+
+    get calificaciones(){
+        return this.#calificaciones;
+    }
+
+    set nombre(nombre) {
+        this.#nombre = nombre;
+    }
+
+    set calificaciones(calificaciones){
+        this.#calificaciones = calificaciones;
+    }
+
+    get estudiantes(){
+        return this.#estudiantes;
+    }
+
+    set estudiantes(estudiantes){
+        this.#estudiantes = estudiantes;
+    }
 
     addEstudiante(estudiante) {
-        this.estudiantes.set(estudiante, []);
+        if(this.#estudiantes.has(estudiante)){
+            throw new Error(`${estudiante.nombre} ya está matriculado en ${this.#nombre}`);
+        }else{
+            this.#estudiantes.set(estudiante, []); //se inicializa un array vacío para sus calificaciones
+        }
     }
 
     eliminarEstudiante(estudiante) {
