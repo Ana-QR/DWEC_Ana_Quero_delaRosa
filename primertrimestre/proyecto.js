@@ -22,6 +22,8 @@
  *  - toString(): Devuelve una representación en texto de la dirección.
  */
 
+let rege
+
 class Direccion{
     #calle;
     #numero;
@@ -115,6 +117,7 @@ class Estudiante{
 #edad;
 #direccion;
 #asignaturas;
+#regex = /^([a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+)$/;
 
 constructor(id, nombre, edad, direccion){
     if (!/^([a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+)$/.test(nombre)) { //el gorrito indica una negacion, coincidirá con cualquier carácter que no esté dentro de los corchetes y el \s es para que coincida con cualquier caracter de espacio en blanco
@@ -522,6 +525,9 @@ while(eleccion != 0){
 
     switch(eleccion){
         case 1:
+            console.log("Ingresar la calle: ");
+            eleccion = window.prompt("Calle: ");
+            
             const calle = prompt("Ingrese la calle: ");
             const numero = prompt("Ingrese el número: ");
             const piso = prompt("Ingrese el piso (opcional): ");
