@@ -116,7 +116,6 @@ class Estudiante {
     #edad;
     #direccion;
     #asignaturas;
-    #regex = /^([a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+)$/;
 
     constructor(id, nombre, edad, direccion) {
         if (!/^([a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+)$/.test(nombre)) { //el gorrito indica una negacion, coincidirá con cualquier carácter que no esté dentro de los corchetes y el \s es para que coincida con cualquier caracter de espacio en blanco
@@ -465,13 +464,13 @@ listaDirecciones.push(new Direccion("Juan Pablo", 90, "4ºB", 18013, "Granada", 
 
 // Creación de Estudiantes
 
-listaEstudiantes.añadirEstudiante(new Estudiante("Paquita Salas", 21, listaDirecciones[0]));
-listaEstudiantes.añadirEstudiante(new Estudiante("Pablito Campos", 20, listaDirecciones[1]));
+listaEstudiantes.addEstudiante(new Estudiante("Paquita Salas", 21, listaDirecciones[0]));
+listaEstudiantes.addEstudiante(new Estudiante("Pablito Campos", 20, listaDirecciones[1]));
 
 // Creación de Asignaturas
 
-listaAsignaturas.añadirAsignatura(new Asignatura("Matemáticas"));
-listaAsignaturas.añadirAsignatura(new Asignatura("Historia"));
+listaAsignaturas.addAsignatura(new Asignatura("Matemáticas"));
+listaAsignaturas.addAsignatura(new Asignatura("Historia"));
 
 // Matriculación de Estudiantes
 
