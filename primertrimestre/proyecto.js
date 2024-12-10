@@ -521,13 +521,10 @@ while(eleccion != 0){
     console.log("15. Calcular promedio general");
     console.log("0. Salir");
 
-    eleccion = Number.parseInt(window.prompt("Elección:"));
+    eleccion = parseInt(prompt("ingrese el número de la opcion deseada:"));
 
     switch(eleccion){
         case 1:
-            console.log("Ingresar la calle: ");
-            eleccion = window.prompt("Calle: ");
-            
             const calle = prompt("Ingrese la calle: ");
             const numero = prompt("Ingrese el número: ");
             const piso = prompt("Ingrese el piso (opcional): ");
