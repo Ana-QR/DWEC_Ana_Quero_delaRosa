@@ -209,38 +209,26 @@ agregarCalificacion(asignatura, calificacion){
 
 //media de las notas del estudiante
 calcularPromedio(){
-    let totalNotas = 0;
-    let cantidadNotas = 0;
-
-    //el for in que se utiliza está diseñado para recorrer todas las propiedades enumerables de un objeto
-    /*  const ejemplo = { a: 1, b: 2, c: 3 };
-        for (let clave in ejemplo) {
-            console.log(clave); // Imprime: 'a', 'b', 'c'
-        } 
-        console.log(ejemplo[clave]); // Imprime: 1, 2, 3
-    */
-    for(let asignatura in this.#asignaturas){
-        const calificaciones = this.#asignaturas[asignatura].calificaciones;
-        totalNotas += calificaciones.reduce((a,b)=> a + b, 0);
-        cantidadNotas += calificaciones.length;
-    }
-
-    return cantidadNotas > 0 ? (totalNotas / cantidadNotas).toFixed(2) : 0;
+    const asignaturasCalificadas = this.#asignaturas.filter(a => typeof a[1] != "string");
+        
+    if(asignaturasCalificadas.length == 0) return "Sin evaluar";
+        
+    const resultado = asignaturasCalificadas.reduce((suma, asignatura) => suma += asignatura[1], 0) / asignaturasCalificadas.length;
+        
+    return Number(resultado).toFixed(2);
 }
 
-/*const calificaciones = this.asignaturas.flatMap(asignatura => asignatura.calificaciones);
-        if (calificaciones.length === 0) return 0;
-        const total = calificaciones.reduce((suma, nota) => suma + nota, 0);
-        return (total / calificaciones.length).toFixed(2);
- */
 
 //buscar asignaturas según un patrón de texto
 buscarAsignaturas(patron) {
     const regex = new RegExp(patron, "i");
     return Object.keys(this.#asignaturas).filter(asignatura => regex.test(asignatura));
-  }
+}
+
 
 }
+
+
 
 /**
  * 2.3. Clase Asignatura
@@ -324,25 +312,12 @@ class Asignatura{
         }
     }
 
-    getPromedio(){
-        if(this.#calificaciones.length === 0) return 0;
-        const total = this.#calificaciones.reduce((suma, calificacion)=> suma + calificacion, 0);
-        return (total / this.#calificaciones.length).toFixed(2);
-    }
+    eliminarCalificación(calificacion){
+        const indiceCalificacion = this.#calificaciones.indexOf(calificacion);
 
-    getPromedioPorEstudiante(estudiante) {
-        if (!this.estudiantes.has(estudiante)) {
-            throw new Error(`${estudiante.nombre} no está matriculado en ${this.#nombre}`);
-        }
+        if(indiceCalificacion == -1) throw new Error("Ningún estudiante ha sacado dicha calificación.");
 
-        const calificaciones = this.estudiantes.get(estudiante);
-        
-        if (calificaciones.length === 0){
-            return 0;
-        }
-            
-        const total = calificaciones.reduce((suma, nota) => suma + nota, 0);
-        return (total / calificaciones.length).toFixed(2);
+        this.#calificaciones.splice(indiceCalificacion, 1);
     }
 
     toString(){
@@ -405,11 +380,17 @@ class Lista{
  */
 
 class ListaEstudiantes extends Lista{
-    constructor (){
+    constructor (...estudiantes){
         super();
+
+        for(const estudiante of estudiantes){
+
+            this.añadirEstudiante(estudiante);
+
+        }
     }
 
-    obtenerPromedioGeneral(){
+    get promedioGeneral(){
         const estudiantes = this._getElementos();
         if (estudiantes.length === 0) return 0;
         const total = estudiantes.reduce((sum, estudiante) => sum + parseFloat(estudiante.calcularPromedio()), 0);
@@ -448,8 +429,14 @@ class ListaEstudiantes extends Lista{
 */
 
 class ListaAsignaturas extends Lista{
-    constructor(){
+    constructor(...asignaturas){
         super();
+
+        for(const asignatura of asignaturas){
+
+            this.addAsignatura(asignatura);
+
+        }
     }
 
     addAsignatura(asignatura){
@@ -552,7 +539,7 @@ listaEstudiantes.mostrarDatos();
 
 // Paso 8: Mostrar promedio general
 console.log("\nCalculando promedio general de todos los estudiantes...");
-const promedioGeneral = listaEstudiantes.obtenerPromedioGeneral();
+const promedioGeneral = listaEstudiantes.calcularPromedio();
 console.log(`Promedio General de Todos los Estudiantes: ${promedioGeneral}`);
 
 
