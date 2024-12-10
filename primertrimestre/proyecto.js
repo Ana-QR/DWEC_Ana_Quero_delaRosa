@@ -99,25 +99,6 @@ class Direccion{
 
 }
 
-// // función para pedir los datos al usuario y crear una dirección
-// function crearDireccion() {
-//     const calle = prompt("Introduce la calle:");
-//     const numero = prompt("Introduce el número:");
-//     const piso = prompt("Introduce el piso (si no tiene, deja vacío):");
-//     const codigoPostal = prompt("Introduce el código postal (5 dígitos):");
-//     const provincia = prompt("Introduce la provincia:");
-//     const localidad = prompt("Introduce la localidad:");
-  
-//     // creamos un objeto de tipo Direccion con los datos introducidos
-//     const direccion = new Direccion(calle, numero, piso, codigoPostal, provincia, localidad);
-  
-//     // mostramos la dirección en consola
-//     console.log("Dirección creada: " + direccion.toString());
-//   }
-  
-//   // llamamos a la función para crear una dirección
-//   crearDireccion();
-
 /**
  * 2.2. Clase Estudiante
  * 
@@ -143,7 +124,7 @@ constructor(id, nombre, edad, direccion){
     this.#nombre = nombre;
     this.#edad = edad >= 0 ? edad: 0; //si la edad es negativa se inicializa a 0, esto ayuda a que no puedan haber edades negativas
     this.#direccion = direccion;
-    this.#asignaturas = {};
+    this.#asignaturas = [];
 }
 
 get id() {
@@ -247,6 +228,12 @@ calcularPromedio(){
     return cantidadNotas > 0 ? (totalNotas / cantidadNotas).toFixed(2) : 0;
 }
 
+/*const calificaciones = this.asignaturas.flatMap(asignatura => asignatura.calificaciones);
+        if (calificaciones.length === 0) return 0;
+        const total = calificaciones.reduce((suma, nota) => suma + nota, 0);
+        return (total / calificaciones.length).toFixed(2);
+ */
+
 //buscar asignaturas según un patrón de texto
 buscarAsignaturas(patron) {
     const regex = new RegExp(patron, "i");
@@ -311,24 +298,30 @@ class Asignatura{
     }
 
     eliminarEstudiante(estudiante) {
-        this.estudiantes.delete(estudiante);
+        if (!this.estudiantes.has(estudiante)) {
+            throw new Error(`${estudiante.nombre} no está matriculado en ${this.#nombre}`);
+        }else{
+            this.estudiantes.delete(estudiante); //se elimina el estudiante de la asignatura
+        }
     }
 
     calificar(estudiante, nota) {
         if (!this.estudiantes.has(estudiante)) {
             throw new Error(`${estudiante.nombre} no está matriculado en ${this.#nombre}.`);
-        }
-        if (nota < 0 || nota > 10) {
+        }else if (nota < 0 || nota > 10) {
             throw new Error("La calificación debe estar entre 0 y 10.");
+        }else{
+            this.estudiantes.get(estudiante).push(nota); //añade la nota al array del estudiante
         }
-        this.estudiantes.get(estudiante).push(nota);
+        
     }
 
     addCalificaciones(calificacion){
         if(calificacion < 0 || calificacion > 10){
             throw new Error("La calificación debe estar entre 0 y 10.");
+        }else{
+            this.#calificaciones.push(calificacion);//añade calificaciones generales
         }
-        this.#calificaciones.push(calificacion);
     }
 
     getPromedio(){
@@ -337,99 +330,26 @@ class Asignatura{
         return (total / this.#calificaciones.length).toFixed(2);
     }
 
+    getPromedioPorEstudiante(estudiante) {
+        if (!this.estudiantes.has(estudiante)) {
+            throw new Error(`${estudiante.nombre} no está matriculado en ${this.#nombre}`);
+        }
+
+        const calificaciones = this.estudiantes.get(estudiante);
+        
+        if (calificaciones.length === 0){
+            return 0;
+        }
+            
+        const total = calificaciones.reduce((suma, nota) => suma + nota, 0);
+        return (total / calificaciones.length).toFixed(2);
+    }
+
     toString(){
-        return`${this.#nombre}, ${this.#calificaciones}`;
+        return`${this.#nombre}, ${this.#calificaciones}, ${this.#estudiantes}`;
     }
     
 }
-
-// function generarReporteEstudiantes(estudiantes) {
-//     estudiantes.forEach(estudiante => {
-//         console.log(estudiante.toString());
-//         estudiante.asignaturas.forEach((notas, asignatura) => {
-//             const promedio = notas.length ? (notas.reduce((a, b) => a + b, 0) / notas.length).toFixed(2) : "Sin calificaciones";
-//             console.log(`  ${asignatura.nombre}: Promedio ${promedio}`);
-//         });
-//         console.log(`  Promedio General del Estudiante: ${estudiante.getPromedio()}`);
-//     });
-// }
-
-// function calcularPromedioGeneral(estudiantes) {
-//     const totalPromedios = estudiantes.reduce((suma, estudiante) => suma + parseFloat(estudiante.getPromedio()), 0);
-//     return (totalPromedios / estudiantes.length).toFixed(2);
-// }
-
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////EJEMPLO DE USO DE LAS CLASES ANTERIORES/////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// // Crear una dirección
-// const direccion1 = new Direccion("Calle Mayor", 10, "2ºB", "28013", "Madrid", "Madrid");
-
-// // Crear un estudiante con la dirección
-// const estudiante1 = new Estudiante(1, "Juan Pérez", 20, direccion1);
-
-// // Mostrar información del estudiante
-// console.log(`Estudiante creado: 
-// ID: ${estudiante1.id}
-// Nombre: ${estudiante1.nombre}
-// Edad: ${estudiante1.edad}
-// Dirección: ${estudiante1.direccion.toString()}`);
-
-// // Matricular al estudiante en asignaturas
-// estudiante1.matricular("Matemáticas");
-// estudiante1.matricular("Historia");
-
-// // Agregar calificaciones
-// estudiante1.agregarCalificacion("Matemáticas", 9);
-// estudiante1.agregarCalificacion("Matemáticas", 7.5);
-// estudiante1.agregarCalificacion("Historia", 8);
-
-// // Mostrar promedio de calificaciones
-// console.log(`Promedio de ${estudiante1.nombre}: ${estudiante1.calcularPromedio()}`);
-
-// // Buscar asignaturas por patrón
-// const asignaturasEncontradas = estudiante1.buscarAsignaturas("mat");
-// console.log(`Asignaturas encontradas: ${asignaturasEncontradas.join(", ")}`);
-
-// // Desmatricular al estudiante de una asignatura
-// estudiante1.desmatricular("Historia");
-
-// // Mostrar asignaturas finales
-// console.log(`Asignaturas actuales de ${estudiante1.nombre}:`);
-// for (let asignatura in estudiante1.asignaturas) {
-//     console.log(`- ${asignatura}`);
-// }
-
-// // Crear asignaturas
-// const matematicas = new Asignatura("Matemáticas");
-// const historia = new Asignatura("Historia");
-
-// // Agregar calificaciones a las asignaturas
-// matematicas.addCalificaciones(9);
-// matematicas.addCalificaciones(8.5);
-// historia.addCalificaciones(7);
-// historia.addCalificaciones(6.5);
-
-// // Mostrar promedio de calificaciones por asignatura
-// console.log(`Promedio de ${matematicas.nombre}: ${matematicas.getPromedio()}`);
-// console.log(`Promedio de ${historia.nombre}: ${historia.getPromedio()}`);
-
-// // Crear una asignatura con un nombre inválido (esto lanzará un error)
-// try {
-//     const asignaturaInvalida = new Asignatura("Matemáticas_123");
-// } catch (error) {
-//     console.error("Error al crear la asignatura:", error.message);
-// }
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Herencia
 class Lista{
@@ -461,7 +381,7 @@ class Lista{
 
     buscar(patron){
         const regex = new RegExp(patron, 'i');
-        return this.#elementos(elemento => regex.test(elemento.nombre || elemento.toString()));
+        return this.#elementos.filter(elemento => regex.test(elemento.nombre || elemento.toString()));
     }
 
     get size() {
@@ -492,7 +412,7 @@ class ListaEstudiantes extends Lista{
     obtenerPromedioGeneral(){
         const estudiantes = this._getElementos();
         if (estudiantes.length === 0) return 0;
-        const total = estudiantes.reduce((sum, estudiante) => sum + parseFloat(estudiante.getOverallAverage()), 0);
+        const total = estudiantes.reduce((sum, estudiante) => sum + parseFloat(estudiante.calcularPromedio()), 0);
         return (total / estudiantes.length).toFixed(2);
     }
 
@@ -508,20 +428,18 @@ class ListaEstudiantes extends Lista{
         return super.buscar(nombre);
     }
 
-    mostrarDatos(){
-        console.log("Reporte de estudiantes \n");
-        this._getElementos().forEach(estudiante =>{
-            const promedioAsignatura = estudiante.asignatura.calificaciones.reduce((a,b)=> a+b,0) / (estudiante.asignatura.calificaciones.lenght || 1); //promedio de una asignatura
-            console.log(`ID: ${estudiante.id}\n`);
-            console.log(`Nombre: ${estudiante.nombre}\n`);
-            console.log(`Edad: ${estudiante.edad}\n`);
-            console.log(`ASIGNATURAS:\n`);
-            console.log(`Nombre: ${estudiante.asignatura}\n`);
-            console.log(`Nota: ${estudiante.calificaciones}\n`);
-            console.log(`PROMEDIO DE LA ASIGNATURA:\n`);
-            console.log(`Promedio: ${promedioAsignatura.toFixed(2)}\n`);
-        })
+    mostrarDatos() {
+        console.log("Reporte de estudiantes:");
+        this._getElementos().forEach(estudiante => {
+            console.groupCollapsed(`Estudiante: ${estudiante.nombre}`);
+            console.log(`ID: ${estudiante.id}`);
+            console.log(`Edad: ${estudiante.edad}`);
+            console.log(`Promedio de calificaciones: ${estudiante.calcularPromedio()}`);
+            console.log(`Asignaturas: ${Object.keys(estudiante.asignaturas).join(', ')}`);
+            console.groupEnd();
+        });
     }
+    
 }
 
 
@@ -553,38 +471,130 @@ class ListaAsignaturas extends Lista{
 
 // Ejemplo de uso completo
 
-// Crear direcciones
-const direccion1 = new Direccion("Calle Falsa", 123, 1, "12345", "Provincia1", "Localidad1");
-const direccion2 = new Direccion("Avenida Real", 456, 2, "67890", "Provincia2", "Localidad2");
+// Paso 1: Crear direcciones
+const calle1 = prompt("Ingrese la calle de la primera dirección:");
+const numero1 = parseInt(prompt("Ingrese el número de la primera dirección:"));
+const piso1 = parseInt(prompt("Ingrese el piso de la primera dirección:"));
+const codigoPostal1 = prompt("Ingrese el código postal de la primera dirección:");
+const provincia1 = prompt("Ingrese la provincia de la primera dirección:");
+const localidad1 = prompt("Ingrese la localidad de la primera dirección:");
+const direccion1 = new Direccion(calle1, numero1, piso1, codigoPostal1, provincia1, localidad1);
+console.log("Dirección creada:", direccion1);
 
-// Crear estudiantes
-const estudiante1 = new Estudiante(1, "Juan Pérez", 20, direccion1);
-const estudiante2 = new Estudiante(2, "María López", 22, direccion2);
+const calle2 = prompt("Ingrese la calle de la segunda dirección:");
+const numero2 = parseInt(prompt("Ingrese el número de la segunda dirección:"));
+const piso2 = parseInt(prompt("Ingrese el piso de la segunda dirección:"));
+const codigoPostal2 = prompt("Ingrese el código postal de la segunda dirección:");
+const provincia2 = prompt("Ingrese la provincia de la segunda dirección:");
+const localidad2 = prompt("Ingrese la localidad de la segunda dirección:");
+const direccion2 = new Direccion(calle2, numero2, piso2, codigoPostal2, provincia2, localidad2);
+console.log("Dirección creada:", direccion2);
 
-// Crear asignaturas
-const matematicas = new Asignatura("Matemáticas");
-const historia = new Asignatura("Historia");
+// Paso 2: Crear estudiantes
+const id1 = parseInt(prompt("Ingrese el ID del primer estudiante:"));
+const nombre1 = prompt("Ingrese el nombre del primer estudiante:");
+const edad1 = parseInt(prompt("Ingrese la edad del primer estudiante:"));
+const estudiante1 = new Estudiante(id1, nombre1, edad1, direccion1);
+console.log("Estudiante creado:", estudiante1);
 
-// Matricular estudiantes en asignaturas
+const id2 = parseInt(prompt("Ingrese el ID del segundo estudiante:"));
+const nombre2 = prompt("Ingrese el nombre del segundo estudiante:");
+const edad2 = parseInt(prompt("Ingrese la edad del segundo estudiante:"));
+const estudiante2 = new Estudiante(id2, nombre2, edad2, direccion2);
+console.log("Estudiante creado:", estudiante2);
+
+// Paso 3: Crear asignaturas
+const nombreAsignatura1 = prompt("Ingrese el nombre de la primera asignatura:");
+const matematicas = new Asignatura(nombreAsignatura1);
+console.log("Asignatura creada:", matematicas);
+
+const nombreAsignatura2 = prompt("Ingrese el nombre de la segunda asignatura:");
+const historia = new Asignatura(nombreAsignatura2);
+console.log("Asignatura creada:", historia);
+
+// Paso 4: Matricular estudiantes en asignaturas
+console.log("\nMatriculando estudiantes...");
 estudiante1.matricular(matematicas);
+console.log(`Estudiante ${estudiante1.nombre} matriculado en ${matematicas.nombre}`);
+
 estudiante1.matricular(historia);
+console.log(`Estudiante ${estudiante1.nombre} matriculado en ${historia.nombre}`);
+
 estudiante2.matricular(matematicas);
+console.log(`Estudiante ${estudiante2.nombre} matriculado en ${matematicas.nombre}`);
 
-// Agregar calificaciones
-estudiante1.agregarCalificacion("Matemáticas", 9);
-estudiante1.agregarCalificacion("Matemáticas", 7.5);
-estudiante1.agregarCalificacion("Historia", 8);
+// Paso 5: Agregar calificaciones
+console.log("\nAgregando calificaciones...");
+const calificacion1 = parseFloat(prompt(`Ingrese la calificación para ${estudiante1.nombre} en ${matematicas.nombre}:`));
+estudiante1.agregarCalificacion("Matemáticas", calificacion1);
 
-estudiante2.agregarCalificacion("Matemáticas", 7);
-estudiante2.agregarCalificacion("Matemáticas", 6.5);
+const calificacion2 = parseFloat(prompt(`Ingrese otra calificación para ${estudiante1.nombre} en ${matematicas.nombre}:`));
+estudiante1.agregarCalificacion("Matemáticas", calificacion2);
 
-// Crear lista de estudiantes y agregar estudiantes
+const calificacion3 = parseFloat(prompt(`Ingrese la calificación para ${estudiante1.nombre} en ${historia.nombre}:`));
+estudiante1.agregarCalificacion("Historia", calificacion3);
+
+const calificacion4 = parseFloat(prompt(`Ingrese la calificación para ${estudiante2.nombre} en ${matematicas.nombre}:`));
+estudiante2.agregarCalificacion("Matemáticas", calificacion4);
+
+const calificacion5 = parseFloat(prompt(`Ingrese otra calificación para ${estudiante2.nombre} en ${matematicas.nombre}:`));
+estudiante2.agregarCalificacion("Matemáticas", calificacion5);
+
+// Paso 6: Crear lista de estudiantes y agregar estudiantes
 const listaEstudiantes = new ListaEstudiantes();
 listaEstudiantes.addEstudiante(estudiante1);
 listaEstudiantes.addEstudiante(estudiante2);
+console.log("Estudiantes agregados a la lista.");
 
-// Mostrar reporte de estudiantes
+// Paso 7: Mostrar reporte de estudiantes
+console.log("\nMostrando reporte de estudiantes:");
 listaEstudiantes.mostrarDatos();
 
-// Mostrar promedio general de todos los estudiantes
-console.log(`Promedio General de Todos los Estudiantes: ${listaEstudiantes.obtenerPromedioGeneral()}`);
+// Paso 8: Mostrar promedio general
+console.log("\nCalculando promedio general de todos los estudiantes...");
+const promedioGeneral = listaEstudiantes.obtenerPromedioGeneral();
+console.log(`Promedio General de Todos los Estudiantes: ${promedioGeneral}`);
+
+
+
+
+
+
+
+
+// // Crear direcciones predefinidas
+// const direccion1 = new Direccion("Calle Falsa", 123, 1, "23001", "Jaén", "Porcuna");
+// const direccion2 = new Direccion("Avenida Siempreviva", 742, 2, "23002", "Jaén", "Jaén");
+
+// // Crear estudiantes
+// const estudiante1 = new Estudiante(1, "Juan Pérez", 20, direccion1);
+// const estudiante2 = new Estudiante(2, "María López", 22, direccion2);
+
+// // Crear asignaturas predefinidas
+// const matematicas = new Asignatura("Matemáticas");
+// const historia = new Asignatura("Historia");
+
+// // Matricular estudiantes en asignaturas
+// estudiante1.matricular(matematicas);
+// estudiante1.matricular(historia);
+// estudiante2.matricular(matematicas);
+
+// // Agregar calificaciones predefinidas
+// estudiante1.agregarCalificacion("Matemáticas", 9);
+// estudiante1.agregarCalificacion("Historia", 7);
+// estudiante2.agregarCalificacion("Matemáticas", 6);
+// estudiante2.agregarCalificacion("Matemáticas", 8);
+
+// // Crear lista de estudiantes
+// const listaEstudiantes = new ListaEstudiantes();
+// listaEstudiantes.addEstudiante(estudiante1);
+// listaEstudiantes.addEstudiante(estudiante2);
+
+// // Mostrar los datos de los estudiantes
+// console.log("\nMostrando reporte de estudiantes:");
+// listaEstudiantes.mostrarDatos();
+
+// // Mostrar el promedio general de calificaciones
+// console.log("\nCalculando promedio general de todos los estudiantes...");
+// const promedioGeneral = listaEstudiantes.obtenerPromedioGeneral();
+// console.log(`Promedio General: ${promedioGeneral}`);
