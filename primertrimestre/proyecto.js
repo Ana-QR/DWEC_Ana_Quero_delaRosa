@@ -210,11 +210,15 @@ class Estudiante {
 
     //media de las notas del estudiante
     calcularPromedio() {
-        const asignaturasCalificadas = this.#asignaturas.filter(a => typeof a[1] != "string");
+        // Filter out subjects with no grades
+        const asignaturasCalificadas = Object.values(this.#asignaturas).filter(asignatura => asignatura.calificaciones.length > 0);
 
-        if (asignaturasCalificadas.length == 0) return "Sin evaluar";
+        if (asignaturasCalificadas.length === 0) return "Sin evaluar";
 
-        const resultado = asignaturasCalificadas.reduce((suma, asignatura) => suma += asignatura[1], 0) / asignaturasCalificadas.length;
+        const resultado = asignaturasCalificadas.reduce((suma, asignatura) => {
+            const promedioAsignatura = asignatura.calificaciones.reduce((a, b) => a + b, 0) / asignatura.calificaciones.length;
+            return suma + promedioAsignatura;
+        }, 0) / asignaturasCalificadas.length;
 
         return Number(resultado).toFixed(2);
     }
@@ -452,56 +456,20 @@ class ListaAsignaturas extends Lista {
 }
 
 //PROGRAMA
-const listaEstudiantes = new ListaEstudiantes();
-const listaAsignaturas = new ListaAsignaturas();
-let listaDirecciones = [];
-let eleccion;
+// Inicialización de estructuras de datos
+const listaEstudiantes = [];
+const listaAsignaturas = [];
+const listaDirecciones = [];
 
-// Creación de Direcciones
-
-listaDirecciones.push(new Direccion("Emilio Sebastián", 30, " ", 23790, "Jaén", "Porcuna"));
-listaDirecciones.push(new Direccion("Juan Pablo", 90, "4ºB", 18013, "Granada", "Granada"));
-
-// Creación de Estudiantes
-
-listaEstudiantes.addEstudiante(new Estudiante("Paquita Salas", 21, listaDirecciones[0]));
-listaEstudiantes.addEstudiante(new Estudiante("Pablito Campos", 20, listaDirecciones[1]));
-
-// Creación de Asignaturas
-
-listaAsignaturas.addAsignatura(new Asignatura("Matemáticas"));
-listaAsignaturas.addAsignatura(new Asignatura("Historia"));
-
-// Matriculación de Estudiantes
-
-listaEstudiantes.lista[0].matricular(listaAsignaturas.lista[0]);
-listaEstudiantes.lista[0].matricular(listaAsignaturas.lista[1]);
-
-listaEstudiantes.lista[1].matricular(listaAsignaturas.lista[0]);
-listaEstudiantes.lista[1].matricular(listaAsignaturas.lista[1]);
-
-// Desmatriculaciones de Estudiantes
-
-listaEstudiantes.lista[0].desmatricular(listaAsignaturas.lista[0]);
-
-// Calificación de Estudiantes
-
-listaEstudiantes.lista[0].calificar(listaAsignaturas.lista[0], 10);
-listaEstudiantes.lista[0].calificar(listaAsignaturas.lista[1], 9.3);
-
-listaEstudiantes.lista[1].calificar(listaAsignaturas.lista[1], 9.4);
-
-
-// Bucle while
-
-while (eleccion != 0) {
-    console.log("Menú de opciones: ")
+// Función para mostrar el menú
+function mostrarMenu() {
+    console.log("\nMenú de opciones:");
     console.log("1. Crear dirección");
     console.log("2. Crear estudiante");
     console.log("3. Crear asignatura");
     console.log("4. Eliminar dirección");
     console.log("5. Eliminar estudiante");
-    console.log("6. Eliminar asignatura")
+    console.log("6. Eliminar asignatura");
     console.log("7. Matricular a un estudiante en una asignatura");
     console.log("8. Desmatricular a un estudiante de una asignatura");
     console.log("9. Mostrar direcciones");
@@ -512,220 +480,119 @@ while (eleccion != 0) {
     console.log("14. Buscar asignatura");
     console.log("15. Calcular promedio general");
     console.log("0. Salir");
+}
 
-    eleccion = parseInt(prompt("ingrese el número de la opcion deseada:"));
+// Función principal
+function main() {
+    let eleccion;
+    do {
+        mostrarMenu();
+        eleccion = parseInt(prompt("Ingrese el número de la opción deseada:"));
 
-    switch (eleccion) {
-        case 1:
-            const calle = prompt("Ingrese la calle: ");
-            const numero = prompt("Ingrese el número: ");
-            const piso = prompt("Ingrese el piso (opcional): ");
-            const codigoPostal = prompt("Ingrese el código postal: ");
-            const provincia = prompt("Ingrese la provincia: ");
-            const localidad = prompt("Ingrese la localidad: ");
-            listaDirecciones.push(new Direccion(calle, numero, piso, codigoPostal, provincia, localidad));
-            console.log("Dirección creada con éxito.");
-            break;
+        switch (eleccion) {
+            case 1:
+                crearDireccion();
+                break;
+            case 2:
+                crearEstudiante();
+                break;
+            case 3:
+                crearAsignatura();
+                break;
+            case 13:
+                const nombreEstudiante = prompt("Ingrese el nombre del estudiante a buscar: ");
+                buscar(nombreEstudiante);
+                break;
 
-        case 2:
-            const id = parseInt(prompt("Ingrese el ID del estudiante: "));
-            const nombre = prompt("Ingrese el nombre del estudiante: ");
-            const edad = parseInt(prompt("Ingrese la edad del estudiante: "));
-            console.log("Seleccione una dirección para el estudiante:");
-            listaDirecciones.forEach((direccion, indice) => {
-                console.log(`${indice + 1}. ${direccion}`);
-            });
-            const indiceDireccion = parseInt(prompt("Ingrese el número de la dirección: ")) - 1;
-            if (indiceDireccion >= 0 && indiceDireccion < listaDirecciones.length) {
-                const direccionEstudiante = listaDirecciones[indiceDireccion];
-                listaEstudiantes.push(new Estudiante(nombre, edad, direccionEstudiante));
-                console.log("Estudiante creado con éxito.");
-            } else {
-                console.log("Índice de dirección no válido.");
-            }
-            break;
+            case 14:
+                const nombreAsignatura = prompt("Ingrese el nombre de la asignatura a buscar: ");
+                buscar(nombreAsignatura);
+                break;
 
-        case 3:
-            const nombreAsignatura = prompt("Ingrese el nombre de la asignatura: ");
-            listaAsignaturas.push(new Asignatura(nombreAsignatura));
-            console.log("Asignatura creada con éxito.");
-            break;
-
-        case 4:
-            console.log("Seleccione la dirección a eliminar:");
-            listaDirecciones.forEach((direccion, indice) => {
-                console.log(`${indice + 1}. ${direccion}`);
-            });
-            const indiceEliminar = parseInt(prompt("Ingrese el número de la dirección a eliminar: ")) - 1;
-            if (indiceEliminar >= 0 && indiceEliminar < listaDirecciones.length) {
-                listaDirecciones.splice(indiceEliminar, 1);
-                console.log("Dirección eliminada con éxito.");
-            } else {
-                console.log("Índice no válido.");
-            }
-            break;
-
-        case 5:
-            console.log("Seleccione el estudiante a eliminar:");
-            listaEstudiantes.forEach((estudiante, index) => {
-                console.log(`${indice + 1}. ${estudiante.nombre}`);
-            });
-            const indiceEstudianteEliminar = parseInt(prompt("Ingrese el número del estudiante a eliminar: ")) - 1;
-            if (indiceEstudianteEliminar >= 0 && indiceEstudianteEliminar < listaEstudiantes.length) {
-                listaEstudiantes.splice(indiceEstudianteEliminar, 1);
-                console.log("Estudiante eliminado con éxito.");
-            } else {
-                console.log("Índice no válido.");
-            }
-            break;
-
-        case 6:
-            console.log("Seleccione la asignatura a eliminar:");
-            listaAsignaturas.forEach((asignatura, indice) => {
-                console.log(`${indice + 1}. ${asignatura.nombre}`);
-            });
-            const indiceAsignaturaEliminar = parseInt(prompt("Ingrese el número de la asignatura a eliminar: ")) - 1;
-            if (indiceAsignaturaEliminar >= 0 && indiceAsignaturaEliminar < listaAsignaturas.length) {
-                listaAsignaturas.splice(indiceAsignaturaEliminar, 1);
-                console.log("Asignatura eliminada con éxito.");
-            } else {
-                console.log("Índice no válido.");
-            }
-            break;
-
-        case 7:
-            console.log("Seleccione un estudiante para matricular:");
-            listaEstudiantes.forEach((estudiante, indice) => {
-                console.log(`${indice + 1}. ${estudiante.nombre}`);
-            });
-            const indiceEstudiante = parseInt(prompt("Ingrese el número del estudiante: ")) - 1;
-
-            if (indiceEstudiante >= 0 && indiceEstudiante < listaEstudiantes.length) {
-                const estudianteSeleccionado = listaEstudiantes[indiceEstudiante];
-                console.log("Seleccione una asignatura:");
-                listaAsignaturas.forEach((asignatura, indice) => {
-                    console.log(`${indice + 1}. ${asignatura.nombre}`);
+            case 15:
+                console.log("Seleccione un estudiante para calcular el promedio:");
+                listaEstudiantes.forEach((estudiante, indice) => {
+                    console.log(`${indice + 1}. ${estudiante.nombre}`);
                 });
-                const indiceAsignatura = parseInt(prompt("Ingrese el número de la asignatura: ")) - 1;
-
-                if (indiceAsignatura >= 0 && indiceAsignatura < listaAsignaturas.length) {
-                    const asignaturaSeleccionada = listaAsignaturas[indiceAsignatura];
-                    estudianteSeleccionado.matricular(asignaturaSeleccionada);
-                    console.log(`Estudiante matriculado en ${asignaturaSeleccionada.nombre}.`);
+                const indiceEstudiantePromedio = parseInt(prompt("Ingrese el número del estudiante: ")) - 1;
+                if (indiceEstudiantePromedio >= 0 && indiceEstudiantePromedio < listaEstudiantes.length) {
+                    const estudianteParaPromedio = listaEstudiantes[indiceEstudiantePromedio];
+                    const promedio = estudianteParaPromedio.calcularPromedio();
+                    console.log(`El promedio de calificaciones de ${estudianteParaPromedio.nombre} es: ${promedio}`);
                 } else {
-                    console.log("Índice de asignatura no válido.");
+                    console.log("Índice de estudiante no válido.");
                 }
-            } else {
-                console.log("Índice de estudiante no válido.");
-            }
-            break;
+                break;
 
-        case 8:
-            console.log("Seleccione un estudiante para desmatricular:");
-            listaEstudiantes.forEach((estudiante, indice) => {
-                console.log(`${indice + 1}. ${estudiante.nombre}`);
-            });
-            const indiceEstudianteDesmatricular = parseInt(prompt("Ingrese el número del estudiante: ")) - 1;
+            case 0:
+                console.log("Saliendo del programa...");
+                break;
 
-            if (indiceEstudianteDesmatricular >= 0 && indiceEstudianteDesmatricular < listaEstudiantes.length) {
-                const estudianteParaDesmatricular = listaEstudiantes[indiceEstudianteDesmatricular];
-                console.log("Seleccione una asignatura para desmatricular:");
-                estudianteParaDesmatricular.asignaturas.forEach((asignatura, indice) => {
-                    console.log(`${indice + 1}. ${asignatura.nombre}`);
-                });
-                const indiceAsignaturaDesmatricular = parseInt(prompt("Ingrese el número de la asignatura: ")) - 1;
+            default:
+                console.log("Opción no válida. Intente de nuevo.");
 
-                if (indiceAsignaturaDesmatricular >= 0 && indiceAsignaturaDesmatricular < estudianteParaDesmatricular.asignaturas.length) {
-                    const asignaturaDesmatriculada = estudianteParaDesmatricular.asignaturas[indiceAsignaturaDesmatricular];
-                    estudianteParaDesmatricular.desmatricular(asignaturaDesmatriculada);
-                    console.log(`Estudiante desmatriculado de ${asignaturaDesmatriculada.nombre}.`);
-                } else {
-                    console.log("Índice de asignatura no válido.");
-                }
-            } else {
-                console.log("Índice de estudiante no válido.");
-            }
-            break;
+        }
+    } while (eleccion !== 0);
+}
 
-        case 9:
-            console.log("Lista de direcciones:");
-            listaDirecciones.forEach((direccion, indice) => {
-                console.log(`${indice + 1}. ${direccion}`);
-            });
-            break;
+// Funciones auxiliares
+function crearDireccion() {
+    const calle = prompt("Ingrese la calle:");
+    const numero = prompt("Ingrese el número:");
+    const piso = prompt("Ingrese el piso (opcional):");
+    const codigoPostal = prompt("Ingrese el código postal:");
+    const provincia = prompt("Ingrese la provincia:");
+    const localidad = prompt("Ingrese la localidad:");
 
-        case 10:
-            console.log("Lista de estudiantes:");
-            listaEstudiantes.forEach((estudiante, indice) => {
-                console.log(`${indice + 1}. ${estudiante.nombre}, Edad: ${estudiante.edad}, Dirección: ${estudiante.direccion}`);
-            });
-            break;
+    listaDirecciones.push(new Direccion(calle, numero, piso, codigoPostal, provincia, localidad));
+    console.log("Dirección creada con éxito.");
+}
 
-        case 11:
-            console.log("Lista de asignaturas:");
-            listaAsignaturas.forEach((asignatura, indice) => {
-                console.log(`${indice + 1}. ${asignatura.nombre}`);
-            });
-            break;
+function crearEstudiante() {
+    const id = parseInt(prompt("Ingrese el ID del estudiante:"));
+    const nombre = prompt("Ingrese el nombre del estudiante:");
+    const edad = parseInt(prompt("Ingrese la edad del estudiante:"));
 
-        case 12:
-            console.log("Seleccione un estudiante para calificar:");
-            listaEstudiantes.forEach((estudiante, indice) => {
-                console.log(`${indice + 1}. ${estudiante.nombre}`);
-            });
-            const indiceEstudianteCalificar = parseInt(prompt("Ingrese el número del estudiante: ")) - 1;
+    console.log("Seleccione una dirección para el estudiante:");
+    listaDirecciones.forEach((direccion, indice) => {
+        console.log(`${indice + 1}. ${direccion}`);
+    });
 
-            if (indiceEstudianteCalificar >= 0 && indiceEstudianteCalificar < listaEstudiantes.length) {
-                const estudianteParaCalificar = listaEstudiantes[indiceEstudianteCalificar];
-                console.log("Seleccione una asignatura:");
-                listaAsignaturas.forEach((asignatura, indice) => {
-                    console.log(`${indice + 1}. ${asignatura.nombre}`);
-                });
-                const indiceAsignaturaCalificar = parseInt(prompt("Ingrese el número de la asignatura: ")) - 1;
-
-                if (indiceAsignaturaCalificar >= 0 && indiceAsignaturaCalificar < listaAsignaturas.length) {
-                    const asignaturaParaCalificar = listaAsignaturas[indiceAsignaturaCalificar];
-                    const calificacion = parseFloat(prompt("Ingrese la calificación (0-10): "));
-                    estudianteParaCalificar.calificar(asignaturaParaCalificar, calificacion);
-                    console.log(`Calificación registrada para ${asignaturaParaCalificar.nombre}.`);
-                } else {
-                    console.log("Índice de asignatura no válido.");
-                }
-            } else {
-                console.log("Índice de estudiante no válido.");
-            }
-            break;
-
-        case 13:
-            const nombreEstudiante = prompt("Ingrese el nombre del estudiante a buscar: ");
-            buscar(nombreEstudiante);
-            break;
-
-        case 14:
-            const nombreAsignatura1 = prompt("Ingrese el nombre de la asignatura a buscar: ");
-            buscar(nombreAsignatura1);
-            break;
-
-        case 15:
-            console.log("Seleccione un estudiante para calcular el promedio:");
-            listaEstudiantes.forEach((estudiante, indice) => {
-                console.log(`${indice + 1}. ${estudiante.nombre}`);
-            });
-            const indiceEstudiantePromedio = parseInt(prompt("Ingrese el número del estudiante: ")) - 1;
-
-            if (indiceEstudiantePromedio >= 0 && indiceEstudiantePromedio < listaEstudiantes.length) {
-                const estudianteParaPromedio = listaEstudiantes[indiceEstudiantePromedio];
-                const promedio = estudianteParaPromedio.calcularPromedio();
-                console.log(`El promedio de calificaciones de ${estudianteParaPromedio.nombre} es: ${promedio}`);
-            } else {
-                console.log("Índice de estudiante no válido.");
-            }
-            break;
-
-        case 0:
-            console.log("Saliendo del programa...");
-            break;
-        default:
-            console.log("Opción no válida. Intente de nuevo.");
+    const indiceDireccion = parseInt(prompt("Ingrese el número de la dirección:")) - 1;
+    if (indiceDireccion >= 0 && indiceDireccion < listaDirecciones.length) {
+        const direccionEstudiante = listaDirecciones[indiceDireccion];
+        listaEstudiantes.push(new Estudiante(id, nombre, edad, direccionEstudiante));
+        console.log("Estudiante creado con éxito.");
+    } else {
+        console.log("Índice de dirección no válido.");
     }
 }
+
+function crearAsignatura() {
+    const nombreAsignatura = prompt("Ingrese el nombre de la asignatura:");
+    listaAsignaturas.push(new Asignatura(nombreAsignatura));
+    console.log("Asignatura creada con éxito.");
+}
+
+//Funciones para eliminar
+function eliminarEstudiante(){
+    const id = parseInt(prompt("Introduce el ID del estudiante que deseas eliminar:"), 10);
+    listaEstudiantes.eliminarEstudiante(id);
+}
+
+// Función para buscar estudiante o asignatura
+function buscar(nombre) {
+    const estudianteEncontrado = listaEstudiantes.find(e => e.nombre.toLowerCase().includes(nombre.toLowerCase()));
+    const asignaturaEncontrada = listaAsignaturas.find(a => a.nombre.toLowerCase().includes(nombre.toLowerCase()));
+
+    if (estudianteEncontrado) {
+        console.log(`Estudiante encontrado: ${estudianteEncontrado.nombre}`);
+    } else if (asignaturaEncontrada) {
+        console.log(`Asignatura encontrada: ${asignaturaEncontrada.nombre}`);
+    } else {
+        console.log("No se encontró ningún estudiante o asignatura con ese nombre.");
+    }
+}
+
+// Iniciar el programa
+main();
