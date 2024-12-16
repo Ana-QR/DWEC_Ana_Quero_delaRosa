@@ -22,6 +22,13 @@
  *  - toString(): Devuelve una representación en texto de la dirección.
  */
 
+/**
+ * Sistema de Gestión Académica
+ * Desarrollado por: Ana Quero de la Rosa
+ * 
+ * Sistema de gestión de estudiantes, asignaturas y direcciones 
+ * utilizando programación orientada a objetos en JavaScript.
+ */
 
 class Direccion {
     #calle;
