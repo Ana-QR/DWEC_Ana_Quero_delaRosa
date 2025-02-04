@@ -6,7 +6,194 @@
 
 
 /*
-2.1. Clase Direccion
+Clase Persona
+Es la clase de la que va a heredar estudiante, cualquier estudiante es una persona
+
+Atributos:
+    -nombre
+    -edad
+    -dirección
+
+*/
+class Persona{
+    #nombre;
+    #edad;
+    #direccion;
+
+    constructor(nombre, edad, direccion){
+        if (!/^([a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+)$/.test(nombre)) { //el gorrito indica una negacion, coincidirá con cualquier carácter que no esté dentro de los corchetes y el \s es para que coincida con cualquier caracter de espacio en blanco
+            throw new Error("El nombre solo debe contener letras y espacios");
+        }
+        this.#edad = edad >= 0 ? edad : 0; //si la edad es negativa se inicializa a 0, esto ayuda a que no puedan haber edades negativas
+        this.#direccion = direccion;
+    }
+
+    ///////GETTER///////
+    get nombre(){
+        return this.#nombre;
+    }
+
+    get edad(){
+        return this.#edad;
+    }
+
+    get direccion(){
+        return this.#direccion;
+    }
+
+    ///////SETTER///////
+    set nombre(nombreNuevo) {
+        if (!/^([a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+)$/.test(nombreNuevo)) {
+            throw new Error("El nombre solo debe contener letras y espacios");
+        }
+        this.#nombre = nombreNuevo;
+    }
+
+    set edad(edadNueva) {
+        if (edadNueva < 0) {
+            throw new Error("La edad debe ser un número positivo");
+        }
+        this.#edad = edadNueva;
+    }
+
+    set direccion(direccionNueva) {
+        if (!(direccionNueva instanceof Direccion)) {
+            throw new Error("La dirección debe ser una instancia de la clase direccion");
+        }
+        this.#direccion = direccionNueva;
+    }
+
+    toString(){
+        return `Nombre: ${this.#nombre},\n
+        Edad: ${this.#edad}, \n
+        Dirección: ${this.#direccion}\n`;
+    }
+}
+
+
+/*
+Clase Estudiante 
+Representa un estudiante, hereda de la clase persona, este tiene sus datos, asignaturas y funcionalidades.
+
+Atributos:
+    - ID
+    - asignaturas--> es un array que muestra en qué asignaturas está matriculado el estudiante. El array contiene:
+        * La asignatura de la que está matriculado.
+        * La fecha en la que se matriculó.
+
+Métodos:
+    - Constructor.
+    - Getter y Setter
+    - Matricular/desmatricular asignaturas.
+    - Calificar
+    - Calcular el promedio de las calificaciones.
+*/
+
+class Estudiante extends Persona{
+    #id;
+    #asignaturas;
+
+    constructor(id, nombre, edad, direccion) {
+        super(nombre, edad, direccion);
+
+        this.#id = id;
+        this.#asignaturas = [];
+    }
+
+    get id() {
+        return this.#id;
+    }
+
+    get asignaturas() {
+        return { ...this.#asignaturas };
+    }
+
+    toString() {
+        return `ID del estudiante: ${this.#id},\n
+        Nombre del estudiante: ${this.nombre},\n
+        Edad del estudiante: ${this.edad},\n
+        Dirección del estudiante: ${this.direccion.toString()}\n`;
+    }
+
+    // Matricular al estudiante en una asignatura
+    matricular(...asignaturas) {
+        for (let asignatura of asignaturas) {
+            if (!this.#asignaturas.some(objetos => objetos.nombre === asignatura)) {
+                this.#asignaturas.push({ 
+                    nombre: asignatura, 
+                    calificaciones: [], 
+                    fechaMatricula: new Date(), 
+                    fechaDesmatricula: null 
+                });
+                console.log(`Estudiante ${this.nombre} matriculado en ${asignatura}`);
+            } else {
+                console.log(`El estudiante ${this.nombre} ya está matriculado en ${asignatura}`);
+            }
+        }
+    }
+
+    //Desmatricular al estudiante de una asignatura
+    desmatricular(...asignaturas) {
+        for (let asignatura of asignaturas) {
+            const index = this.#asignaturas.findIndex(objetos => objetos.nombre === asignatura);
+            if (index !== -1) {
+                this.#asignaturas.splice(index, 1);
+                console.log(`Estudiante ${this.nombre} desmatriculado de ${asignatura}`);
+            } else {
+                console.log(`El estudiante ${this.nombre} no está matriculado en ${asignatura}`);
+            }
+        }
+    }
+
+    //Cada estudiante puede recibir varias clasificaciones por asignatura. Numeros entre 0 y 10
+    calificar(asignatura, calificacion) {
+        if (this.#asignaturas[asignatura]) {
+            if (calificacion >= 0 && calificacion <= 10) {
+                this.#asignaturas[asignatura].calificaciones.push(calificacion);
+                console.log(`La calificación ${calificacion} se ha añadido a ${asignatura} para ${this.nombre}`);
+            } else {
+                console.log("La calificación debe ser entre 0 y 10");
+            }
+        } else {
+            console.log(this.nombre + " no está matriculado en " + asignatura);
+        }
+
+    }
+
+    //Media de las notas del estudiante
+    calcularPromedioEstudiante() { 
+        const asignaturasCalificadas = [];
+
+        for (let i = 0; i < this.#asignaturas.length; i++) {
+            if (this.#asignaturas[i].calificaciones.length > 0) {
+                asignaturasCalificadas.push(this.#asignaturas[i]);
+            }
+        }
+
+        if (asignaturasCalificadas.length === 0) {
+            return "Sin evaluar";
+        }
+
+        let sumaTotal = 0;
+        for (let i = 0; i < asignaturasCalificadas.length; i++) {
+            sumaTotal += asignaturasCalificadas[i].calcularPromedio();
+        }
+        const resultado = sumaTotal / asignaturasCalificadas.length;
+    
+        return Number(resultado).toFixed(2);
+    }
+    
+
+    //Buscar asignaturas según un patrón de texto
+    buscarAsignaturas(patron) {
+        const regex = new RegExp(patron, "i"); //el modificador "i" indica que la busqueda sea insensible a mayusculas y minusculas
+        return Object.keys(this.#asignaturas).filter(asignatura => regex.test(asignatura));
+    }
+}
+
+
+/*
+Clase Direccion
 Representa una dirección postal.
 
 Atributos: 
@@ -46,201 +233,18 @@ class Direccion {
     }
 
     toString() {
-        return `${this.#calle}, ${this.#numero}, ${this.#piso}, ${this.#codigoPostal}, ${this.#provincia}, ${this.#localidad}`;
-    }
-}
-
-/*
-Clase Persona
-Es la clase de la que va a heredar estudiante, cualquier estudiante es una persona
-
-Atributos:
-    -nombre
-    -edad
-    -dirección
-
-*/
-class Persona{
-    #nombre;
-    #edad;
-    #direccion;
-
-    constructor(nombre, edad, direccion){
-        this.#nombre = nombre;
-        this.#edad = edad;
-        this.#direccion = direccion;
-    }
-
-    toString(){
-        return `Nombre: ${this.#nombre},\nEdad: ${this.#edad}, \nDirección: ${this.#direccion}\n`;
-    }
-}
-
-
-
-/*
-2.2. Clase Estudiante 
-Representa un estudiante
-
-Atributos:
-    -ID
-    -nombre
-    -edad
-    -dirección
-    -asignaturas matriculadas
-
-Métodos:
-    - Matricular/desmatricular asignaturas.
-    - Agregar calificaciones.
-    - Calcular el promedio de las calificaciones.
-    - Buscar asignaturas por patrón de texto.
-*/
-
-class Estudiante extends Persona{
-    #id;
-    #nombre; //el nombre debe tener solo letras y espacios
-    #edad;
-    #direccion;
-    #asignaturas;
-
-    constructor(id, nombre, edad, direccion) {
-        if (!/^([a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+)$/.test(nombre)) { //el gorrito indica una negacion, coincidirá con cualquier carácter que no esté dentro de los corchetes y el \s es para que coincida con cualquier caracter de espacio en blanco
-            throw new Error("El nombre solo debe contener letras y espacios");
-        }
-        this.#id = id;
-        this.#nombre = nombre;
-        this.#edad = edad >= 0 ? edad : 0; //si la edad es negativa se inicializa a 0, esto ayuda a que no puedan haber edades negativas
-        this.#direccion = direccion;
-        this.#asignaturas = new Map();
-    }
-
-    get id() {
-        return this.#id;
-    }
-
-    get nombre() {
-        return this.#nombre;
-    }
-
-    set nombre(nombreNuevo) {
-        if (!/^([a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+)$/.test(nombreNuevo)) {
-            throw new Error("El nombre solo debe contener letras y espacios");
-        }
-        this.#nombre = nombreNuevo;
-    }
-
-    get edad() {
-        return this.#edad;
-    }
-
-    set edad(edadNueva) {
-        if (edadNueva < 0) {
-            throw new Error("La edad debe ser un número positivo");
-        }
-        this.#edad = edadNueva;
-    }
-
-    get direccion() {
-        return this.#direccion;
-    }
-
-    set direccion(direccionNueva) {
-        if (!(direccionNueva instanceof Direccion)) {
-            throw new Error("La dirección debe ser una instancia de la clase direccion");
-        }
-        this.#direccion = direccionNueva;
-    }
-
-    get asignaturas() {
-        return { ...this.#asignaturas };
-    }
-
-    toString() {
-        return `${this.#id}, ${this.#nombre}, ${this.#edad}, ${this.#direccion}, ${this.#asignaturas}`;
-    }
-
-    // Matricular al estudiante en una asignatura
-    matricular(asignatura) {
-        if (!this.#asignaturas[asignatura]) {
-            this.#asignaturas[asignatura] = { calificaciones: [], fechaMatricula: new Date(), fechaDesmatricula: null };
-            console.log(`Estudiante ${this.#nombre} matriculado en ${asignatura}`);
-        } else {
-            console.log(`El estudiante ${this.#nombre} ya está matriculado en ${asignatura}`);
-        }
-    }
-
-    //Desmatricular al estudiante de una asignatura
-    desmatricular(asignatura) {
-        if (!this.#asignaturas[asignatura]) {
-            throw new Error(`La asignatura "${asignatura}" no está registrada`);
-        } else {
-            delete this.#asignaturas[asignatura];
-            console.log(`Estudiante ${this.#nombre} desmatriculado de ${asignatura}`);
-        }
-
-    }
-
-    //Cada estudiante puede recibir varias clasificaciones por asignatura. Numeros entre 0 y 10
-    calificar(asignatura, calificacion) {
-        if (this.#asignaturas[asignatura]) {
-            if (calificacion >= 0 && calificacion <= 10) {
-                this.#asignaturas[asignatura].calificaciones.push(calificacion);
-                console.log(`La calificación ${calificacion} se ha añadido a ${asignatura} para ${this.#nombre}`);
-            } else {
-                console.log("La calificación debe ser entre 0 y 10");
-            }
-        } else {
-            console.log(this.#nombre + " no está matriculado en " + asignatura);
-        }
-
-    }
-
-    //Media de las notas del estudiante
-    calcularPromedio() { 
-        const asignaturasCalificadas = [];
-    
-        for (const asignatura in this.#asignaturas) {
-            if (this.#asignaturas[asignatura].calificaciones.length > 0) {
-                asignaturasCalificadas.push(this.#asignaturas[asignatura]);
-            }
-        }
-        
-        if (asignaturasCalificadas.length === 0){
-            return "Sin evaluar";
-    
-        }
-        
-        let sumaTotal = 0;
-        for (let i = 0; i < asignaturasCalificadas.length; i++) {
-            let sumaCalificaciones = 0;
-            let asignatura = asignaturasCalificadas[i];
-        
-            for (let j = 0; j < asignatura.calificaciones.length; j++) {
-                sumaCalificaciones += asignatura.calificaciones[j];
-            }
-        
-            sumaTotal += sumaCalificaciones / asignatura.calificaciones.length;
-        }        
-    
-        const resultado = sumaTotal / asignaturasCalificadas.length;
-    
-        return Number(resultado).toFixed(2);
-    }
-    
-
-
-
-
-    //Buscar asignaturas según un patrón de texto
-    buscarAsignaturas(patron) {
-        const regex = new RegExp(patron, "i"); //el modificador "i" indica que la busqueda sea insensible a mayusculas y minusculas
-        return Object.keys(this.#asignaturas).filter(asignatura => regex.test(asignatura));
+        return `Calle: ${this.#calle},\n
+        Numero: ${this.#numero},\n
+        Piso: ${this.#piso},\n
+        Código Postal: ${this.#codigoPostal},\n
+        Provincia: ${this.#provincia},\n
+        Localidad: ${this.#localidad}\n`;
     }
 }
 
 
 /*
-2.3. Clase Asignatura
+Clase Asignatura
 Representa una asignatura 
 
 Atributos:
@@ -291,19 +295,22 @@ class Asignatura {
         this.#estudiantes = estudiantes;
     }
 
-    addEstudiante(estudiante) {
-        if (this.#estudiantes.has(estudiante)) {
-            throw new Error(`${estudiante.nombre} ya está matriculado en ${this.#nombre}`);
-        } else {
-            this.#estudiantes.set(estudiante, []); //se inicializa un array vacío para sus calificaciones
-        }
-    }
+    calcularPromedio(){
+        // Comprueba si hay calificaciones
+        let longitudArray = this.#calificaciones.length;
+        if(longitudArray > 0){
+            let sumaArray = 0;
+            for (let i = 0; i < longitudArray; i++) {
+            sumaArray += this.#calificaciones[i];
+            }
 
-    eliminarEstudiante(estudiante) {
-        if (!this.estudiantes.has(estudiante)) {
-            throw new Error(`${estudiante.nombre} no está matriculado en ${this.#nombre}`);
+            // Devuelve la media de las calificaciones
+            return sumaArray / longitudArray;
+
         } else {
-            this.estudiantes.delete(estudiante); //se elimina el estudiante de la asignatura
+            console.log("No existen calificaciones");
+            return 0;
+
         }
     }
 
@@ -314,15 +321,6 @@ class Asignatura {
             throw new Error("La calificación debe estar entre 0 y 10.");
         } else {
             this.estudiantes.get(estudiante).push(nota); //añade la nota al array del estudiante
-        }
-
-    }
-
-    addCalificacion(calificacion) {
-        if (calificacion < 0 || calificacion > 10) {
-            throw new Error("La calificación debe estar entre 0 y 10.");
-        } else {
-            this.#calificaciones.push(calificacion);//añade calificaciones generales
         }
     }
 
@@ -341,50 +339,8 @@ class Asignatura {
 }
 
 
-class Lista {
-    #elementos;
-    constructor() {
-        this.#elementos = [];
-    }
-
-    get elementos() {
-        return [...this.#elementos]; //lo que tiene la lista
-    }
-
-    add(elemento) {
-        if (!this.#elementos.includes(elemento)) {
-            this.#elementos.push(elemento);
-            console.log("Se han añadido nuevos elementos a la lista");
-        } else {
-            throw new Error("El elemento ya existe en la lista");
-        }
-    }
-
-    borrar(elemento) {
-        const longitudInicial = this.#elementos.length;
-        this.#elementos = this.#elementos.filter(i => i !== elemento);
-        if (this.#elementos.length === longitudInicial) {
-            throw new Error("El elemento no se ha encontrado en la lista")
-        }
-    }
-
-    buscar(patron) {
-        const regex = new RegExp(patron, 'i');
-        return this.#elementos.filter(elemento => regex.test(elemento.nombre || elemento.toString()));
-    }
-
-    get size() {
-        return this.#elementos.length;
-    }
-
-    // Método protegido para las subclases
-    _getElementos() {
-        return this.#elementos;
-    }
-}
-
 /*
-2.3. Clase ListaEstudiantes
+Clase ListaEstudiantes
 Array que contiene a los estudiantes
 
 Métodos:
@@ -394,21 +350,37 @@ Métodos:
  */
 
 class ListaEstudiantes{
+    #listadoEstudiantes;
+
     constructor(...estudiantes) {
-        super();
+        this.#listadoEstudiantes = [];
 
         for (const estudiante of estudiantes) {
-
             this.addEstudiante(estudiante);
-
         }
     }
 
-    get promedioGeneral() {
-        const estudiantes = this._getElementos();
-        if (estudiantes.length === 0) return 0;
-        const total = estudiantes.reduce((sum, estudiante) => sum + parseFloat(estudiante.calcularPromedio()), 0);
-        return (total / estudiantes.length).toFixed(2);
+    promedioEstudiantes(){
+        if(this.#listadoEstudiantes.length !== 0){
+            return "No existe ningún estudiante en la lista";
+        }
+
+        let sumatorio = 0;
+        let contador = 0;
+
+        for (let estudiante of this.#listadoEstudiantes) {
+            // Se obtiene la media de cada estudiante por separado
+            let promedioEstudiante = estudiante.promedioEstudiante(); 
+
+            // Si la media es un número, se suma al sumatorio y se incrementa el contador
+            if (typeof promedioEstudiante === "number") {
+                sumatorio += promedioEstudiante;
+                contador++;
+            }
+        }
+
+        let promedioTotal = (sumatorio / contador).toFixed(2);
+        return Number(promedioTotal);
     }
 
     addEstudiante(estudiante) {
@@ -419,7 +391,7 @@ class ListaEstudiantes{
         }
     }
 
-    borrarEstudiante(estudiante) {
+    eliminarEstudiante(estudiante) {
         const longitudInicial = this.estudiantes.length;
         this.estudiantes = this.estudiantes.filter(i => i !== estudiante);
         if (this.estudiantes.length === longitudInicial) {
@@ -427,22 +399,58 @@ class ListaEstudiantes{
         }
     }
 
-    encontrarPorNombre(nombre) {
-        return super.buscar(nombre);
+    busquedaPorNombre(nombre) {
+        const regex = new RegExp(patron, 'i');
+        return this.#listadoEstudiantes.filter(elemento => regex.test(elemento.nombre || elemento.toString()));
     }
 
     mostrarDatos() {
-        console.log("Reporte de estudiantes:");
-        this._getElementos().forEach(estudiante => {
-            console.groupCollapsed(`Estudiante: ${estudiante.nombre}`);
-            console.log(`ID: ${estudiante.id}`);
-            console.log(`Edad: ${estudiante.edad}`);
-            console.log(`Promedio de calificaciones: ${estudiante.calcularPromedio()}`);
-            console.log(`Asignaturas: ${Object.keys(estudiante.asignaturas).join(', ')}`);
-            console.groupEnd();
-        });
+        for (const id in this.listaEstudiantes) {
+            console.log(this.listaEstudiantes[id].toString());
+        }
+    }
+    
+}
+
+
+/**
+ * 2.5. Clase ListaAsignaturas
+*/
+
+class ListaAsignaturas extends Lista {
+    #listadoAsignaturas;
+
+    constructor(...asignaturas) {
+        this.#listadoAsignaturas = [];
+
+        for (const asignatura of asignaturas) {
+            this.addAsignatura(asignatura);
+        }
     }
 
+    addAsignatura(asignatura) {
+        if (!(asignatura instanceof Asignatura)) {
+            throw new Error("Solo se pueden añadir objetos de tipo asignatura")
+        } else {
+            this.push(asignatura);
+        }
+    }
+
+    eliminaAsignatura(asignatura){
+        const longitudInicial = this.asignatura.length;
+        this.asignatura = this.asignatura.filter(i => i !== estudiante);
+        if (this.asignatura.length === longitudInicial) {
+            throw new Error("La asignatura no se ha encontrado en la lista")
+        }
+    }
+
+    obtenerPromedioCalificaciones() {
+        const asignaturas = this.#listadoAsignaturas();
+        return asignaturas.map(asignatura => ({
+            nombre: asignatura.nombre,
+            promedio: asignatura.calcularPromedio()
+        }));
+    }
 }
 
 
