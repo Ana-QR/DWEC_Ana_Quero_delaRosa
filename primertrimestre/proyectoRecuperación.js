@@ -93,26 +93,21 @@ class Estudiante extends Persona{
     #id;
     #asignaturas;
 
+    static contadorId = 0;
     constructor(id, nombre, edad, direccion) {
         super(nombre, edad, direccion);
 
-        this.#id = id;
+        this.#id = Estudiante.contadorId++;
         this.#asignaturas = [];
     }
 
+    ///////GETTER///////
     get id() {
         return this.#id;
     }
 
     get asignaturas() {
         return { ...this.#asignaturas };
-    }
-
-    toString() {
-        return `ID del estudiante: ${this.#id},\n
-        Nombre del estudiante: ${this.nombre},\n
-        Edad del estudiante: ${this.edad},\n
-        Dirección del estudiante: ${this.direccion.toString()}\n`;
     }
 
     // Matricular al estudiante en una asignatura
@@ -188,6 +183,13 @@ class Estudiante extends Persona{
     buscarAsignaturas(patron) {
         const regex = new RegExp(patron, "i"); //el modificador "i" indica que la busqueda sea insensible a mayusculas y minusculas
         return Object.keys(this.#asignaturas).filter(asignatura => regex.test(asignatura));
+    }
+
+    toString() {
+        return `ID del estudiante: ${this.#id},\n
+        Nombre del estudiante: ${this.nombre},\n
+        Edad del estudiante: ${this.edad},\n
+        Dirección del estudiante: ${this.direccion.toString()}\n`;
     }
 }
 
@@ -344,9 +346,12 @@ Clase ListaEstudiantes
 Array que contiene a los estudiantes
 
 Métodos:
-    - Añadir estudiantes
-    - Encontrar un estudiante por nombre
-    - Mostrar datos de los estudiantes
+    - Constructor
+    - Promedio de las asignaturas de un estudiante 
+    - Añadir un estudiante en la lista
+    - Eliminar un estudiante de la lista
+    - Buscar un estudiante por nombre
+    - Mostrar el contenido de la lista de los estudiantes
  */
 
 class ListaEstudiantes{
@@ -400,21 +405,29 @@ class ListaEstudiantes{
     }
 
     busquedaPorNombre(nombre) {
-        const regex = new RegExp(patron, 'i');
+        const regex = new RegExp(nombre, 'i');
         return this.#listadoEstudiantes.filter(elemento => regex.test(elemento.nombre || elemento.toString()));
     }
 
     mostrarDatos() {
-        for (const id in this.listaEstudiantes) {
-            console.log(this.listaEstudiantes[id].toString());
+        for (const id in this.#listadoEstudiantes) {
+            console.log(this.#listadoEstudiantes[id].toString());
         }
     }
     
 }
 
 
-/**
- * 2.5. Clase ListaAsignaturas
+/*
+Clase ListaAsignaturas
+Array que contiene las asignaturas
+
+Métodos:
+    - Constructor
+    - Promedio de las calificaciones de todas las asignaturas
+    - Añadir una asignatura en la lista
+    - Eliminar una asignatura de la lista
+    - Buscar una asignatura por un patrón 
 */
 
 class ListaAsignaturas extends Lista {
@@ -428,6 +441,14 @@ class ListaAsignaturas extends Lista {
         }
     }
 
+    obtenerPromedioCalificaciones() {
+        const asignaturas = this.#listadoAsignaturas();
+        return asignaturas.map(asignatura => ({
+            nombre: asignatura.nombre,
+            promedio: asignatura.calcularPromedio()
+        }));
+    }
+
     addAsignatura(asignatura) {
         if (!(asignatura instanceof Asignatura)) {
             throw new Error("Solo se pueden añadir objetos de tipo asignatura")
@@ -436,22 +457,103 @@ class ListaAsignaturas extends Lista {
         }
     }
 
-    eliminaAsignatura(asignatura){
-        const longitudInicial = this.asignatura.length;
-        this.asignatura = this.asignatura.filter(i => i !== estudiante);
-        if (this.asignatura.length === longitudInicial) {
+    eliminarAsignatura(asignatura){
+        const longitudInicial = this.#listadoAsignaturas.length;
+        this.#listadoAsignaturas = this.#listadoAsignaturas.filter(i => i !== asignatura);
+        if (this.#listadoAsignaturas.length === longitudInicial) {
             throw new Error("La asignatura no se ha encontrado en la lista")
         }
     }
 
-    obtenerPromedioCalificaciones() {
-        const asignaturas = this.#listadoAsignaturas();
-        return asignaturas.map(asignatura => ({
-            nombre: asignatura.nombre,
-            promedio: asignatura.calcularPromedio()
-        }));
+    buscarAsignaturas(patron) {
+        const regex = new RegExp(patron, 'i');
+        return this.#listadoAsignaturas.filter(elemento => regex.test(elemento.nombre || elemento.toString()));
     }
 }
+
+///////////////////////////////////PRUEBAS///////////////////////////////////////
+const pruebaListaEstudiantes = new ListaEstudiantes();
+const asignaturas = [];
+
+function datos() {
+    const direccion1 = new Direccion("Calle Quero", 12, "", "23790", "Jaén", "Porcuna");
+    const direccion2 = new Direccion("Calle Huesa", 13, "", "23790", "Jaén", "Porcuna");
+    const direccion3 = new Direccion("Calle Emilio Sebastián", 14, "1C", "18013", "Granada", "Granada");
+
+    // Agregar estudiantes
+    PlistaEstudiantes.agregarEstudiante("Mario Vaquerizo", 40, direccion1);
+    PlistaEstudiantes.agregarEstudiante("Paula Mola", 20, direccion2);
+    PlistaEstudiantes.agregarEstudiante("Federico Garcia Lorca", 50, direccion3);
+
+    // Crear asignaturas
+    const matematicas = new Asignatura("Matemáticas");
+    const historia = new Asignatura("Historia");
+    const artes = new Asignatura("Artes");
+    const tecnologia = new Asignatura("Tecnología");
+
+
+    asignaturas.push(matematicas, historia, artes);
+
+    // Matricular estudiantes en asignaturas
+    const estudiante1 = pruebaListaEstudiantes.estudiantes[1];
+    const estudiante2 = pruebaListaEstudiantes.estudiantes[2];
+    const estudiante3 = pruebaListaEstudiantes.estudiantes[3];
+
+    estudiante1.matricular(matematicas);
+    estudiante1.matricular(historia);
+    estudiante1.matricular(tecnologia);
+
+    estudiante2.matricular(matematicas);
+    estudiante2.matricular(artes);
+
+    estudiante3.matricular(historia);
+    estudiante3.matricular(artes);
+    estudiante3.matricular(tecnologia);
+
+
+    // Asignar notas
+    matematicas.calificar(estudiante1, 8.5);
+    matematicas.calificar(estudiante2, 9.0);
+
+    historia.calificar(estudiante1, 7.5);
+    historia.calificar(estudiante3, 8.0);
+
+    artes.calificar(estudiante2, 9.5);
+    artes.calificar(estudiante3, 8.5);
+
+    tecnologia.calificar(estudiante1, 10.0);
+    tecnologia.calificar(estudiante3, 8.8);
+
+    prompt("Datos inicializados correctamente. Presiona Enter para continuar.");
+
+    //Eliminar estudiantes y asignaturas
+    ListaEstudiantes.eliminarEstudiante(estudiante3);
+    ListaAsignaturas.eliminarAsignatura(artes);
+
+    prompt("Estudiantes y asignaturas eliminados con éxito");
+
+    //Matricular y desmatricular estudiantes de asignaturas
+    estudiante2.matricular(historia);
+    estudiante1.desmatricular(historia);
+
+    //Agregar estudiantes y asignaturas a las listas con addEstudiante y addAsignatura
+    listaEstudiantes.addEstudiante(estudiante1);
+    listaEstudiantes.addEstudiante(estudiante2);
+    listaEstudiantes.addEstudiante(estudiante3);
+
+    listaAsignaturas.addAsignatura(matematicas);
+    listaAsignaturas.addAsignatura(historia);
+    listaAsignaturas.addAsignatura(artes);
+    listaAsignaturas.addAsignatura(tecnologia);
+
+    //Calificación de estudiantes en asignaturas con la funcion calificar de estudiante
+    estudiante1.calificar(tecnologia, 7);
+    estudiante3.calificar(tecnologia, 8);
+    estudiante3.calificar(historia, 6);
+    estudiante1.calificar(historia, 8);
+    estudiante2.calificar(matematicas, 6);
+}
+
 
 
 // Llamada a la función para inicializar datos antes de mostrar el menú
@@ -488,22 +590,22 @@ function programa() {
                     const provincia = prompt("Provincia de la dirección:");
                     const localidad = prompt("Localidad de la dirección:");
                     const direccion = new Direccion(calle, numero, piso, codPostal, provincia, localidad);
-                    PlistaEstudiantes.addEstudiante(nombre, edad, direccion);
+                    listaEstudiantes.addEstudiante(nombre, edad, direccion);
                     prompt(`Estudiante ${nombre} añadido con éxito. Presiona Enter para continuar.`);
                     break;
 
                 case "2":
                     const idEliminar = parseInt(prompt("ID del estudiante a eliminar:"), 10);
-                    listaEstudiantes.eliminarEstudiante(idEliminar);
+                    pruebaListaEstudiantes.eliminarEstudiante(idEliminar);
                     prompt(`Estudiante con ID ${idEliminar} eliminado. Presiona Enter para continuar.`);
                     break;
 
                 case "3":
-                    let listaEstud = "Lista de estudiantes:\n";
-                    for (const id in listaEstudiantes.listaEstud) {
-                        listaEstud += `${listaEstudiantes.listaEstud[id].toString()}\n`;
+                    let listaEstu = "Lista de estudiantes:\n";
+                    for (const id in pruebaListaEstudiantes.listaEstu) {
+                        listaEstu += `${pruebaListaEstudiantes.listaEstu[id].toString()}\n`;
                     }
-                    prompt(listaEstud);
+                    prompt(listaEstu);
                     break;
 
                 case "4":
@@ -523,7 +625,7 @@ function programa() {
                 case "6":
                     const idEstMatricular = parseInt(prompt("ID del estudiante a matricular:"), 10);
                     const nombreAsigMatricular = prompt("Nombre de la asignatura:");
-                    const estudianteMatricular = PlistaEstudiantes.listaEstudiantes[idEstMatricular];
+                    const estudianteMatricular = pruebaListaEstudiantes.listaEstudiantes[idEstMatricular];
                     const asignaturaMatricular = asignaturas.find(a => a.nombre === nombreAsigMatricular);
                     if (estudianteMatricular && asignaturaMatricular) {
                         estudianteMatricular.matricular(asignaturaMatricular);
@@ -537,7 +639,7 @@ function programa() {
                     const idEstDesmatricular = parseInt(prompt("ID del estudiante a desmatricular:"), 10);
                     const nombreAsigDesmatricular = prompt("Nombre de la asignatura:");
                     const estudianteDesmatricular = listaEstudiantes.listaEstudiantes[idEstDesmatricular];
-                    const asignaturaDesmatricular = asignatura.find(a => a.nombre === nombreAsigDesmatricular);
+                    const asignaturaDesmatricular = asignaturas.find(a => a.nombre === nombreAsigDesmatricular);
 
                     if (estudianteDesmatricular && asignaturaDesmatricular) {
                         estudianteDesmatricular.desmatricular(asignaturaDesmatricular);
@@ -579,7 +681,7 @@ function programa() {
                     let totalEstudiantes = 0;
 
                     for (const id in listaEstudiantes.listaEstudiantes) {
-                        const estudiante = PlistaEstudiantes.listaEstudiantes[id];
+                        const estudiante = pruebaListaEstudiantes.listaEstudiantes[id];
                         const promedio = parseFloat(estudiante.promedio());
                         if (!isNaN(promedio)) {
                             sumaPromedios += promedio;
