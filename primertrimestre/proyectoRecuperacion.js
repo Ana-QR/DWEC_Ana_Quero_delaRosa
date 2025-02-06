@@ -691,7 +691,7 @@ function mostrarMenu() {
                 const idEstPromedio = parseInt(prompt("ID del estudiante:"), 10);
                 const estudiantePromedio = listaEstu.ListaEstudiantes[idEstPromedio];
 
-                if (estudiantePromedio && estudiantePromedio._asignaturas.length > 0) {
+                if (estudiantePromedio && estudiantePromedio.asignaturas.length > 0) {
                     const promedio = estudiantePromedio.promedioIndividual();
                     prompt(`Promedio de ${estudiantePromedio.nombre}: ${promedio}. Presiona Enter para continuar.`);
                 } else {
