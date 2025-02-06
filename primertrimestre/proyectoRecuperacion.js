@@ -21,9 +21,10 @@ class Persona {
     #direccion;
 
     constructor(nombre, edad, direccion) {
-        if (!/^([a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+)$/.test(nombre)) { //el gorrito indica una negacion, coincidirá con cualquier carácter que no esté dentro de los corchetes y el \s es para que coincida con cualquier caracter de espacio en blanco
+        if (!/^[a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+$/.test(nombre)) { //el gorrito indica una negacion, coincidirá con cualquier carácter que no esté dentro de los corchetes y el \s es para que coincida con cualquier caracter de espacio en blanco
             throw new Error("El nombre solo debe contener letras y espacios");
         }
+        this.#nombre = nombre;
         this.#edad = edad >= 0 ? edad : 0; //si la edad es negativa se inicializa a 0, esto ayuda a que no puedan haber edades negativas
         this.#direccion = direccion;
     }
@@ -389,10 +390,10 @@ class ListaEstudiantes {
     }
 
     addEstudiante(estudiante) {
-        if (!(estudiante instanceof Estudiante)) {
-            throw new Error("Solo se pueden añadir objetos de tipo Estudiante.");
+        if(this.#listadoEstudiantes.includes(estudiante)){
+            throw new Error("El estudiante ya se encuentra en la lista, no puede haber duplicados");
         } else {
-            super.add(estudiante);
+            this.#listadoEstudiantes.push(estudiante);
         }
     }
 
@@ -430,15 +431,19 @@ Métodos:
     - Buscar una asignatura por un patrón 
 */
 
-class ListaAsignaturas extends Lista {
+class ListaAsignaturas{
     #listadoAsignaturas;
 
     constructor(...asignaturas) {
         this.#listadoAsignaturas = [];
 
-        for (const asignatura of asignaturas) {
+        for (let asignatura of asignaturas) {
             this.addAsignatura(asignatura);
         }
+    }
+
+    get listadoAsignaturas(){
+        return this.#listadoAsignaturas;
     }
 
     obtenerPromedioCalificaciones() {
@@ -450,11 +455,7 @@ class ListaAsignaturas extends Lista {
     }
 
     addAsignatura(asignatura) {
-        if (!(asignatura instanceof Asignatura)) {
-            throw new Error("Solo se pueden añadir objetos de tipo asignatura")
-        } else {
-            this.push(asignatura);
-        }
+        this.#listadoAsignaturas.push(asignatura);
     }
 
     eliminarAsignatura(asignatura) {
@@ -467,12 +468,13 @@ class ListaAsignaturas extends Lista {
 
     buscarAsignaturas(patron) {
         const regex = new RegExp(patron, 'i');
-        return this.#listadoAsignaturas.filter(elemento => regex.test(elemento.nombre || elemento.toString()));
+        return this.#listadoAsignaturas.filter(function(elemento) {
+            return regex.test(elemento.nombre || elemento.toString());
+        });
     }
 }
 
 ///////////////////////////////////PRUEBAS///////////////////////////////////////
-
 function pruebas() {
     let listaEstu = new ListaEstudiantes();
     let listaAsig = new ListaAsignaturas();
@@ -482,10 +484,10 @@ function pruebas() {
     const direccion2 = new Direccion("Calle Huesa", 13, "", "23790", "Jaén", "Porcuna");
     const direccion3 = new Direccion("Calle Emilio Sebastián", 14, "1C", "18013", "Granada", "Granada");
 
-    // Agregar estudiantes
-    ListaEstudiantes.agregarEstudiante("Mario Vaquerizo", 40, direccion1);
-    ListaEstudiantes.agregarEstudiante("Paula Mola", 20, direccion2);
-    ListaEstudiantes.agregarEstudiante("Federico Garcia Lorca", 50, direccion3);
+    // Definir estudiantes
+    const estudiante1 = new Estudiante("Mario Vaquerizo", 40, direccion1);
+    const estudiante2 = new Estudiante("Paula Mola", 20, direccion2);
+    const estudiante3 = new Estudiante("Federico Garcia", 50, direccion3);
 
     // Crear asignaturas
     const matematicas = new Asignatura("Matemáticas");
@@ -493,11 +495,13 @@ function pruebas() {
     const artes = new Asignatura("Artes");
     const tecnologia = new Asignatura("Tecnología");
 
-    // Matricular estudiantes en asignaturas
-    const estudiante1 = listaEstu.estudiantes[1];
-    const estudiante2 = listaEstu.estudiantes[2];
-    const estudiante3 = listaEstu.estudiantes[3];
+    // Agregar asignaturas a la lista
+    listaAsig.addAsignatura(matematicas);
+    listaAsig.addAsignatura(historia);
+    listaAsig.addAsignatura(artes);
+    listaAsig.addAsignatura(tecnologia);
 
+    // Matricular estudiantes en asignaturas
     estudiante1.matricular(matematicas);
     estudiante1.matricular(historia);
     estudiante1.matricular(tecnologia);
@@ -552,10 +556,6 @@ function pruebas() {
     estudiante2.calificar(matematicas, 6);
 }
 
-
-
-// Llamada a la función para inicializar datos antes de mostrar el menú
-//inicializarDatos();
 
 function mostrarMenu() {
     let continuar = true;
@@ -716,5 +716,9 @@ function mostrarMenu() {
     }
 }
 
+// Llamada a la función para inicializar datos antes de mostrar el menú
+//Ejecutar pruebas
+pruebas();
+
 // Ejecutar el programa
-//programa();
+mostrarMenu();
