@@ -613,12 +613,12 @@ function mostrarMenu() {
 
             case "3":
                 console.clear();
-                let listaEstudi = "Lista de estudiantes:\n";
+                let listaEstu = "Lista de estudiantes:\n";
                 for (let i = 0; i < listaEstu.listaEstudiantes.length; i++) {
                     const estudiante = listaEstu.listaEstudiantes[i];
-                    listaEstudi += estudiante.toString() + "\n";
+                    listaEstu += estudiante.toString() + "\n";
                 }
-                prompt(listaEstudi);
+                prompt(listaEstu);
                 break;
 
             case "4":
@@ -689,10 +689,10 @@ function mostrarMenu() {
             case "9":
                 console.clear();
                 const idEstPromedio = parseInt(prompt("ID del estudiante:"), 10);
-                const estudiantePromedio = listaEstu.ListaEstudiantes[idEstPromedio];
+                const estudiantePromedio = listaEstu.listaEstudiantes[idEstPromedio];
 
-                if (estudiantePromedio && estudiantePromedio.asignaturas.length > 0) {
-                    const promedio = estudiantePromedio.promedioIndividual();
+                if (estudiantePromedio && estudiantePromedio.listaAsig.length > 0) {
+                    const promedio = estudiantePromedio.calcularPromedioEstudiantes();
                     prompt(`Promedio de ${estudiantePromedio.nombre}: ${promedio}. Presiona Enter para continuar.`);
                 } else {
                     prompt("No hay asignaturas matriculadas o el estudiante no existe. Presiona Enter para continuar.");
@@ -706,7 +706,7 @@ function mostrarMenu() {
 
                 for (const id in listaEstu.listaEstudiantes) {
                     const estudiante = listaEstu.listaEstudiantes[id];
-                    const promedio = parseFloat(estudiante.promedio());
+                    const promedio = parseFloat(estudiante.calcularPromedioEstudiante());
                     if (!isNaN(promedio)) {
                         sumaPromedios += promedio;
                         totalEstudiantes++;
