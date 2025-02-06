@@ -21,7 +21,7 @@ class Persona {
     #direccion;
 
     constructor(nombre, edad, direccion) {
-        if (!/^[a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+$/.test(nombre)) { //el gorrito indica una negacion, coincidirá con cualquier carácter que no esté dentro de los corchetes y el \s es para que coincida con cualquier caracter de espacio en blanco
+        if (!/^[a-zA-Z\s]+$/.test(nombre)) { //el gorrito indica una negacion, coincidirá con cualquier carácter que no esté dentro de los corchetes y el \s es para que coincida con cualquier caracter de espacio en blanco
             throw new Error("El nombre solo debe contener letras y espacios");
         }
         this.#nombre = nombre;
@@ -95,7 +95,7 @@ class Estudiante extends Persona {
     #asignaturas;
 
     static contadorId = 0;
-    constructor(id, nombre, edad, direccion) {
+    constructor(nombre, edad, direccion) {
         super(nombre, edad, direccion);
 
         this.#id = Estudiante.contadorId++;
@@ -317,14 +317,13 @@ class Asignatura {
         }
     }
 
-    calificar(estudiante, nota) {
-        if (!this.estudiantes.has(estudiante)) {
-            throw new Error(`${estudiante.nombre} no está matriculado en ${this.#nombre}.`);
-        } else if (nota < 0 || nota > 10) {
-            throw new Error("La calificación debe estar entre 0 y 10.");
-        } else {
-            this.estudiantes.get(estudiante).push(nota); //añade la nota al array del estudiante
-        }
+    calificar(nota) {
+        if(0<=nota<=10){
+            // Agrega la calificación al array
+            this.#calificaciones.push(nota);
+            }else {
+                throw new Error("La calificación debe estar entre 0 y 10.");
+            }
     }
 
     eliminarCalificacion(calificacion) {
@@ -527,8 +526,8 @@ function pruebas() {
     prompt("Datos inicializados correctamente. Presiona Enter para continuar.");
 
     // Eliminar estudiantes y asignaturas
-    ListaEstudiantes.eliminarEstudiante(estudiante3);
-    ListaAsignaturas.eliminarAsignatura(artes);
+    listaEstu.eliminarEstudiante(estudiante3);
+    listaAsig.eliminarAsignatura(artes);
 
     prompt("Estudiantes y asignaturas eliminados con éxito");
 
