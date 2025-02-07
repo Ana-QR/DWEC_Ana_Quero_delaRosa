@@ -365,6 +365,10 @@ class ListaEstudiantes {
         }
     }
 
+    get listadoEstudiantes() {
+        return this.#listadoEstudiantes;
+    }
+
     promedioEstudiantes() {
         if (this.#listadoEstudiantes.length !== 0) {
             return "No existe ningún estudiante en la lista";
@@ -478,7 +482,6 @@ class ListaAsignaturas {
 const listaEstu = new ListaEstudiantes();
 const listaAsig = new ListaAsignaturas();
 console.log("Listas de estudiantes y asignaturas creadas con éxito");
-
 const direccion1 = new Direccion("Calle Quero", 12, "", "23790", "Jaén", "Porcuna");
 const direccion2 = new Direccion("Calle Huesa", 13, "", "23790", "Jaén", "Porcuna");
 const direccion3 = new Direccion("Calle Emilio Sebastián", 14, "1C", "18013", "Granada", "Granada");
@@ -611,12 +614,9 @@ function mostrarMenu() {
             case "3":
                 console.clear();
                 console.log("Lista de estudiantes:\n");
-                let listaEstudi;
-                for (let i = 0; i < listaEstu.length; i++) {
-                    const estudiante = listaEstu[i];
-                    listaEstudi = estudiante.toString() + "\n";
+                for (const estudiante of listaEstu.listadoEstudiantes) {
+                    console.log(estudiante.toString());
                 }
-                prompt(listaEstudi);
                 break;
 
             case "4":
