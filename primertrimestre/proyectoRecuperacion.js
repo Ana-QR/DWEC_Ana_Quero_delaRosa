@@ -660,7 +660,9 @@ function mostrarMenu() {
                 // Desmatricular estudiantes de asignaturas
                 console.clear();
                 const idEstDesmatricular = parseInt(prompt("ID del estudiante a desmatricular:"), 10);
-                const estudianteDesmatricular = listaEstu.listadoEstudiantes.find(est => est.id === idEstDesmatricular);
+                const estudianteDesmatricular = listaEstu.listadoEstudiantes.find(function(est) {
+                    return est.id === idEstDesmatricular;
+                });
 
                 if (!estudianteDesmatricular) {
                     prompt("Estudiante no encontrado. Presiona Enter para continuar.");
@@ -668,7 +670,9 @@ function mostrarMenu() {
                 }
 
                 const nombreAsigDesmatricular = prompt("Nombre de la asignatura:");
-                const asignaturaDesmatricular = listaAsig.listadoAsignaturas.find(asig => asig.nombre === nombreAsigDesmatricular);
+                const asignaturaDesmatricular = listaAsig.listadoAsignaturas.find(function(asig) {
+                    return asig.nombre === nombreAsigDesmatricular;
+                });
 
                 if (!asignaturaDesmatricular) {
                     prompt("Asignatura no encontrada. Presiona Enter para continuar.");
