@@ -136,16 +136,14 @@ class Estudiante extends Persona {
     }
 
     //Desmatricular al estudiante de una asignatura
-    desmatricular(...asignaturas) {
-        for (let asignatura of asignaturas) {
-            const index = this.#asignaturas.findIndex(objetos => objetos.nombre === asignatura);
-            if (index !== -1) {
-                this.#asignaturas[index].fechaDesmatricula = new Date();
-                this.#asignaturas.splice(index, 1);
-                console.log(`Estudiante ${this.nombre} desmatriculado de ${asignatura}`);
-            } else {
-                console.log(`El estudiante ${this.nombre} no está matriculado en ${asignatura}`);
-            }
+    desmatricular(asignatura) {
+        const index = this.#asignaturas.findIndex(objetos => objetos.nombre === asignatura);
+        if (index !== -1) {
+            this.#asignaturas[index].fechaDesmatricula = new Date();
+            this.#asignaturas.splice(index, 1);
+            console.log(`Estudiante ${this.nombre} desmatriculado de ${asignatura}`);
+        } else {
+            console.log(`El estudiante ${this.nombre} no está matriculado en ${asignatura}`);
         }
     }
 
@@ -642,8 +640,8 @@ function mostrarMenu() {
                 console.clear();
                 const idEstDesmatricular = parseInt(prompt("ID del estudiante a desmatricular:"), 10);
                 const nombreAsigDesmatricular = prompt("Nombre de la asignatura:");
-                const estudianteDesmatricular = listaEstu[idEstDesmatricular];
-                const asignaturaDesmatricular = listaAsig.find(function (a) {
+                const estudianteDesmatricular = listaEstu.listadoEstudiantes[idEstDesmatricular];
+                const asignaturaDesmatricular = listaAsig.listadoAsignaturas.find(function (a) {
                     return a.nombre === nombreAsigDesmatricular;
                 });
 
