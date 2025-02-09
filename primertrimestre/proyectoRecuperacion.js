@@ -84,7 +84,7 @@ Representa un estudiante, hereda de la clase persona, este tiene sus datos, asig
 
 Atributos:
     - ID.
-    - Asignaturas.
+    - Asignaturas: Array de objetos con las asignaturas matriculadas, cada objeto tiene el nombre de la asignatura, las calificaciones, la fecha de matriculación y la fecha de desmatriculación.
 
 Métodos:
     - Constructor.
@@ -136,14 +136,29 @@ class Estudiante extends Persona {
     }
 
     //Desmatricular al estudiante de una asignatura
-    desmatricular(asignatura) {
-        const index = this.#asignaturas.findIndex(objetos => objetos.nombre === asignatura);
-        if (index !== -1) {
-            this.#asignaturas[index].fechaDesmatricula = new Date();
-            this.#asignaturas.splice(index, 1);
-            console.log(`Estudiante ${this.nombre} desmatriculado de ${asignatura}`);
-        } else {
-            console.log(`El estudiante ${this.nombre} no está matriculado en ${asignatura}`);
+    desmatricular(...asignaturas) {
+        for (let asignatura of asignaturas) {
+            console.log("Buscando asignatura:", asignatura); // Muestra la asignatura que se intenta desmatricular
+            console.log("Asignaturas actuales del estudiante:", this.#asignaturas); // Muestra las asignaturas del estudiante
+    
+            const index = this.#asignaturas.findIndex(function (objeto) {
+                console.log("Verificando objeto:", objeto); // Muestra cada asignatura del estudiante
+                if (typeof objeto.nombre === "string" && typeof asignatura === "string") { 
+                    // Normaliza los nombres (quita espacios y convierte a minúsculas)
+                    const nombreObjeto = objeto.nombre.trim().toLowerCase();
+                    const nombreBuscado = asignatura.trim().toLowerCase();
+                    console.log(`Comparando '${nombreObjeto}' con '${nombreBuscado}'`);
+                    return nombreObjeto === nombreBuscado;
+                }
+                return false; // Si no son strings, descarta el objeto
+            });            
+    
+            if (index !== -1) {
+                this.#asignaturas[index].fechaDesmatricula = new Date();
+                console.log(`Estudiante ${this.nombre} desmatriculado de ${asignatura}`);
+            } else {
+                console.log(`El estudiante ${this.nombre} no está matriculado en ${asignatura}`);
+            }
         }
     }
 
@@ -570,8 +585,8 @@ function mostrarMenu() {
                 // Mostrar estudiantes
                 console.clear();
                 if (listaEstu.listadoEstudiantes.length === 0) {
-                    prompt("No hay estudiantes en la lista. Presiona Enter para continuar.");                    
-                }else{
+                    prompt("No hay estudiantes en la lista. Presiona Enter para continuar.");
+                } else {
                     console.log("Lista de estudiantes:\n");
                     for (const estudiante of listaEstu.listadoEstudiantes) {
                         console.log(estudiante.toString());
@@ -608,8 +623,8 @@ function mostrarMenu() {
                 // Mostrar asignaturas
                 console.clear();
                 if (listaAsig.listadoAsignaturas.length === 0) {
-                    prompt("No hay asignaturas en la lista. Presiona Enter para continuar.");                    
-                }else{
+                    prompt("No hay asignaturas en la lista. Presiona Enter para continuar.");
+                } else {
                     console.log("Lista de asignaturas:\n");
                     for (const asignatura of listaAsig.listadoAsignaturas) {
                         console.log(asignatura.toString());
@@ -641,15 +656,13 @@ function mostrarMenu() {
                 const idEstDesmatricular = parseInt(prompt("ID del estudiante a desmatricular:"), 10);
                 const nombreAsigDesmatricular = prompt("Nombre de la asignatura:");
                 const estudianteDesmatricular = listaEstu.listadoEstudiantes[idEstDesmatricular];
-                const asignaturaDesmatricular = listaAsig.listadoAsignaturas.find(function (a) {
-                    return a.nombre === nombreAsigDesmatricular;
-                });
 
-                if (estudianteDesmatricular && asignaturaDesmatricular) {
-                    estudianteDesmatricular.desmatricular(asignaturaDesmatricular);
-                    prompt(`Estudiante ${estudianteDesmatricular.nombre} desmatriculado de ${asignaturaDesmatricular.nombre}. Presiona Enter para continuar.`);
-                } else {
-                    prompt("Estudiante o asignatura no encontrados. Presiona Enter para continuar.");
+                if (estudianteDesmatricular) {
+                    estudianteDesmatricular.desmatricular(nombreAsigDesmatricular);
+                    prompt(`Estudiante ${estudianteDesmatricular.nombre} desmatriculado de ${nombreAsigDesmatricular}. Presiona Enter para continuar.`);
+                }
+                else {
+                    prompt("Estudiante no encontrado. Presiona Enter para continuar.");
                 }
                 break;
 
