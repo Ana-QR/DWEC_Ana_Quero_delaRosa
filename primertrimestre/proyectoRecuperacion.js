@@ -1,9 +1,11 @@
 /**
  * Hecho por: Ana Quero de la Rosa
- */
+*/
+
+/* Cuando abra el live server, abra la consola, dele a 0 para salir del programa y recargue la página para volver a empezar 
+y que se muestre el menú de nuevo, así irá correctamente todo. */
 
 /*https://ana-qr.github.io/DWEC_QueroDeLaRosa_Ana-tareas/primertrimestre/index.html */
-
 
 /*
 Clase Persona
