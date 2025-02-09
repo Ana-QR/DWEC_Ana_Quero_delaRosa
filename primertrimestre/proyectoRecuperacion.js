@@ -140,6 +140,7 @@ class Estudiante extends Persona {
         for (let asignatura of asignaturas) {
             const index = this.#asignaturas.findIndex(objetos => objetos.nombre === asignatura);
             if (index !== -1) {
+                this.#asignaturas[index].fechaDesmatricula = new Date();
                 this.#asignaturas.splice(index, 1);
                 console.log(`Estudiante ${this.nombre} desmatriculado de ${asignatura}`);
             } else {
@@ -150,18 +151,19 @@ class Estudiante extends Persona {
 
     //Cada estudiante puede recibir varias clasificaciones por asignatura. Numeros entre 0 y 10
     calificar(asignatura, calificacion) {
-        const index = this.#asignaturas.findIndex(objetos => objetos.nombre === asignatura);
-        if (index !== -1) {
-            if (calificacion >= 0 && calificacion <= 10) {
-                this.#asignaturas[index].calificaciones.push(calificacion);
-                console.log(`Calificación añadida con éxito`);
+        for (asignatura of asignaturas) {
+            const index = this.#asignaturas.findIndex(objetos => objetos.nombre === asignatura);
+            if (index !== -1) {
+                if (0 <= calificacion <= 10) {
+                    this.#asignaturas[index].calificaciones.push(calificacion);
+                    console.log(`Calificación añadida con éxito`);
+                } else {
+                    throw new Error("La calificación debe estar entre 0 y 10");
+                }
             } else {
-                console.log(`La calificación debe estar entre 0 y 10`);
+                throw new Error("El estudiante no está matriculado en la asignatura");
             }
-        } else {
-            console.log(`El estudiante ${this.nombre} no está matriculado en ${asignatura}`);
         }
-
     }
 
     //Media de las notas del estudiante
