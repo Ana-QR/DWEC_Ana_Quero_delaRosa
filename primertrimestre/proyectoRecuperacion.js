@@ -138,26 +138,20 @@ class Estudiante extends Persona {
     //Desmatricular al estudiante de una asignatura
     desmatricular(...asignaturas) {
         for (let asignatura of asignaturas) {
-            console.log("Buscando asignatura:", asignatura); // Muestra la asignatura que se intenta desmatricular
-            console.log("Asignaturas actuales del estudiante:", this.#asignaturas); // Muestra las asignaturas del estudiante
-    
-            const index = this.#asignaturas.findIndex(function (objeto) {
-                console.log("Verificando objeto:", objeto); // Muestra cada asignatura del estudiante
-                if (typeof objeto.nombre === "string" && typeof asignatura === "string") { 
-                    // Normaliza los nombres (quita espacios y convierte a minúsculas)
-                    const nombreObjeto = objeto.nombre.trim().toLowerCase();
-                    const nombreBuscado = asignatura.trim().toLowerCase();
-                    console.log(`Comparando '${nombreObjeto}' con '${nombreBuscado}'`);
-                    return nombreObjeto === nombreBuscado;
-                }
-                return false; // Si no son strings, descarta el objeto
-            });            
-    
+            const index = this.#asignaturas.findIndex(function(obj) {
+                return obj.nombre === asignatura.nombre;
+            });
             if (index !== -1) {
-                this.#asignaturas[index].fechaDesmatricula = new Date();
-                console.log(`Estudiante ${this.nombre} desmatriculado de ${asignatura}`);
+                this.#asignaturas.splice(index, 1); // Elimina la asignatura del estudiante
+    
+                // Asegurar que se elimina del registro de la asignatura
+                if (asignatura instanceof Asignatura && asignatura.estudiantes.has(this.id)) {
+                    asignatura.estudiantes.delete(this.id);
+                    console.log(`Estudiante ${this.nombre} eliminado de ${asignatura.nombre}`);
+                }
+    
             } else {
-                console.log(`El estudiante ${this.nombre} no está matriculado en ${asignatura}`);
+                console.log(`El estudiante ${this.nombre} no está matriculado en ${asignatura.nombre}`);
             }
         }
     }
@@ -653,18 +647,32 @@ function mostrarMenu() {
             case "8":
                 // Desmatricular estudiantes de asignaturas
                 console.clear();
-                const idEstDesmatricular = parseInt(prompt("ID del estudiante a desmatricular:"), 10);
-                const nombreAsigDesmatricular = prompt("Nombre de la asignatura:");
-                const estudianteDesmatricular = listaEstu.listadoEstudiantes[idEstDesmatricular];
-
-                if (estudianteDesmatricular) {
-                    estudianteDesmatricular.desmatricular(nombreAsigDesmatricular);
-                    prompt(`Estudiante ${estudianteDesmatricular.nombre} desmatriculado de ${nombreAsigDesmatricular}. Presiona Enter para continuar.`);
-                }
-                else {
-                    prompt("Estudiante no encontrado. Presiona Enter para continuar.");
-                }
-                break;
+                
+                    let idEstDesmatricular = parseInt(prompt("ID del estudiante a desmatricular:"), 10);
+                    let estudianteDesmatricular = listaEstu.listadoEstudiantes.find(est => est.id === idEstDesmatricular);
+                
+                    if (!estudianteDesmatricular) {
+                        prompt("Estudiante no encontrado. Presiona Enter para continuar.");
+                        break;
+                    }
+                
+                    let nombreAsigDesmatricular = prompt("Nombre de la asignatura:");
+                    let asignaturasEncontradas = listaAsig.buscarAsignaturas(nombreAsigDesmatricular);
+                
+                    if (asignaturasEncontradas.length === 0) {
+                        prompt("Asignatura no encontrada. Presiona Enter para continuar.");
+                        break;
+                    }
+                
+                    let asignaturaDesmatricular = asignaturasEncontradas[0];
+                
+                    estudianteDesmatricular.desmatricular(asignaturaDesmatricular); // Pasamos el objeto asignatura
+                
+                    // Comprobamos el número de estudiantes después de la desmatriculación
+                    console.log(`Número de estudiantes en ${asignaturaDesmatricular.nombre}: ${asignaturaDesmatricular.estudiantes.size}`);
+                
+                    prompt(`Estudiante ${estudianteDesmatricular.nombre} desmatriculado de ${asignaturaDesmatricular.nombre}. Presiona Enter para continuar.`);
+                    break;
 
             case "9":
                 // Calificar estudiantes en asignaturas
