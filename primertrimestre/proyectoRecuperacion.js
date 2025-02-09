@@ -123,14 +123,19 @@ class Estudiante extends Persona {
         for (let asignatura of asignaturas) {
             if (!this.#asignaturas.some(objetos => objetos.nombre === asignatura)) {
                 this.#asignaturas.push({
-                    nombre: asignatura,
+                    nombre: asignatura.nombre,
                     calificaciones: [],
                     fechaMatricula: new Date(),
                     fechaDesmatricula: null
                 });
-                console.log(`Estudiante ${this.nombre} matriculado en ${asignatura}`);
+                // Agregar al estudiante en la lista de la asignatura
+                if (!asignatura.estudiantes.has(this.id)) {
+                    asignatura.estudiantes.set(this.id, this);
+                }
+    
+                console.log(`Estudiante ${this.nombre} matriculado en ${asignatura.nombre}`);
             } else {
-                console.log(`El estudiante ${this.nombre} ya está matriculado en ${asignatura}`);
+                console.log(`El estudiante ${this.nombre} ya está matriculado en ${asignatura.nombre}`);
             }
         }
     }
@@ -267,6 +272,7 @@ Representa una asignatura
 Atributos:
     -nombre
     -calificaciones
+    -estudiantes
 
 Métodos:
     - calificar: Añade una calificación a la asignatura.
@@ -277,6 +283,7 @@ Métodos:
 class Asignatura {
     #nombre;
     #calificaciones; //son las calificaciones generales, no están asociadas a ningún estudiante
+    #estudiantes;
 
     constructor(nombre) {
         if (!/^([a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+)$/.test(nombre)) {
@@ -284,6 +291,7 @@ class Asignatura {
         }
         this.#nombre = nombre;
         this.#calificaciones = []; //calificaciones generales
+        this.#estudiantes = new Map() // map para asociar los estudiantes son sus calificaciones
     }
 
     ///////GETTERS///////
@@ -293,6 +301,10 @@ class Asignatura {
 
     get calificaciones() {
         return this.#calificaciones;
+    }
+
+    get estudiantes() {
+        return this.#estudiantes;
     }
 
     // Califica a un estudiante en la asignatura
@@ -647,32 +659,25 @@ function mostrarMenu() {
             case "8":
                 // Desmatricular estudiantes de asignaturas
                 console.clear();
-                
-                    let idEstDesmatricular = parseInt(prompt("ID del estudiante a desmatricular:"), 10);
-                    let estudianteDesmatricular = listaEstu.listadoEstudiantes.find(est => est.id === idEstDesmatricular);
-                
-                    if (!estudianteDesmatricular) {
-                        prompt("Estudiante no encontrado. Presiona Enter para continuar.");
-                        break;
-                    }
-                
-                    let nombreAsigDesmatricular = prompt("Nombre de la asignatura:");
-                    let asignaturasEncontradas = listaAsig.buscarAsignaturas(nombreAsigDesmatricular);
-                
-                    if (asignaturasEncontradas.length === 0) {
-                        prompt("Asignatura no encontrada. Presiona Enter para continuar.");
-                        break;
-                    }
-                
-                    let asignaturaDesmatricular = asignaturasEncontradas[0];
-                
-                    estudianteDesmatricular.desmatricular(asignaturaDesmatricular); // Pasamos el objeto asignatura
-                
-                    // Comprobamos el número de estudiantes después de la desmatriculación
-                    console.log(`Número de estudiantes en ${asignaturaDesmatricular.nombre}: ${asignaturaDesmatricular.estudiantes.size}`);
-                
-                    prompt(`Estudiante ${estudianteDesmatricular.nombre} desmatriculado de ${asignaturaDesmatricular.nombre}. Presiona Enter para continuar.`);
+                const idEstDesmatricular = parseInt(prompt("ID del estudiante a desmatricular:"), 10);
+                const estudianteDesmatricular = listaEstu.listadoEstudiantes.find(est => est.id === idEstDesmatricular);
+
+                if (!estudianteDesmatricular) {
+                    prompt("Estudiante no encontrado. Presiona Enter para continuar.");
                     break;
+                }
+
+                const nombreAsigDesmatricular = prompt("Nombre de la asignatura:");
+                const asignaturaDesmatricular = listaAsig.listadoAsignaturas.find(asig => asig.nombre === nombreAsigDesmatricular);
+
+                if (!asignaturaDesmatricular) {
+                    prompt("Asignatura no encontrada. Presiona Enter para continuar.");
+                    break;
+                }
+
+                estudianteDesmatricular.desmatricular(asignaturaDesmatricular);
+                prompt(`Estudiante ${estudianteDesmatricular.nombre} desmatriculado de ${asignaturaDesmatricular.nombre}. Presiona Enter para continuar.`);
+                break;
 
             case "9":
                 // Calificar estudiantes en asignaturas
