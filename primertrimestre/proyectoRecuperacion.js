@@ -151,19 +151,18 @@ class Estudiante extends Persona {
 
     //Cada estudiante puede recibir varias clasificaciones por asignatura. Numeros entre 0 y 10
     calificar(asignatura, calificacion) {
-        for (asignatura of asignaturas) {
-            const index = this.#asignaturas.findIndex(objetos => objetos.nombre === asignatura);
-            if (index !== -1) {
-                if (0 <= calificacion <= 10) {
-                    this.#asignaturas[index].calificaciones.push(calificacion);
-                    console.log(`Calificación añadida con éxito`);
-                } else {
-                    throw new Error("La calificación debe estar entre 0 y 10");
-                }
+        const index = this.#asignaturas.findIndex(objetos => objetos.nombre === asignatura);
+        if (index !== -1) {
+            if (calificacion >= 0 && calificacion <= 10) {
+                this.#asignaturas[index].calificaciones.push(calificacion);
+                console.log(`Calificación añadida con éxito`);
             } else {
-                throw new Error("El estudiante no está matriculado en la asignatura");
+                console.log(`La calificación debe estar entre 0 y 10`);
             }
+        } else {
+            console.log(`El estudiante ${this.nombre} no está matriculado en ${asignatura}`);
         }
+
     }
 
     //Media de las notas del estudiante
