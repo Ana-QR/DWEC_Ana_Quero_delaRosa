@@ -7,13 +7,17 @@
 
 /*
 Clase Persona
-Es la clase de la que va a heredar estudiante, cualquier estudiante es una persona
+Es la clase de la que va a heredar estudiante, cualquier estudiante es una persona pero no al revés. 
 
 Atributos:
-    -nombre
-    -edad
-    -dirección
+    -Nombre: Solo letras y espacios.
+    -Edad: Número positivo.
+    -Dirección: Instancia de la clase dirección.
 
+Métodos:
+    - Constructor. 
+    - Getter y Setter: Nombre, edad y dirección.
+    - toString(): Devuelve una representación en texto de la persona.
 */
 class Persona {
     #nombre;
@@ -74,20 +78,21 @@ class Persona {
 
 /*
 Clase Estudiante 
-Representa un estudiante, hereda de la clase persona, este tiene sus datos, asignaturas y funcionalidades.
+Representa un estudiante, hereda de la clase persona, este tiene sus datos, asignaturas y funcionalidades. 
 
 Atributos:
-    - ID
-    - asignaturas--> es un array que muestra en qué asignaturas está matriculado el estudiante. El array contiene:
-        * La asignatura de la que está matriculado.
-        * La fecha en la que se matriculó.
+    - ID.
+    - Asignaturas.
 
 Métodos:
     - Constructor.
-    - Getter y Setter
-    - Matricular/desmatricular asignaturas.
-    - Calificar
-    - Calcular el promedio de las calificaciones.
+    - Getter y Setter: ID y asignaturas.
+    - matricular: Matricular a una asignatura.
+    - desmatricular: Desmatricular de una asignatura.
+    - calificar: Añadir una calificación.
+    - calcularPromedioEstudiante: Calcular el promedio de las calificaciones.
+    - buscarAsignaturas: Buscar asignaturas según un patrón de texto.
+    - toString(): Devuelve una representación en texto del estudiante.
 */
 
 class Estudiante extends Persona {
@@ -177,7 +182,6 @@ class Estudiante extends Persona {
         }
     }
 
-
     //Buscar asignaturas según un patrón de texto
     buscarAsignaturas(patron) {
         const regex = new RegExp(patron, "i"); //el modificador "i" indica que la busqueda sea insensible a mayusculas y minusculas
@@ -198,16 +202,17 @@ Clase Direccion
 Representa una dirección postal.
 
 Atributos: 
-    -calle
-    -número
-    -piso
-    -código postal
-    -provincia y localidad
+    -Calle.
+    -Número.
+    -Piso.
+    -Código postal.
+    -Provincia.
+    -Localidad.
 Todos son privados.
 
 Métodos:
     - Constructor: Permite inicializar los datos, validando el código postal (5 dígitos).
-    - Getter y Setter: Para acceder y modificar cada atributo.
+    - validarCodigoPostal(): Valida el código postal.
     - toString(): Devuelve una representación en texto de la dirección.
 */
 
@@ -228,6 +233,7 @@ class Direccion {
         this.#codigoPostal = this.validarCodigoPostal(codigoPostal);
     }
 
+    // Valida el código postal
     validarCodigoPostal(codigoPostal) {
         const regex = /^\d{5}$/;  // Expresión regular para verificar que sea un código postal de 5 dígitos
         return regex.test(codigoPostal) ? codigoPostal : "00000";  // Si es válido, devuelve el codigo postal; si no, pone "00000"
@@ -249,13 +255,13 @@ Clase Asignatura
 Representa una asignatura 
 
 Atributos:
-    -nombre 
+    -nombre
     -calificaciones
-    -estudiantes
 
 Métodos:
-    - Añadir calificaciones
-    - Obtener el promedio de calificaciones
+    - calificar: Añade una calificación a la asignatura.
+    - eliminarCalificacion: Elimina una calificación de la asignatura.
+    - toString(): Devuelve una representación en texto de la asignatura.
 */
 
 class Asignatura {
@@ -270,6 +276,7 @@ class Asignatura {
         this.#calificaciones = []; //calificaciones generales
     }
 
+    ///////GETTERS///////
     get nombre() {
         return this.#nombre;
     }
@@ -278,6 +285,7 @@ class Asignatura {
         return this.#calificaciones;
     }
 
+    // Califica a un estudiante en la asignatura
     calificar(nota) {
         if (0 <= nota <= 10) {
             // Agrega la calificación al array
@@ -287,6 +295,7 @@ class Asignatura {
         }
     }
 
+    // Elimina una calificación de la asignatura
     eliminarCalificacion(calificacion) {
         const indiceCalificacion = this.#calificaciones.indexOf(calificacion);
 
@@ -306,14 +315,16 @@ class Asignatura {
 Clase ListaEstudiantes
 Array que contiene a los estudiantes
 
+Atributos:
+    -listadoEstudiantes
+
 Métodos:
-    - Constructor
-    - Promedio de las asignaturas de un estudiante 
-    - Añadir un estudiante en la lista
-    - Eliminar un estudiante de la lista
-    - Buscar un estudiante por nombre
-    - Mostrar el contenido de la lista de los estudiantes
- */
+    - Constructor: Permite inicializar la lista de estudiantes.
+    - promedioEstudiantes: Promedio de las asignaturas de un estudiante.
+    - addEstudiante: Añadir un estudiante en la lista.
+    - eliminarEstudiante: Eliminar un estudiante de la lista.
+    - busquedaPorNombre: Buscar un estudiante por nombre.
+*/
 
 class ListaEstudiantes {
     #listadoEstudiantes;
@@ -326,10 +337,13 @@ class ListaEstudiantes {
         }
     }
 
+    ///////GETTER///////
+    //Devuelve una copia del array de estudiantes
     get listadoEstudiantes() {
         return [...this.#listadoEstudiantes];
     }
 
+    //Promedio general de las asignaturas de los estudiantes
     promedioEstudiantes() {
         let sum = 0;
         let contador = 0;
@@ -347,6 +361,7 @@ class ListaEstudiantes {
         }
     }
 
+    //Añadir un estudiante a la lista
     addEstudiante(estudiante) {
         if (this.#listadoEstudiantes.includes(estudiante)) {
             throw new Error("El estudiante ya se encuentra en la lista, no puede haber duplicados");
@@ -355,6 +370,7 @@ class ListaEstudiantes {
         }
     }
 
+    //Eliminar un estudiante de la lista
     eliminarEstudiante(estudiante) {
         if (this.#listadoEstudiantes.includes(estudiante)) {
             this.#listadoEstudiantes = this.#listadoEstudiantes.filter(e => e !== estudiante);
@@ -364,6 +380,7 @@ class ListaEstudiantes {
         }
     }
 
+    //Buscar un estudiante por nombre
     busquedaPorNombre(nombre) {
         const regex = new RegExp(nombre, 'i');
         return this.#listadoEstudiantes.filter(elemento => regex.test(elemento.nombre || elemento.toString()));
@@ -376,12 +393,15 @@ class ListaEstudiantes {
 Clase ListaAsignaturas
 Array que contiene las asignaturas
 
+Atributos:  
+    -listadoAsignaturas
+
 Métodos:
-    - Constructor
-    - Promedio de las calificaciones de todas las asignaturas
-    - Añadir una asignatura en la lista
-    - Eliminar una asignatura de la lista
-    - Buscar una asignatura por un patrón 
+    - Constructor: Permite inicializar la lista de asignaturas.
+    - Getter: listadoAsignaturas (devuelve una copia del array de asignaturas).
+    - addAsignatura: Añadir una asignatura en la lista.
+    - eliminarAsignatura: Eliminar una asignatura de la lista.
+    - buscarAsignaturas: Buscar asignaturas según un patrón de texto.
 */
 
 class ListaAsignaturas {
@@ -512,6 +532,7 @@ function mostrarMenu() {
 
         switch (opcion) {
             case "1":
+                // Añadir estudiantes
                 console.clear();
                 prompt(`Introduce los datos que debe poseer el estudiante: (enter para continuar)`);
                 const nombre = prompt("Nombre del estudiante:");
@@ -531,6 +552,7 @@ function mostrarMenu() {
                 break;
 
             case "2":
+                // Eliminar estudiantes
                 console.clear();
                 prompt(`Introduce lo siguiente para eliminar al estudiante: `);
                 const nombreEliminar = prompt("Nombre del estudiante a eliminar:");
@@ -544,6 +566,7 @@ function mostrarMenu() {
                 break;
 
             case "3":
+                // Mostrar estudiantes
                 console.clear();
                 if (listaEstu.listadoEstudiantes.length === 0) {
                     prompt("No hay estudiantes en la lista. Presiona Enter para continuar.");                    
@@ -556,6 +579,7 @@ function mostrarMenu() {
                 break;
 
             case "4":
+                // Añadir asignaturas
                 console.clear();
                 const nombreAsig = prompt("Nombre de la asignatura:");
 
@@ -566,6 +590,7 @@ function mostrarMenu() {
                 break;
 
             case "5":
+                // Eliminar asignaturas
                 console.clear();
                 prompt(`Introduce lo siguiente para eliminar la asignatura: `);
                 const nombreAsigEliminar = prompt("Nombre de la asignatura a eliminar:");
@@ -579,6 +604,7 @@ function mostrarMenu() {
                 break;
 
             case "6":
+                // Mostrar asignaturas
                 console.clear();
                 if (listaAsig.listadoAsignaturas.length === 0) {
                     prompt("No hay asignaturas en la lista. Presiona Enter para continuar.");                    
@@ -591,6 +617,7 @@ function mostrarMenu() {
                 break;
 
             case "7":
+                // Matricular estudiantes en asignaturas
                 console.clear();
                 const idEstMatricular = parseInt(prompt("ID del estudiante a matricular:"), 10);
                 const nombreAsigMatricular = prompt("Nombre de la asignatura:");
@@ -608,6 +635,7 @@ function mostrarMenu() {
                 break;
 
             case "8":
+                // Desmatricular estudiantes de asignaturas
                 console.clear();
                 const idEstDesmatricular = parseInt(prompt("ID del estudiante a desmatricular:"), 10);
                 const nombreAsigDesmatricular = prompt("Nombre de la asignatura:");
@@ -625,6 +653,7 @@ function mostrarMenu() {
                 break;
 
             case "9":
+                // Calificar estudiantes en asignaturas
                 console.clear();
                 const idEstCalificar = parseInt(prompt("ID del estudiante a calificar:"), 10);
                 const nombreAsigCalificar = prompt("Nombre de la asignatura:");
@@ -643,6 +672,7 @@ function mostrarMenu() {
                 break;
 
             case "10":
+                // Calcular promedio de un estudiante
                 console.clear();
                 const idEstPromedio = parseInt(prompt("ID del estudiante:"), 10);
                 const estudiantePromedio = listaEstu.listadoEstudiantes[idEstPromedio];
@@ -652,12 +682,14 @@ function mostrarMenu() {
                 break;
 
             case "11":
+                // Calcular promedio general de los estudiantes
                 console.clear();
                 const promedioGeneral = listaEstu.promedioEstudiantes();
                 prompt(`Promedio general de los estudiantes: ${promedioGeneral}. Presiona Enter para continuar.`);
                 break;
 
             case "0":
+                // Salir del programa
                 console.clear();
                 prompt("Saliendo del programa... Presiona Enter para finalizar.");
                 continuar = false;
