@@ -163,18 +163,20 @@ class Estudiante extends Persona {
 
     //Cada estudiante puede recibir varias clasificaciones por asignatura. Numeros entre 0 y 10
     calificar(asignatura, calificacion) {
-        const index = this.#asignaturas.findIndex(objetos => objetos.nombre === asignatura);
-        if (index !== -1) {
-            if (calificacion >= 0 && calificacion <= 10) {
-                this.#asignaturas[index].calificaciones.push(calificacion);
-                console.log(`Calificación añadida con éxito`);
-            } else {
-                console.log(`La calificación debe estar entre 0 y 10`);
-            }
-        } else {
-            console.log(`El estudiante ${this.nombre} no está matriculado en ${asignatura}`);
+        if (calificacion < 0 || calificacion > 10) {
+            throw new Error("La calificación debe estar entre 0 y 10.");
         }
 
+        const index = this.#asignaturas.findIndex(function(obj) {
+            return obj.nombre === asignatura.nombre;
+        });
+
+        if (index !== -1) {
+            this.#asignaturas[index].calificaciones.push(calificacion);
+            console.log(`Calificación añadida con éxito`);
+        } else {
+            console.log(`El estudiante ${this.nombre} no está matriculado en ${asignatura.nombre}`);
+        }
     }
 
     //Media de las notas del estudiante
@@ -309,12 +311,11 @@ class Asignatura {
 
     // Califica a un estudiante en la asignatura
     calificar(nota) {
-        if (0 <= nota <= 10) {
-            // Agrega la calificación al array
-            this.#calificaciones.push(nota);
-        } else {
+        if (nota < 0 || nota > 10) {
             throw new Error("La calificación debe estar entre 0 y 10.");
         }
+
+        this.#calificaciones.push(nota);
     }
 
     // Elimina una calificación de la asignatura
@@ -362,7 +363,7 @@ class ListaEstudiantes {
     ///////GETTER///////
     //Devuelve una copia del array de estudiantes
     get listadoEstudiantes() {
-        return [...this.#listadoEstudiantes];
+        return this.#listadoEstudiantes;
     }
 
     //Promedio general de las asignaturas de los estudiantes
