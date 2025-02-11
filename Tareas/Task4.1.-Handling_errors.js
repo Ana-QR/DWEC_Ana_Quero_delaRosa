@@ -322,7 +322,9 @@ class Asignatura {
     eliminarCalificacion(calificacion) {
         const indiceCalificacion = this.#calificaciones.indexOf(calificacion);
 
-        if (indiceCalificacion == -1) throw new Error("Ningún estudiante ha sacado dicha calificación.");
+        if (indiceCalificacion == -1) {
+            throw new Error("Ningún estudiante ha sacado dicha calificación.");
+        }
 
         this.#calificaciones.splice(indiceCalificacion, 1);
     }
@@ -515,21 +517,32 @@ tecnologia.calificar(estudiante3, 8.8);
 prompt("Datos inicializados correctamente. Presiona Enter para continuar.");
 
 // Eliminar estudiantes y asignaturas
-listaEstu.eliminarEstudiante(estudiante3);
-listaAsig.eliminarAsignatura(artes);
-
-prompt("Estudiantes y asignaturas eliminados con éxito");
+try {
+    listaEstu.eliminarEstudiante(estudiante3);
+    listaAsig.eliminarAsignatura(artes);
+    prompt("Estudiantes y asignaturas eliminados con éxito");
+} catch (error) {
+    console.error(error.message);
+}
 
 //Matricular y desmatricular estudiantes de asignaturas
-estudiante2.matricular(historia);
-estudiante1.desmatricular(historia);
+try {
+    estudiante2.matricular(historia);
+    estudiante1.desmatricular(historia);
+} catch (error) {
+    console.error(error.message);
+}
 
 //Calificación de estudiantes en asignaturas con la funcion calificar de estudiante
-estudiante1.calificar(tecnologia, 7);
-estudiante3.calificar(tecnologia, 8);
-estudiante3.calificar(historia, 6);
-estudiante1.calificar(historia, 8);
-estudiante2.calificar(matematicas, 6);
+try {
+    estudiante1.calificar(tecnologia, 7);
+    estudiante3.calificar(tecnologia, 8);
+    estudiante3.calificar(historia, 6);
+    estudiante1.calificar(historia, 8);
+    estudiante2.calificar(matematicas, 6);
+} catch (error) {
+    console.error(error.message);
+}
 
 
 function mostrarMenu() {
@@ -553,182 +566,186 @@ function mostrarMenu() {
                 Escribe tu opción:`
         );
 
-        switch (opcion) {
-            case "1":
-                // Añadir estudiantes
-                console.clear();
-                prompt(`Introduce los datos que debe poseer el estudiante: (enter para continuar)`);
-                const nombre = prompt("Nombre del estudiante:");
-                const edad = parseInt(prompt("Edad del estudiante:"), 10);
-                const calle = prompt("Calle de la dirección:");
-                const numero = prompt("Número de la dirección:");
-                const piso = prompt("Piso de la dirección:");
-                const codPostal = prompt("Código postal de la dirección:");
-                const provincia = prompt("Provincia de la dirección:");
-                const localidad = prompt("Localidad de la dirección:");
-                const direccion = new Direccion(calle, numero, piso, codPostal, provincia, localidad);
+        try {
+            switch (opcion) {
+                case "1":
+                    // Añadir estudiantes
+                    console.clear();
+                    prompt(`Introduce los datos que debe poseer el estudiante: (enter para continuar)`);
+                    const nombre = prompt("Nombre del estudiante:");
+                    const edad = parseInt(prompt("Edad del estudiante:"), 10);
+                    const calle = prompt("Calle de la dirección:");
+                    const numero = prompt("Número de la dirección:");
+                    const piso = prompt("Piso de la dirección:");
+                    const codPostal = prompt("Código postal de la dirección:");
+                    const provincia = prompt("Provincia de la dirección:");
+                    const localidad = prompt("Localidad de la dirección:");
+                    const direccion = new Direccion(calle, numero, piso, codPostal, provincia, localidad);
 
-                const nuevoEstudiante = new Estudiante(nombre, edad, direccion);
+                    const nuevoEstudiante = new Estudiante(nombre, edad, direccion);
 
-                listaEstu.addEstudiante(nuevoEstudiante);
-                prompt(`Estudiante ${nombre} añadido con éxito. Presiona Enter para continuar.`);
-                break;
-
-            case "2":
-                // Eliminar estudiantes
-                console.clear();
-                prompt(`Introduce lo siguiente para eliminar al estudiante: `);
-                const nombreEliminar = prompt("Nombre del estudiante a eliminar:");
-                const estudianteEliminar = listaEstu.busquedaPorNombre(nombreEliminar)[0];
-                if (estudianteEliminar) {
-                    listaEstu.eliminarEstudiante(estudianteEliminar);
-                    prompt(`Estudiante ${estudianteEliminar.nombre} eliminado. Presiona Enter para continuar.`);
-                } else {
-                    prompt("Estudiante no encontrado. Presiona Enter para continuar.");
-                }
-                break;
-
-            case "3":
-                // Mostrar estudiantes
-                console.clear();
-                if (listaEstu.listadoEstudiantes.length === 0) {
-                    prompt("No hay estudiantes en la lista. Presiona Enter para continuar.");
-                } else {
-                    console.log("Lista de estudiantes:\n");
-                    for (const estudiante of listaEstu.listadoEstudiantes) {
-                        console.log(estudiante.toString());
-                    }
-                }
-                break;
-
-            case "4":
-                // Añadir asignaturas
-                console.clear();
-                const nombreAsig = prompt("Nombre de la asignatura:");
-
-                const nuevaAsignatura = new Asignatura(nombreAsig);
-
-                listaAsig.addAsignatura(nuevaAsignatura);
-                prompt(`Asignatura ${nombreAsig} añadida con éxito. Presiona Enter para continuar.`);
-                break;
-
-            case "5":
-                // Eliminar asignaturas
-                console.clear();
-                prompt(`Introduce lo siguiente para eliminar la asignatura: `);
-                const nombreAsigEliminar = prompt("Nombre de la asignatura a eliminar:");
-                const asignaturaEliminar = listaAsig.buscarAsignaturas(nombreAsigEliminar)[0];
-                if (asignaturaEliminar) {
-                    listaAsig.eliminarAsignatura(asignaturaEliminar);
-                    prompt(`Asignatura ${asignaturaEliminar.nombre} eliminada. Presiona Enter para continuar.`);
-                } else {
-                    prompt("Asignatura no encontrada. Presiona Enter para continuar.");
-                }
-                break;
-
-            case "6":
-                // Mostrar asignaturas
-                console.clear();
-                if (listaAsig.listadoAsignaturas.length === 0) {
-                    prompt("No hay asignaturas en la lista. Presiona Enter para continuar.");
-                } else {
-                    console.log("Lista de asignaturas:\n");
-                    for (const asignatura of listaAsig.listadoAsignaturas) {
-                        console.log(asignatura.toString());
-                    }
-                }
-                break;
-
-            case "7":
-                // Matricular estudiantes en asignaturas
-                console.clear();
-                const idEstMatricular = parseInt(prompt("ID del estudiante a matricular:"), 10);
-                const nombreAsigMatricular = prompt("Nombre de la asignatura:");
-                const estudianteMatricular = listaEstu.listadoEstudiantes[idEstMatricular];
-                const asignaturaMatricular = listaAsig.listadoAsignaturas.find(function (a) {
-                    return a.nombre === nombreAsigMatricular;
-                });
-
-                if (estudianteMatricular && asignaturaMatricular) {
-                    estudianteMatricular.matricular(asignaturaMatricular);
-                    prompt(`Estudiante ${estudianteMatricular.nombre} matriculado en ${asignaturaMatricular.nombre}. Presiona Enter para continuar.`);
-                } else {
-                    prompt("Estudiante o asignatura no encontrados. Presiona Enter para continuar.");
-                }
-                break;
-
-            case "8":
-                // Desmatricular estudiantes de asignaturas
-                console.clear();
-                const idEstDesmatricular = parseInt(prompt("ID del estudiante a desmatricular:"), 10);
-                const estudianteDesmatricular = listaEstu.listadoEstudiantes.find(function (est) {
-                    return est.id === idEstDesmatricular;
-                });
-
-                if (!estudianteDesmatricular) {
-                    prompt("Estudiante no encontrado. Presiona Enter para continuar.");
+                    listaEstu.addEstudiante(nuevoEstudiante);
+                    prompt(`Estudiante ${nombre} añadido con éxito. Presiona Enter para continuar.`);
                     break;
-                }
 
-                const nombreAsigDesmatricular = prompt("Nombre de la asignatura:");
-                const asignaturaDesmatricular = listaAsig.listadoAsignaturas.find(function (asig) {
-                    return asig.nombre === nombreAsigDesmatricular;
-                });
-
-                if (!asignaturaDesmatricular) {
-                    prompt("Asignatura no encontrada. Presiona Enter para continuar.");
+                case "2":
+                    // Eliminar estudiantes
+                    console.clear();
+                    prompt(`Introduce lo siguiente para eliminar al estudiante: `);
+                    const nombreEliminar = prompt("Nombre del estudiante a eliminar:");
+                    const estudianteEliminar = listaEstu.busquedaPorNombre(nombreEliminar)[0];
+                    if (estudianteEliminar) {
+                        listaEstu.eliminarEstudiante(estudianteEliminar);
+                        prompt(`Estudiante ${estudianteEliminar.nombre} eliminado. Presiona Enter para continuar.`);
+                    } else {
+                        prompt("Estudiante no encontrado. Presiona Enter para continuar.");
+                    }
                     break;
-                }
 
-                estudianteDesmatricular.desmatricular(asignaturaDesmatricular);
-                prompt(`Estudiante ${estudianteDesmatricular.nombre} desmatriculado de ${asignaturaDesmatricular.nombre}. Presiona Enter para continuar.`);
-                break;
+                case "3":
+                    // Mostrar estudiantes
+                    console.clear();
+                    if (listaEstu.listadoEstudiantes.length === 0) {
+                        prompt("No hay estudiantes en la lista. Presiona Enter para continuar.");
+                    } else {
+                        console.log("Lista de estudiantes:\n");
+                        for (const estudiante of listaEstu.listadoEstudiantes) {
+                            console.log(estudiante.toString());
+                        }
+                    }
+                    break;
 
-            case "9":
-                // Calificar estudiantes en asignaturas
-                console.clear();
-                const idEstCalificar = parseInt(prompt("ID del estudiante a calificar:"), 10);
-                const nombreAsigCalificar = prompt("Nombre de la asignatura:");
-                const calificacion = parseFloat(prompt("Calificación (0-10):"));
-                const estudianteCalificar = listaEstu.listadoEstudiantes[idEstCalificar];
-                const asignaturaCalificar = listaAsig.listadoAsignaturas.find(function (a) {
-                    return a.nombre === nombreAsigCalificar;
-                });
+                case "4":
+                    // Añadir asignaturas
+                    console.clear();
+                    const nombreAsig = prompt("Nombre de la asignatura:");
 
-                if (estudianteCalificar && asignaturaCalificar) {
-                    estudianteCalificar.calificar(asignaturaCalificar, calificacion);
-                    prompt(`Calificación añadida con éxito. Presiona Enter para continuar.`);
-                } else {
-                    prompt("Estudiante o asignatura no encontrados. Presiona Enter para continuar.");
-                }
-                break;
+                    const nuevaAsignatura = new Asignatura(nombreAsig);
 
-            case "10":
-                // Calcular promedio de un estudiante
-                console.clear();
-                const idEstPromedio = parseInt(prompt("ID del estudiante:"), 10);
-                const estudiantePromedio = listaEstu.listadoEstudiantes[idEstPromedio];
-                const promedioEstudiante = estudiantePromedio.calcularPromedioEstudiante();
+                    listaAsig.addAsignatura(nuevaAsignatura);
+                    prompt(`Asignatura ${nombreAsig} añadida con éxito. Presiona Enter para continuar.`);
+                    break;
 
-                prompt(`Promedio del estudiante: ${promedioEstudiante}. Presiona Enter para continuar.`);
-                break;
+                case "5":
+                    // Eliminar asignaturas
+                    console.clear();
+                    prompt(`Introduce lo siguiente para eliminar la asignatura: `);
+                    const nombreAsigEliminar = prompt("Nombre de la asignatura a eliminar:");
+                    const asignaturaEliminar = listaAsig.buscarAsignaturas(nombreAsigEliminar)[0];
+                    if (asignaturaEliminar) {
+                        listaAsig.eliminarAsignatura(asignaturaEliminar);
+                        prompt(`Asignatura ${asignaturaEliminar.nombre} eliminada. Presiona Enter para continuar.`);
+                    } else {
+                        prompt("Asignatura no encontrada. Presiona Enter para continuar.");
+                    }
+                    break;
 
-            case "11":
-                // Calcular promedio general de los estudiantes
-                console.clear();
-                const promedioGeneral = listaEstu.promedioEstudiantes();
-                prompt(`Promedio general de los estudiantes: ${promedioGeneral}. Presiona Enter para continuar.`);
-                break;
+                case "6":
+                    // Mostrar asignaturas
+                    console.clear();
+                    if (listaAsig.listadoAsignaturas.length === 0) {
+                        prompt("No hay asignaturas en la lista. Presiona Enter para continuar.");
+                    } else {
+                        console.log("Lista de asignaturas:\n");
+                        for (const asignatura of listaAsig.listadoAsignaturas) {
+                            console.log(asignatura.toString());
+                        }
+                    }
+                    break;
 
-            case "0":
-                // Salir del programa
-                console.clear();
-                prompt("Saliendo del programa... Presiona Enter para finalizar.");
-                continuar = false;
-                break;
+                case "7":
+                    // Matricular estudiantes en asignaturas
+                    console.clear();
+                    const idEstMatricular = parseInt(prompt("ID del estudiante a matricular:"), 10);
+                    const nombreAsigMatricular = prompt("Nombre de la asignatura:");
+                    const estudianteMatricular = listaEstu.listadoEstudiantes[idEstMatricular];
+                    const asignaturaMatricular = listaAsig.listadoAsignaturas.find(function (a) {
+                        return a.nombre === nombreAsigMatricular;
+                    });
 
-            default:
-                prompt("Opción no válida. Por favor, introduce un número entre 0 y 10. Presiona Enter para continuar.");
+                    if (estudianteMatricular && asignaturaMatricular) {
+                        estudianteMatricular.matricular(asignaturaMatricular);
+                        prompt(`Estudiante ${estudianteMatricular.nombre} matriculado en ${asignaturaMatricular.nombre}. Presiona Enter para continuar.`);
+                    } else {
+                        prompt("Estudiante o asignatura no encontrados. Presiona Enter para continuar.");
+                    }
+                    break;
+
+                case "8":
+                    // Desmatricular estudiantes de asignaturas
+                    console.clear();
+                    const idEstDesmatricular = parseInt(prompt("ID del estudiante a desmatricular:"), 10);
+                    const estudianteDesmatricular = listaEstu.listadoEstudiantes.find(function (est) {
+                        return est.id === idEstDesmatricular;
+                    });
+
+                    if (!estudianteDesmatricular) {
+                        prompt("Estudiante no encontrado. Presiona Enter para continuar.");
+                        break;
+                    }
+
+                    const nombreAsigDesmatricular = prompt("Nombre de la asignatura:");
+                    const asignaturaDesmatricular = listaAsig.listadoAsignaturas.find(function (asig) {
+                        return asig.nombre === nombreAsigDesmatricular;
+                    });
+
+                    if (!asignaturaDesmatricular) {
+                        prompt("Asignatura no encontrada. Presiona Enter para continuar.");
+                        break;
+                    }
+
+                    estudianteDesmatricular.desmatricular(asignaturaDesmatricular);
+                    prompt(`Estudiante ${estudianteDesmatricular.nombre} desmatriculado de ${asignaturaDesmatricular.nombre}. Presiona Enter para continuar.`);
+                    break;
+
+                case "9":
+                    // Calificar estudiantes en asignaturas
+                    console.clear();
+                    const idEstCalificar = parseInt(prompt("ID del estudiante a calificar:"), 10);
+                    const nombreAsigCalificar = prompt("Nombre de la asignatura:");
+                    const calificacion = parseFloat(prompt("Calificación (0-10):"));
+                    const estudianteCalificar = listaEstu.listadoEstudiantes[idEstCalificar];
+                    const asignaturaCalificar = listaAsig.listadoAsignaturas.find(function (a) {
+                        return a.nombre === nombreAsigCalificar;
+                    });
+
+                    if (estudianteCalificar && asignaturaCalificar) {
+                        estudianteCalificar.calificar(asignaturaCalificar, calificacion);
+                        prompt(`Calificación añadida con éxito. Presiona Enter para continuar.`);
+                    } else {
+                        prompt("Estudiante o asignatura no encontrados. Presiona Enter para continuar.");
+                    }
+                    break;
+
+                case "10":
+                    // Calcular promedio de un estudiante
+                    console.clear();
+                    const idEstPromedio = parseInt(prompt("ID del estudiante:"), 10);
+                    const estudiantePromedio = listaEstu.listadoEstudiantes[idEstPromedio];
+                    const promedioEstudiante = estudiantePromedio.calcularPromedioEstudiante();
+
+                    prompt(`Promedio del estudiante: ${promedioEstudiante}. Presiona Enter para continuar.`);
+                    break;
+
+                case "11":
+                    // Calcular promedio general de los estudiantes
+                    console.clear();
+                    const promedioGeneral = listaEstu.promedioEstudiantes();
+                    prompt(`Promedio general de los estudiantes: ${promedioGeneral}. Presiona Enter para continuar.`);
+                    break;
+
+                case "0":
+                    // Salir del programa
+                    console.clear();
+                    prompt("Saliendo del programa... Presiona Enter para finalizar.");
+                    continuar = false;
+                    break;
+
+                default:
+                    prompt("Opción no válida. Por favor, introduce un número entre 0 y 10. Presiona Enter para continuar.");
+            }
+        } catch (error) {
+            console.error(error.message);
         }
     }
 }
