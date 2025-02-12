@@ -389,9 +389,10 @@ class ListaEstudiantes {
     }
 
     mostrarEstudiantes() {
-        for (let estudiante of this.#listadoEstudiantes) {
+        console.log("Lista de estudiantes:");
+        this.#listadoEstudiantes.forEach(estudiante => {
             console.log(estudiante.toString());
-        }
+        });
     }
 
 }
@@ -442,19 +443,20 @@ class ListaAsignaturas {
 
     //Buscar asignaturas según un patrón de texto
     buscarAsignaturas(patron) {
-        const asignatura = this.#listadoAsignaturas.find(function (a) {
-            return a.nombre === patron;
+        const asignaturaEncontrada = this.#listadoAsignaturas.find(function (asignatura) {
+            return asignatura.nombre === patron;
         });
-        if (!asignatura) {
+        if (!asignaturaEncontrada) {
             throw new Error(`Asignatura(s) con el patrón '${patron}' no encontrada(s).`);
         }
-        return asignatura;
+        return asignaturaEncontrada;
     }
 
     mostrarAsignaturas() {
-        for (let asignatura of this.#listadoAsignaturas) {
+        console.log("Lista de asignaturas:");
+        this.#listadoAsignaturas.forEach(asignatura => {
             console.log(asignatura.toString());
-        }
+        });
     }
 }
 
