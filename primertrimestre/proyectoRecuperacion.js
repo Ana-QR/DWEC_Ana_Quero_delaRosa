@@ -118,25 +118,25 @@ class Estudiante extends Persona {
     }
 
     // Matricular al estudiante en una asignatura
-    matricular(...asignatura) {
-        for (let asig of asignatura) {
-            if (this.#asignaturas.find(function (asignatura) { return asignatura.nombre === asig.nombre; }) === undefined) {
-                this.#asignaturas.push(asig);
-                console.log(`Matriculación de ${asig.nombre} realizada el ${new Date()}`);
+    matricular(...asignaturas) {
+        for (let asignatura of asignaturas) {
+            if (this.#asignaturas.find(asig => asig.nombre === asignatura.nombre) === undefined) {
+                this.#asignaturas.push(asignatura);
+                console.log(`Matriculación de ${asignatura.nombre} realizada el ${new Date()}`);
             } else {
-                console.log(`El estudiante ya está matriculado en ${asig.nombre}`);
+                console.log(`El estudiante ya está matriculado en ${asignatura.nombre}`);
             }
         }
     }
 
     // Desmatricular al estudiante de una asignatura
-    desmatricular(...asignatura) {
-        for (let asig of asignatura) {
-            if (this.#asignaturas.find(function (asignatura) { return asignatura.nombre === asig.nombre; }) !== undefined) {
-                this.#asignaturas = this.#asignaturas.filter(function (asignatura) { return asignatura.nombre !== asig.nombre; });
-                console.log(`Desmatriculación de ${asig.nombre} realizada el ${new Date()}`);
+    desmatricular(...asignaturas) {
+        for (let asignatura of asignaturas) {
+            if (this.#asignaturas.find(asig => asig.nombre === asignatura.nombre) !== undefined) {
+                this.#asignaturas = this.#asignaturas.filter(asig => asig.nombre !== asignatura.nombre);
+                console.log(`Desmatriculación de ${asignatura.nombre} realizada el ${new Date()}`);
             } else {
-                console.log(`El estudiante no está matriculado en ${asig.nombre}`);
+                console.log(`El estudiante no está matriculado en ${asignatura.nombre}`);
             }
         }
     }
