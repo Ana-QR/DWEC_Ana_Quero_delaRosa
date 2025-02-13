@@ -1,5 +1,4 @@
-https://github.com/Ana-QR/DWEC_Ana_Quero_delaRosa/blob/main/primertrimestre/proyectoRecuperacion.js
-
+https://github.com/Ana-QR/DWEC_Ana_Quero_delaRosa.git
 
 Se ha cambiado: 
     -Clase Estudiante:
