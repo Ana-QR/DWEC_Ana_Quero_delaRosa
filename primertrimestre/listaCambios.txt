@@ -1,0 +1,20 @@
+Se ha cambiado: 
+    -Clase Estudiante:
+        +Función matricular()-> arreglado
+        +Función desmatricular()-> arreglado
+    -Clase listaEstudiantes:
+        +get listadoEstudiantes -> arreglado
+        +Funcion busquedaPorNombre()-> arreglado
+        +Funcion mostrarEstudiantes()
+    -Clase listaAsignaturas:
+        +Función burcarAsignaturas()-> arreglado
+        +Función mostrarAsignaturas()
+    -Función mostrarMenu:
+        +Case 3-> mostrar estudiantes
+        +Case 4-> añadir asignaturas
+        +Case 5-> eliminar asignaturas
+        +Case 6-> mostrar asignaturas
+        +Case 7-> matricular estudiantes
+        +Case 8-> desmtricular estudiantes
+        +Case 9-> calificar estudiantes en asignaturas
+        +Case 10-> calcular promedio de un estudiante
