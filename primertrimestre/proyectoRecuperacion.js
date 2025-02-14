@@ -379,8 +379,8 @@ class ListaEstudiantes {
 
     //Buscar un estudiante por nombre
     busquedaPorNombre(nombre) {
-        const estudiante = this.#listadoEstudiantes.find(function(est) {
-            return est.nombre.toLowerCase() === nombre.toLowerCase();
+        const estudiante = this.#listadoEstudiantes.find(function(estudiante) {
+            return estudiante.nombre.toLowerCase() === nombre.toLowerCase();
         });
         if (!estudiante) {
             throw new Error(`No se encontró ningún estudiante con el nombre: ${nombre}`);
@@ -444,7 +444,7 @@ class ListaAsignaturas {
     //Buscar asignaturas según un patrón de texto
     buscarAsignaturas(patron) {
         const asignaturaEncontrada = this.#listadoAsignaturas.find(function (asignatura) {
-            return asignatura.nombre === patron;
+            return asignatura.nombre.toLowerCase() == patron.toLowerCase();
         });
         if (!asignaturaEncontrada) {
             throw new Error(`Asignatura(s) con el patrón '${patron}' no encontrada(s).`);
@@ -666,8 +666,8 @@ function mostrarMenu() {
                     prompt("La calificación debe estar entre 0 y 10. Presiona Enter para continuar.");
                     break;
                 }
-                const estudianteCalificar = listaEstu.busquedaPorNombre[nombreEstuCalificar][0];
-                const asignaturaCalificar = listaAsig.buscarAsignaturas(nombreAsigCalificar)[0];
+                const estudianteCalificar = listaEstu.busquedaPorNombre(nombreEstuCalificar);
+                const asignaturaCalificar = listaAsig.buscarAsignaturas(nombreAsigCalificar);
 
                 if (estudianteCalificar && asignaturaCalificar) {
                     estudianteCalificar.calificar(asignaturaCalificar, calificacion);
