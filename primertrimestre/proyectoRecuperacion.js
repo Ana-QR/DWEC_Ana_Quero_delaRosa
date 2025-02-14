@@ -267,7 +267,7 @@ class Asignatura {
         }
         this.#nombre = nombre;
         this.#calificaciones = []; //calificaciones generales
-        this.#estudiantes = new Map(); // map para asociar los estudiantes con sus calificaciones
+        this.#estudiantes = [];
     }
 
     ///////GETTERS///////
@@ -425,7 +425,7 @@ class ListaAsignaturas {
     }
 
     get listadoAsignaturas() {
-        return this.#listadoAsignaturas;
+        return [...this.#listadoAsignaturas];
     }
 
     addAsignatura(asignatura) {
@@ -453,7 +453,6 @@ class ListaAsignaturas {
     }
 
     mostrarAsignaturas() {
-        console.log("Lista de asignaturas:");
         this.#listadoAsignaturas.forEach(asignatura => {
             console.log(asignatura.toString());
         });
@@ -468,33 +467,39 @@ console.log("Listas de estudiantes y asignaturas creadas con éxito");
 const direccion1 = new Direccion("Calle Quero", 12, 1, "23790", "Jaén", "Porcuna");
 const direccion2 = new Direccion("Calle Huesa", 13, "", "23790", "Jaén", "Porcuna");
 const direccion3 = new Direccion("Calle Emilio Sebastián", 14, "1C", "18013", "Granada", "Granada");
+const direccion4 = new Direccion("hola", 12, "", "23790", "Jaén", "Porcuna");
 
 // Definir estudiantes
 const estudiante1 = new Estudiante("Mario Vaquerizo", 40, direccion1);
 const estudiante2 = new Estudiante("Paula Mola", 20, direccion2);
 const estudiante3 = new Estudiante("Federico Garcia", 50, direccion3);
+const estudiante4 = new Estudiante("ana", 20, direccion4);
 
 // Agregar estudiantes a la lista usando addEstudiante
 listaEstu.addEstudiante(estudiante1);
 listaEstu.addEstudiante(estudiante2);
 listaEstu.addEstudiante(estudiante3);
+listaEstu.addEstudiante(estudiante4);
 
 // Crear asignaturas
 const matematicas = new Asignatura("Matemáticas");
 const historia = new Asignatura("Historia");
 const artes = new Asignatura("Artes");
 const tecnologia = new Asignatura("Tecnología");
+const musica = new Asignatura("musica");
 
 //Agregar asignaturas a la lista usando addAsignatura
 listaAsig.addAsignatura(matematicas);
 listaAsig.addAsignatura(historia);
 listaAsig.addAsignatura(artes);
 listaAsig.addAsignatura(tecnologia);
+listaAsig.addAsignatura(musica);
 
 // Matricular estudiantes en asignaturas
 estudiante1.matricular(matematicas, historia, tecnologia);
 estudiante2.matricular(matematicas, artes);
 estudiante3.matricular(historia, artes, tecnologia);
+estudiante4.matricular(musica, matematicas, historia, tecnologia);
 
 // Asignar notas
 matematicas.calificar(estudiante1, 8.5);
