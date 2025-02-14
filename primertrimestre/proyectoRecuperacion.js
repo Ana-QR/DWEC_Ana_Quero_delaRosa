@@ -143,17 +143,16 @@ class Estudiante extends Persona {
 
     //Cada estudiante puede recibir varias clasificaciones por asignatura. Numeros entre 0 y 10
     calificar(asignatura, calificacion) {
-        if (calificacion < 0 || calificacion > 10) {
+        if (typeof calificacion !== "number" || calificacion < 0 || calificacion > 10) {
             throw new Error("La calificación debe estar entre 0 y 10.");
         }
-
-        const index = this.#asignaturas.findIndex(function (asig) {
-            return asig.nombre === asignatura.nombre;
-        });
-
+    
+        const index = this.#asignaturas.findIndex(asig => asig.nombre === asignatura.nombre);
+        
         if (index !== -1) {
+            console.log(`Calificación añadida a ${asignatura.nombre} para ${this.nombre}: ${calificacion}`);
             this.#asignaturas[index].calificaciones.push(calificacion);
-            console.log(`Calificación añadida con éxito`);
+            asignatura.calificar(this, calificacion);
         } else {
             console.log(`El estudiante ${this.nombre} no está matriculado en ${asignatura.nombre}`);
         }
@@ -165,18 +164,26 @@ class Estudiante extends Persona {
         let contador = 0;
 
         for (let asignatura of this.#asignaturas) {
-            for (let calificacion of asignatura.calificaciones) {
-                sum += calificacion;
-                contador++;
+            console.log("Asignatura:", asignatura);
+
+            if (Array.isArray(asignatura.calificaciones)) {  // Aseguramos que sea un array
+                for (let calificacion of asignatura.calificaciones) {
+                    console.log("Calificación encontrada:", calificacion, "Tipo:", typeof calificacion);
+
+                    if (typeof calificacion === "number" && !isNaN(calificacion)) {
+                        sum += calificacion;
+                        contador++;
+                    } else {
+                        console.warn("Calificación inválida (descartada):", calificacion);
+                    }
+                }
+            } else {
+                console.warn("asignatura.calificaciones no es un array:", asignatura.calificaciones);
             }
         }
 
-        if (contador === 0) {
-            return "No hay calificaciones";
-        } else {
-            let promedio = (sum / contador).toFixed(2);
-            return Number(promedio);
-        }
+        console.log(`Suma final: ${sum}, Contador final: ${contador}`);
+        return contador === 0 ? 0 : sum / contador;
     }
 
     toString() {
@@ -284,12 +291,19 @@ class Asignatura {
     }
 
     // Califica a un estudiante en la asignatura
-    calificar(nota) {
-        if (nota < 0 || nota > 10) {
+    calificar(estudiante, calificacion) {
+        if (typeof calificacion !== "number" || calificacion < 0 || calificacion > 10) {
             throw new Error("La calificación debe estar entre 0 y 10.");
         }
-
-        this.#calificaciones.push(nota);
+    
+        const index = this.#estudiantes.findIndex(e => e.nombre === estudiante.nombre);
+    
+        if (index !== -1) {
+            console.log(`Calificación añadida: ${calificacion} para ${estudiante.nombre} en ${this.nombre}`);
+            this.#calificaciones.push(calificacion); // Asegurar que solo se agregan números
+        } else {
+            console.log(`${estudiante.nombre} no está matriculado en ${this.nombre}`);
+        }
     }
 
     // Elimina una calificación de la asignatura
@@ -345,17 +359,23 @@ class ListaEstudiantes {
         let sum = 0;
         let contador = 0;
 
+        console.log("Calculando promedio general...");
+
         for (let estudiante of this.#listadoEstudiantes) {
-            sum += estudiante.calcularPromedioEstudiante();
-            contador++;
+            const promedioEstudiante = estudiante.calcularPromedioEstudiante();
+            console.log(`Promedio de ${estudiante.nombre}:`, promedioEstudiante);
+
+            if (typeof promedioEstudiante === "number" && !isNaN(promedioEstudiante)) {
+                sum += promedioEstudiante;
+                contador++;
+            } else {
+                console.warn(`Promedio inválido para ${estudiante.nombre}:`, promedioEstudiante);
+            }
         }
 
-        if (contador === 0) {
-            return "No hay estudiantes";
-        } else {
-            let promedio = (sum / contador).toFixed(2);
-            return Number(promedio);
-        }
+        console.log(`Suma total: ${sum}, Contador total: ${contador}`);
+
+        return contador === 0 ? 0 : sum / contador;
     }
 
     //Añadir un estudiante a la lista
@@ -497,7 +517,7 @@ listaAsig.addAsignatura(musica);
 
 // Matricular estudiantes en asignaturas
 estudiante1.matricular(matematicas, historia, tecnologia);
-estudiante2.matricular(matematicas, artes);
+estudiante2.matricular(matematicas, historia, artes);
 estudiante3.matricular(historia, artes, tecnologia);
 estudiante4.matricular(musica, matematicas, historia, tecnologia);
 
@@ -507,6 +527,7 @@ matematicas.calificar(estudiante2, 9.0);
 
 historia.calificar(estudiante1, 7.5);
 historia.calificar(estudiante3, 8.0);
+historia.calificar(estudiante2, 6.5);
 
 artes.calificar(estudiante2, 9.5);
 artes.calificar(estudiante3, 8.5);
@@ -532,6 +553,7 @@ estudiante3.calificar(tecnologia, 8);
 estudiante3.calificar(historia, 6);
 estudiante1.calificar(historia, 8);
 estudiante2.calificar(matematicas, 6);
+estudiante2.calificar(historia, 7);
 
 function mostrarMenu() {
 
@@ -687,7 +709,7 @@ function mostrarMenu() {
                 console.clear();
                 const estPromedio = prompt("Nombre del estudiante:");
                 const estudiantePromedio = listaEstu.busquedaPorNombre(estPromedio);
-                if (estPromedio) {
+                if (estudiantePromedio) {
                     console.log(`Promedio del estudiante: ${estudiantePromedio.calcularPromedioEstudiante()}. Presiona Enter para continuar.`);
                 } else {
                     prompt("Estudiante no encontrado. Presiona Enter para continuar.");
