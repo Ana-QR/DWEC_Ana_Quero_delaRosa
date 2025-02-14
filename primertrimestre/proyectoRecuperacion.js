@@ -174,11 +174,11 @@ class Estudiante extends Persona {
                         sum += calificacion;
                         contador++;
                     } else {
-                        console.warn("Calificación inválida (descartada):", calificacion);
+                        console.log("Calificación inválida (descartada):", calificacion);
                     }
                 }
             } else {
-                console.warn("asignatura.calificaciones no es un array:", asignatura.calificaciones);
+                console.log("asignatura.calificaciones no es un array:", asignatura.calificaciones);
             }
         }
 
@@ -369,7 +369,7 @@ class ListaEstudiantes {
                 sum += promedioEstudiante;
                 contador++;
             } else {
-                console.warn(`Promedio inválido para ${estudiante.nombre}:`, promedioEstudiante);
+                console.log(`Promedio inválido para ${estudiante.nombre}:`, promedioEstudiante);
             }
         }
 
