@@ -183,7 +183,8 @@ class Estudiante extends Persona {
         }
 
         console.log(`Suma final: ${sum}, Contador final: ${contador}`);
-        return contador === 0 ? 0 : sum / contador;
+        let media = sum / contador;
+        return contador === 0 ? 0 : Number(media.toFixed(2));
     }
 
     toString() {
@@ -372,8 +373,6 @@ class ListaEstudiantes {
                 console.log(`Promedio inválido para ${estudiante.nombre}:`, promedioEstudiante);
             }
         }
-
-        console.log(`Suma total: ${sum}, Contador total: ${contador}`);
 
         return contador === 0 ? 0 : sum / contador;
     }
