@@ -25,13 +25,13 @@ y que se muestre el menú de nuevo, así irá correctamente todo. */
  *  - toString(): Devuelve una representación en texto de la persona.
  */
 class Persona {
-    /** @type {string} Nombre de la persona (solo letras y espacios). */
+    /** @type {string}*/
     #nombre;
     
-    /** @type {number} Edad de la persona (número positivo). */
+    /** @type {number}*/
     #edad;
     
-    /** @type {Direccion} Dirección de la persona (instancia de la clase Direccion). */
+    /** @type {Direccion}*/
     #direccion;
 
     /**
@@ -306,37 +306,43 @@ class Estudiante extends Persona {
 
 class Direccion {
     /**
-     * @type {string} Calle de la dirección.
+     * Calle de la dirección.
+     * @type {string} 
      * @private
      */
     #calle;
     
     /**
-     * @type {number} Número de la dirección.
+     * Número de la dirección.
+     * @type {number} 
      * @private
      */
     #numero;
     
     /**
-     * @type {string} Piso de la dirección.
+     * Piso de la dirección.
+     * @type {string} 
      * @private
      */
     #piso;
     
     /**
-     * @type {string} Código postal (5 dígitos).
+     * Código postal (5 dígitos).
+     * @type {string} 
      * @private
      */
     #codigoPostal;
     
     /**
-     * @type {string} Provincia de la dirección.
+     * Provincia de la dirección.
+     * @type {string} 
      * @private
      */
     #provincia;
     
     /**
-     * @type {string} Localidad de la dirección.
+     * Localidad de la dirección.
+     * @type {string} 
      * @private
      */
     #localidad;
@@ -838,37 +844,45 @@ function mostrarMenu() {
                     prompt("Introduce los datos del estudiante:");
 
                     /**
-                     * @type {string} Nombre del estudiante.
+                     * Nombre del estudiante.
+                     * @type {string} 
                      */
                     const nombre = prompt("Nombre del estudiante:");
                     /**
-                     * @type {number} Edad del estudiante.
+                     * Edad del estudiante.
+                     * @type {number} 
                      */
                     const edad = parseInt(prompt("Edad del estudiante:"), 10);
 
                     /* Dirección del estudiante */
                     /**
-                     * @type {string} Calle de la dirección del estudiante.
+                     * Calle de la dirección del estudiante.
+                     * @type {string} 
                      */
                     const calle = prompt("Calle de la dirección:");
                     /**
-                     * @type {string} Número de la dirección del estudiante.
+                     * Número de la dirección del estudiante.
+                     * @type {string} 
                      */
                     const numero = prompt("Número de la dirección:");
                     /**
-                     * @type {string} Piso de la dirección del estudiante.
+                     * Piso de la dirección del estudiante.
+                     * @type {string} 
                      */
                     const piso = prompt("Piso de la dirección:");
                     /**
-                     * @type {string} Código postal de la dirección del estudiante.
+                     * Código postal de la dirección del estudiante.
+                     * @type {string} 
                      */
                     const codPostal = prompt("Código postal de la dirección:");
                     /**
-                     * @type {string} Provincia de la dirección del estudiante.
+                     * Provincia de la dirección del estudiante.
+                     * @type {string} 
                      */
                     const provincia = prompt("Provincia de la dirección:");
                     /**
-                     * @type {string} Localidad de la dirección del estudiante.
+                     * Localidad de la dirección del estudiante.
+                     * @type {string} 
                      */
                     const localidad = prompt("Localidad de la dirección:");
 
