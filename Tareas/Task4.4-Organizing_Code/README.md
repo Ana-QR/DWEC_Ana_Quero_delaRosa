@@ -34,13 +34,13 @@ El objetivo principal de esta tarea es aprender a organizar el código JavaScrip
 1. Clona el repositorio en tu máquina local.
 2. Abre la carpeta del proyecto en tu editor de código preferido.
 3. Revisa el archivo `index.html` para entender la estructura de la página web.
-4. Abre la carpeta `src` para ver los archivos JavaScript organizados.
+4. Abre la carpeta `js` para ver los archivos JavaScript organizados.
 5. Ejecuta el proyecto usando un servidor local para ver los cambios en el navegador.
 
 ## Conceptos Clave
 
 - **Modularización**: Dividir el código en piezas más pequeñas y reutilizables.
-- **Módulos ES6**: Usar las declaraciones `import` y `export` para gestionar dependencias.
+- **Módulos**: Usar las declaraciones `import` y `export` para gestionar dependencias.
 - **Separación de Código**: Mantener HTML, CSS y JavaScript en archivos separados para una mejor mantenibilidad.
 
 ## Recursos
