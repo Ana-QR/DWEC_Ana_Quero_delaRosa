@@ -4,11 +4,12 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
     entry: {
-        main: "./js/Task4-5-Compatibility_with_older_browsers.js"
+        modern: "./js/Task4-5-Compatibility_with_older_browsers.js",
+        legacy: "./js/Task4-5-Compatibility_with_older_browsers.js"
     },
     output: {
-        path: path.resolve(__dirname, "dist"),
-        filename: "[name].bundle.js"
+        path: path.resolve(__dirname, "compilado"),
+        filename: "[name]/[name].js"
     },
     module: {
         rules: [
@@ -26,6 +27,8 @@ module.exports = {
             algorithm: "gzip",
             test: /\.(js|css|html)$/,
         }),
-        new CleanWebpackPlugin()
+        new CleanWebpackPlugin({
+            cleanOnceBeforeBuildPatterns: ['**/*', '!index.html']
+        })
     ]
 };
