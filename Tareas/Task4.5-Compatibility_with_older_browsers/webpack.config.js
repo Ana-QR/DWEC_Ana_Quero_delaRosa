@@ -4,7 +4,7 @@ module.exports = {
     entry: [
         'core-js/stable',
         'regenerator-runtime/runtime',
-        './js/Task4-4-OrganizingCode.js'
+        './js/Task4-5-Compatibility_with_older_browsers.js'
     ],
     output: {
         path: path.resolve(__dirname, 'dist'),

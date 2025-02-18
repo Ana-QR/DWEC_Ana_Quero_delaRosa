@@ -1,19 +1,13 @@
-# Tarea 4.4 - Organización del Código
+# Proyecto de Organización del Código
 
 ## Descripción del Proyecto
 
-El objetivo principal de esta tarea es aprender a organizar el código JavaScript de manera efectiva.
-
-## Objetivos
-
-- Comprender la importancia de la organización del código.
-- Aprender diferentes técnicas para estructurar el código JavaScript.
-- Implementar código modular utilizando módulos.
+El objetivo principal de este proyecto es aprender a organizar el código JavaScript de manera efectiva y asegurarse de que funcione en navegadores más antiguos. Se utiliza Webpack para la gestión de módulos y transpilación con Babel para mejorar la compatibilidad.
 
 ## Estructura del Proyecto
 
 ```
-/Task4.4-Organizing_Code
+/Task4-5-Compatibility_with_older_browsers
 │
 ├── /js
 │   ├── Asignatura.js
@@ -22,33 +16,110 @@ El objetivo principal de esta tarea es aprender a organizar el código JavaScrip
 │   ├── ListaAsignaturas.js
 │   ├── ListaEstudiantes.js
 │   ├── Persona.js
-│   └── Task4-4-OrganizingCode.js
+│   └── Task4-5-Compatibility_with_older_browsers.js
+├── .babelrc
 ├── .gitignore
-├── jsdoc.json
 ├── package-lock.json
-└── package.json
+├── package.json
+└── webpack.config.js
 ```
 
-## Instrucciones
+## Configuración del Entorno
 
-1. Clona el repositorio en tu máquina local.
-2. Abre la carpeta del proyecto en tu editor de código preferido.
-3. Revisa el archivo `index.html` para entender la estructura de la página web.
-4. Abre la carpeta `js` para ver los archivos JavaScript organizados.
-5. Ejecuta el proyecto usando un servidor local para ver los cambios en el navegador.
+1. Instalamos Node.js.
+2. Navegamos a la carpeta del proyecto y ejecutamos `npm install` para instalar las dependencias.
+3. Instalamos Webpack y Webpack CLI ejecutando:
+   ```sh
+   npm install --save-dev webpack webpack-cli
+   ```
+4. Instalamos Babel y sus complementos para transpilación de código moderno a versiones más antiguas:
+   ```sh
+   npm install --save-dev @babel/core @babel/preset-env babel-loader
+   ```
+5. Configuramos Webpack y Babel en `webpack.config.js` y `.babelrc`.
 
-## Conceptos Clave
+## Scripts
 
-- **Modularización**: Dividir el código en piezas más pequeñas y reutilizables.
-- **Módulos**: Usar las declaraciones `import` y `export` para gestionar dependencias.
-- **Separación de Código**: Mantener HTML, CSS y JavaScript en archivos separados para una mejor mantenibilidad.
+- `npm run build`: Compila el código para producción.
+- `npm start`: Inicia un servidor de desarrollo con Webpack Dev Server.
 
-## Recursos
+## Configuración de Webpack
 
-- [MDN Web Docs - Módulos JavaScript](https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Modules)
-- [JavaScript Info - Módulos](https://javascript.info/modules)
-- [Node.js Documentation](https://nodejs.org/en/docs/)
-- [Webpack Documentation](https://webpack.js.org/concepts/)
+Asegúrate de que el archivo `webpack.config.js` incluya la siguiente configuración básica:
+
+```js
+const path = require('path');
+
+module.exports = {
+  entry: './js/Task4-5-Compatibility_with_older_browsers.js',
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist')
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        }
+      }
+    ]
+  },
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    port: 9000
+  }
+};
+```
+
+## Subir el Código a un Proveedor de Hosting
+
+1. Creamos una cuenta en Netlify.
+2. Conectamos el repositorio de GitHub, GitLab o Bitbucket.
+3. Configuramos los ajustes de compilación:
+    - Build command: `npm run build`
+    - Publish directory: `dist`
+4. Hacemos clic en "Deploy site".
+
+## Probar el Código
+
+1. Creamos una cuenta en BrowserStack.
+2. Seleccionamos "Live" para probar el sitio web en tiempo real.
+3. Ingresamos la URL del sitio web desplegado en Netlify.
+4. Seleccionamos los navegadores y dispositivos para probar.
+5. Realizamos las pruebas y verificamos que todo funcione correctamente.
+
+## Resultados de la Prueba
+
+### Resultados de las Pruebas en BrowserStack
+
+1. **Navegador: Internet Explorer 11**
+    - **Resultado:** El sitio web se carga correctamente, pero algunos estilos CSS no se aplican como se esperaba.
+    - **Problemas Encontrados:**
+      - Los bordes redondeados no se muestran.
+      - Algunos elementos de flexbox no se alinean correctamente.
+
+2. **Navegador: Firefox 45**
+    - **Resultado:** El sitio web funciona bien, pero hay problemas menores con la tipografía.
+    - **Problemas Encontrados:**
+      - Las fuentes personalizadas no se cargan en algunos casos.
+
+3. **Navegador: Safari 9**
+    - **Resultado:** El sitio web tiene problemas de rendimiento y algunos elementos no se muestran.
+    - **Problemas Encontrados:**
+      - Las animaciones CSS son lentas.
+      - Algunos íconos SVG no se renderizan.
+
+4. **Navegador: Chrome 49**
+    - **Resultado:** El sitio web se comporta como se esperaba sin problemas significativos.
+    - **Problemas Encontrados:** Ninguno.
+
+### Conclusiones
+
+En general, el sitio web es compatible con la mayoría de los navegadores más antiguos, aunque se encontraron algunos problemas menores que deben ser abordados para mejorar la compatibilidad y la experiencia del usuario.
 
 ## Autor
 
