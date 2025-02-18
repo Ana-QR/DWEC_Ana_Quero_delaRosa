@@ -1,6 +1,6 @@
 {
     "source":{
-        "include": ["Task4-3-JSdoc.js"],
+        "include": ["Task4-5-Compatibility_with_older_browsers.js"],
         "exclude": ["node_modules", "docs"],
         "includePattern": ".*\\.js$",
         "excludePattern": ".*\\.test\\.js$"
