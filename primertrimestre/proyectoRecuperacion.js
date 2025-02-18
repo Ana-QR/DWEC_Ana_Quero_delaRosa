@@ -568,7 +568,7 @@ function mostrarMenu() {
                 6. Mostrar asignaturas
                 7. Matricular estudiante en asignatura
                 8. Desmatricular estudiante de asignatura
-                9. Asignar nota a un estudiante
+                9. Calificar a un estudiante
                 10. Calcular promedio de un estudiante
                 11. Calcular promedio general de estudiantes
                 0. Salir
@@ -599,7 +599,6 @@ function mostrarMenu() {
             case "2":
                 // Eliminar estudiantes
                 console.clear();
-                prompt(`Introduce lo siguiente para eliminar al estudiante: `);
                 const nombreEliminar = prompt("Nombre del estudiante a eliminar:");
                 const estudianteEliminar = listaEstu.busquedaPorNombre(nombreEliminar);
                 if (estudianteEliminar) {
