@@ -1,87 +1,55 @@
-# Proyecto JS - Documentación del Código usando JSDoc
+# Tarea 4.4 - Organización del Código
 
-Este proyecto tiene como objetivo documentar el código utilizando JSDoc para mejorar la legibilidad y mantenibilidad del código fuente.
+## Descripción del Proyecto
+
+El objetivo principal de esta tarea es aprender a organizar el código JavaScript de manera efectiva.
+
+## Objetivos
+
+- Comprender la importancia de la organización del código.
+- Aprender diferentes técnicas para estructurar el código JavaScript.
+- Implementar código modular utilizando módulos.
 
 ## Estructura del Proyecto
 
-El proyecto sigue la siguiente estructura de carpetas y archivos:
-
 ```
+/Task4.4-Organizing_Code
+│
+├── /js
+│   ├── Asignatura.js
+│   ├── Direccion.js
+│   ├── Estudiante.js
+│   ├── ListaAsignaturas.js
+│   ├── ListaEstudiantes.js
+│   ├── Persona.js
+│   └── Task4-4-OrganizingCode.js
 ├── .gitignore
 ├── jsdoc.json
 ├── package-lock.json
-├── package.json
-├── Task4-3-JSdoc.js
-├── README.md
+└── package.json
 ```
 
-- **`.gitignore`**: Archivo que especifica qué archivos o directorios deben ser ignorados por Git.
-- **`jsdoc.json`**: Archivo de configuración para JSDoc.
-- **`package-lock.json`**: Archivo que asegura que las instalaciones de dependencias sean reproducibles.
-- **`package.json`**: Archivo que contiene la información del proyecto y las dependencias necesarias.
-- **`Task4-3-JSdoc.js`**: Archivo JavaScript con ejemplos y tareas relacionadas con JSDoc.
-- **`README.md`**: Este archivo con instrucciones para instalar, ejecutar y contribuir al proyecto.
+## Instrucciones
 
-## Instalación
+1. Clona el repositorio en tu máquina local.
+2. Abre la carpeta del proyecto en tu editor de código preferido.
+3. Revisa el archivo `index.html` para entender la estructura de la página web.
+4. Abre la carpeta `src` para ver los archivos JavaScript organizados.
+5. Ejecuta el proyecto usando un servidor local para ver los cambios en el navegador.
 
-Para instalar dependencias necesarias (si aplica), ejecuta el siguiente comando en la terminal:
+## Conceptos Clave
 
-```bash
-npm install
-```
+- **Modularización**: Dividir el código en piezas más pequeñas y reutilizables.
+- **Módulos ES6**: Usar las declaraciones `import` y `export` para gestionar dependencias.
+- **Separación de Código**: Mantener HTML, CSS y JavaScript en archivos separados para una mejor mantenibilidad.
 
-Si el proyecto no requiere paquetes adicionales, simplemente asegúrate de tener un navegador moderno para ejecutar el código.
+## Recursos
 
-## Uso
+- [MDN Web Docs - Módulos JavaScript](https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Modules)
+- [JavaScript Info - Módulos](https://javascript.info/modules)
+- [Node.js Documentation](https://nodejs.org/en/docs/)
+- [Webpack Documentation](https://webpack.js.org/concepts/)
 
-Para ejecutar el proyecto, abre el archivo `index.html` en tu navegador preferido. 
+## Autor
 
-Si deseas generar la documentación en HTML utilizando JSDoc, sigue estos pasos:
-
-1. Asegúrate de tener Node.js instalado en tu sistema.
-2. Instala JSDoc de manera global si no lo tienes:
-
-    ```bash
-    npm install -g jsdoc
-    ```
-
-3. Genera la documentación ejecutando el siguiente comando en la terminal dentro del directorio del proyecto:
-
-    ```bash
-    jsdoc main.js -d docs
-    ```
-
-4. La documentación generada se guardará en la carpeta `docs`. Abre `docs/index.html` en tu navegador para visualizarla.
-
-## Convenciones de Documentación con JSDoc
-
-Para documentar funciones, clases y objetos, sigue las convenciones de JSDoc. Ejemplo de documentación de una función:
-
-```js
-/**
- * Calcula la suma de dos números.
- * @param {number} a - El primer número.
- * @param {number} b - El segundo número.
- * @returns {number} La suma de los dos números.
- */
-function sumar(a, b) {
-     return a + b;
-}
-```
-
-## Contribuciones
-
-Las contribuciones al proyecto son bienvenidas. Para colaborar, sigue estos pasos:
-
-1. Haz un fork del repositorio.
-2. Crea una nueva rama para tu funcionalidad (`git checkout -b feature/nueva-funcionalidad`).
-3. Realiza tus cambios y confirma los commits (`git commit -m 'Añadir nueva funcionalidad'`).
-4. Sube los cambios a tu rama (`git push origin feature/nueva-funcionalidad`).
-5. Abre un Pull Request en el repositorio principal.
-
-## Recursos Adicionales
-
-- [Documentación oficial de JSDoc](https://jsdoc.app/)
-- [Node.js](https://nodejs.org/)
-- [Git](https://git-scm.com/)
-- [Markdown Guide](https://www.markdownguide.org/)
+Ana Quero de la Rosa
