@@ -1,12 +1,19 @@
 {
+  "type": "module",
   "name": "task4.5-compatibility_with_older_browsers",
   "version": "1.0.0",
-  "main": "./Tareas/Task4.5-Compatibility_with_older_browsers/js/Task4-5-Compatibility_with_older_browsers.js",
+  "main": "js/Task4-5-Compatibility_with_older_browsers.js",
   "scripts": {
+    "doc": "npx jsdoc -c jsdoc.json",
+    "clean": "rimraf documentacion",
+    "all": "npm-run-all clean doc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:modern": "webpack --config webpack.modern.js",
     "build:legacy": "webpack --config webpack.legacy.js",
-    "start": "webpack serve --open"
+    "des": "cross-env-shell modo=development run-s build:modern build:legacy",
+    "prod": "cross-env-shell modo=production run-s build:modern build:legacy",
+    "clean:comp": "rimraf compilado",
+    "start": "run-s clean:comp des prod"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +33,7 @@
   },
   "dependencies": {
     "core-js": "^3.40.0",
-    "regenerator-runtime": "^0.14.1"
+    "regenerator-runtime": "^0.14.1",
+    "rimraf": "^6.0.1"
   }
 }

@@ -1,0 +1,23 @@
+{
+    "source":{
+        "include": ["Task5.js"],
+        "exclude": ["node_modules", "docs"],
+        "includePattern": ".*\\.js$",
+        "excludePattern": ".*\\.test\\.js$"
+    },
+
+    "opts":{
+        "destination": "./docs",
+        "template": "node_modules/minami",
+        "recurse": true
+    },
+
+    "templates": {
+        "cleverLinks": true,
+        "monospaceLinks": true
+    },
+
+    "plugins": [
+        "plugins/markdown"
+    ]
+}
