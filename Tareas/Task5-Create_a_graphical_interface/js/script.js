@@ -107,226 +107,171 @@ function guardarDatos(event) {
     alert("Datos guardados correctamente.");
 }
 
-/* Guardar estudiantes y asignaturas en localstorage */
-function guardarEstudiantes() {
-    let estudiantes = listaEstu.getEstudiantes().map(estudiante => ({
-        nombre: estudiante.nombre,
-        edad: estudiante.edad,
-        direccion: {
-            calle: estudiante.direccion.calle,
-            numero: estudiante.direccion.numero,
-            piso: estudiante.direccion.piso,
-            codigo_postal: estudiante.direccion.codigo_postal,
-            provincia: estudiante.direccion.provincia,
-            localidad: estudiante.direccion.localidad
-        }
-    }));
-    localStorage.setItem("listaEstudiantes", JSON.stringify(estudiantes));
-}
-
-/* Guardar asignaturas en localstorage */
-function guardarAsignaturas() {
-    let asignaturas = listaAsig.getAsignaturas().map(asignatura => ({
-        nombre: asignatura.nombre
-    }));
-    localStorage.setItem("listaAsignaturas", JSON.stringify(asignaturas));
-}
-
-/* Cargar datos de localstorage */
-function cargarDatos() {
-    cargarEstudiantes();
-    cargarAsignaturas();
-}
-
-/* Cargar estudiantes de localstorage */
+// Función para cargar estudiantes desde localStorage
 function cargarEstudiantes() {
-    let estudiantesGuardados = localStorage.getItem("listaEstudiantes");
+    let estudiantesGuardados = localStorage.getItem("listaEstudiantes_1");
     if (estudiantesGuardados) {
         estudiantesGuardados = JSON.parse(estudiantesGuardados);
         estudiantesGuardados.forEach(valor => {
             let direccion = new Direccion(
-                valor.direccion.calle,
-                valor.direccion.numero,
-                valor.direccion.piso,
-                valor.direccion.codigo_postal,
-                valor.direccion.provincia,
-                valor.direccion.localidad
+                valor.direccion.calle, valor.direccion.numero,
+                valor.direccion.piso, valor.direccion.codigo_postal,
+                valor.direccion.provincia, valor.direccion.localidad
             );
-
             let estudiante = new Estudiante(valor.nombre, valor.edad, direccion);
             listaEstu.addEstudiante(estudiante);
         });
     }
 }
 
-/* Cargar asignaturas de localstorage */
+// Función para guardar estudiantes en localStorage
+function guardarEstudiantes() {
+    let estudiantes_1 = listaEstu.listadoEstudiantes.map(valor => ({  // <-- usa listaEstu.estudiantes
+        nombre: valor.nombre,
+        edad: valor.edad,
+        direccion: {
+            calle: valor.direccion.calle,
+            numero: valor.direccion.numero,
+            piso: valor.direccion.piso,
+            codigo_postal: valor.direccion.codigo_postal,
+            provincia: valor.direccion.provincia,
+            localidad: valor.direccion.localidad
+        }
+    }));
+    localStorage.setItem("listaEstudiantes_1", JSON.stringify(estudiantes_1));
+}
+
+// Función para eliminar un estudiante
+function eliminarEstudiante(id) {
+    listaEstu.eliminarEstudiante(id);  
+    guardarEstudiantes();
+}
+
+// Función para mostrar estudiantes
+function mostrarEstudiantes() {
+    listaEstu.forEach(estudiante => {
+        console.log(`Nombre: ${estudiante.nombre}, Edad: ${estudiante.edad}`);
+    });
+}
+
+// Función para cargar asignaturas desde localStorage
 function cargarAsignaturas() {
-    let asignaturasGuardadas = localStorage.getItem("listaAsignaturas");
+    let asignaturasGuardadas = localStorage.getItem("listaAsignaturas_1");
     if (asignaturasGuardadas) {
         asignaturasGuardadas = JSON.parse(asignaturasGuardadas);
         asignaturasGuardadas.forEach(asig => {
-            let nuevaAsignatura = new Asignatura(asig.nombre);
+            let nuevaAsignatura = new Asignatura(asig.nombreA);
             listaAsig.addAsignatura(nuevaAsignatura);
         });
     }
 }
 
-/* Guardar registros en localStorage */
-/* Guardar registros de estudiantes en localStorage */
-function guardarRegistrosEstudiantes() {
-    let registros = listaEstu.getEstudiantes().map(estudiante => ({
-        id: estudiante.id,
-        nombre: estudiante.nombre,
-        asignaturas: estudiante.getAsignaturas().map(asig => asig.nombre),
-        registros: estudiante.registros
-    }));
-
-    localStorage.setItem("registrosEstudiantes", JSON.stringify(registros));
-    console.log(registros);
+// Función para guardar asignaturas en localStorage
+function guardarAsignaturas() {
+    let asignaturas_1 = listaAsig.listadoAsignaturas.map(asig => ({ nombreA: asig.nombre }));
+    localStorage.setItem("listaAsignaturas_1", JSON.stringify(asignaturas_1));
 }
 
-/* Guardar registros de asignaturas en localStorage */
-function guardarRegistrosAsignaturas() {
-    let registros = listaAsig.getAsignaturas().map(asignatura => ({
-        nombre: asignatura.nombre,
-        estudiantes: asignatura.getEstudiantes().map(est => est.nombre),
-        registros: asignatura.registros
-    }));
-
-    localStorage.setItem("registrosAsignaturas", JSON.stringify(registros));
-    console.log(registros);
+// Función para eliminar una asignatura
+function eliminarAsignatura(nombre) {
+    listaAsig.eliminarAsignatura(nombre);  
+    guardarAsignaturas();
 }
 
-/* Cargar registros de estudiantes de localStorage */
-function cargarRegistrosEstudiantes(estudiante) {
-    let registrosGuardados = localStorage.getItem("registrosEstudiantes");
-    let final = [];
-
-    if (registrosGuardados) {
-        let mostrarR = JSON.parse(registrosGuardados);
-        for (let dato of mostrarR) {
-            if (dato.id == estudiante.id) {
-                final = dato.registros;
-            }
-        }
-    }
-    return final;
-}
-
-/* Cargar registros de asignaturas de localStorage */
-function cargarRegistrosAsignaturas(asignatura) {
-    let registrosGuardados = localStorage.getItem("registrosAsignaturas");
-    let final = [];
-
-    if (registrosGuardados) {
-        let mostrarR = JSON.parse(registrosGuardados);
-        for (let dato of mostrarR) {
-            if (dato.nombre == asignatura.nombre) {
-                final = dato.registros;
-            }
-        }
-    }
-    return final;
-}
-
-function cargarMatriculaciones() {
-    let matriculacionesGuardadas = localStorage.getItem("registrosEstudiantes");
-    console.log(matriculacionesGuardadas);
-    if (matriculacionesGuardadas) {
-        let datos = JSON.parse(matriculacionesGuardadas);
-        console.log(datos);
-
-        datos.forEach(mat => {
-            let estudiante = listaEstu.getEstudiantes().find(e => e.id === mat.id);
-            if (estudiante) {
-                mat.asignaturas.forEach(nombreAsig => {
-                    let asignatura = listaAsig.getAsignaturas().find(asig => asig.nombre === nombreAsig);
-                    if (asignatura) {
-                        estudiante.matricular(asignatura);
-                    }
-                });
-            }
-        });
-    }
-}
-
-// Cargar las matriculaciones
-cargarMatriculaciones();
-
-/* Guardar notas en localStorage */
-function guargarNotas() {
-    let notas = listaEstu.getEstudiantes().map(estudiante => ({
-        id: estudiante.id,
-        nombre: estudiante.nombre,
-        notas: estudiante.notas
-    }));
-
-    localStorage.setItem("notas", JSON.stringify(notas));
-}
-
-/* Cargar notas de localStorage */
-function cargarNotas() {
-    let notasGuardadas = localStorage.getItem("notas");
-    if (notasGuardadas) {
-        let notas = JSON.parse(notasGuardadas);
-        notas.forEach(nota => {
-            let estudiante = listaEstu.getEstudiantes().find(e => e.id === nota.id);
-            if (estudiante) {
-                estudiante.notas = nota.notas;
-            }
-        });
-    }
-}
-
-/* Cargar notas de localStorage */
-cargarNotas();
-
-/* Validación de los inputs */
-function validarInput(event) {
-    let errorSpan = event.target.nextElementSibling;
-    if (!event.target.validity.valid) {
-        errorSpan.textContent = "Por favor, introduce un valor válido.";
-    } else {
-        errorSpan.textContent = "";
-    }
-}
-
-/* Eventos */
-document.getElementById("formulario").addEventListener("submit", guardarDatos);
-window.addEventListener("load", cargarDatos);
-document.querySelectorAll("input").forEach((input) => {
-    input.addEventListener("input", validarInput);
-});
-
-/* Modificar las fases */
-let faseActual = 0;
-
-function mostrarFase(fase) {
-    const fases = document.querySelectorAll('.fase');
-    fases.forEach((f, indice) => {
-        f.style.display = (indice === fase) ? 'block' : 'none';
+// Función para mostrar asignaturas
+function mostrarAsignaturas() {
+    listaAsig.forEach(asig => {
+        console.log(`Asignatura: ${asig.nombre}`);
     });
 }
 
-function siguienteFase() {
-    const fases = document.querySelectorAll('.fase');
-    if (faseActual < fases.length - 1) {
-        faseActual++;
-        mostrarFase(faseActual);
+// Función para matricular un estudiante en una asignatura
+function matricularEstudiante(estudiante, nombreAsig) {
+    let estEncontrado = listaEstu.busquedaPorNombre(estudiante);
+    let asignatura = listaAsig.listadoAsignaturas.find(asig => asig.nombre === nombreAsig);
+    if (estEncontrado && asignatura) {
+        estEncontrado.matricular(asignatura);
+        guardarEstudiantes();
     }
 }
 
-function anteriorFase() {
-    if (faseActual > 0) {
-        faseActual--;
-        mostrarFase(faseActual);
+// Función para desmatricular un estudiante de una asignatura
+function desmatricularEstudiante(estudiante, nombreAsig) {
+    let estEncontrado = listaEstu.busquedaPorNombre(estudiante);
+    if (estEncontrado) {
+        estEncontrado.asignaturas = estEncontrado.asignaturas.filter(asig => asig.nombre !== nombreAsig);
+        guardarEstudiantes();
     }
 }
 
-document.getElementById('botonSiguiente').addEventListener('click', siguienteFase);
-document.getElementById('botonAnterior').addEventListener('click', anteriorFase);
+// Función para calificar a un estudiante
+function calificarEstudiante(estudiante, nombreAsig, nota) {
+    let estEncontrado = listaEstu.busquedaPorNombre(estudiante);
+    if (estEncontrado) {
+        let asignatura = estEncontrado.asignaturas.find(asig => asig.nombre === nombreAsig);
+        if (asignatura) {
+            asignatura.nota = nota;
+            guardarEstudiantes();
+        }
+    }
+}
 
-// Inicializar la primera fase
-mostrarFase(faseActual);
+// Función para calcular el promedio de un estudiante
+function calcularPromedioEstudiante(estudiante) {
+    let estEncontrado = listaEstu.busquedaPorNombre(estudiante);
+    if (estEncontrado) {
+        let notas = estEncontrado.asignaturas.map(asig => asig.nota).filter(nota => nota !== undefined);
+        let promedio = notas.length ? (notas.reduce((a, b) => a + b, 0) / notas.length) : 0;
+        console.log(`Promedio de ${estEncontrado.nombre}: ${promedio.toFixed(2)}`);
+    }
+}
+
+// Función para calcular el promedio general de todos los estudiantes
+function calcularPromedioGeneral() {
+    let notasTotales = [];
+    listaEstu.forEach(est => {
+        let notas = est.asignaturas.map(asig => asig.nota).filter(nota => nota !== undefined);
+        notasTotales.push(...notas);
+    });
+    let promedio = notasTotales.length ? (notasTotales.reduce((a, b) => a + b, 0) / notasTotales.length) : 0;
+    console.log(`Promedio general de todos los estudiantes: ${promedio.toFixed(2)}`);
+}
+
+// Cargar datos al inicio
+cargarEstudiantes();
+cargarAsignaturas();
 
 
+// ************* EVENTOS ******************
+document.getElementById("guardarDatos").addEventListener("click", guardarDatos);
+document.getElementById("mostrarEstudiantes").addEventListener("click", mostrarEstudiantes);
+document.getElementById("mostrarAsignaturas").addEventListener("click", mostrarAsignaturas);
+document.getElementById("calcularPromedioGeneral").addEventListener("click", calcularPromedioGeneral);
+document.getElementById("calcularPromedioEstudiante").addEventListener("click", () => {
+    let estudiante = prompt("Introduce el nombre del estudiante:");
+    calcularPromedioEstudiante(estudiante);
+});
+document.getElementById("eliminarEstudiante").addEventListener("click", () => {
+    let estudiante = prompt("Introduce el nombre del estudiante:");
+    eliminarEstudiante(estudiante);
+});
+document.getElementById("eliminarAsignatura").addEventListener("click", () => {
+    let asignatura = prompt("Introduce el nombre de la asignatura:");
+    eliminarAsignatura(asignatura);
+});
+document.getElementById("matricularEstudiante").addEventListener("click", () => {
+    let estudiante = prompt("Introduce el nombre del estudiante:");
+    let asignatura = prompt("Introduce el nombre de la asignatura:");
+    matricularEstudiante(estudiante, asignatura);
+});
+document.getElementById("desmatricularEstudiante").addEventListener("click", () => {
+    let estudiante = prompt("Introduce el nombre del estudiante:");
+    let asignatura = prompt("Introduce el nombre de la asignatura:");
+    desmatricularEstudiante(estudiante, asignatura);
+});
+document.getElementById("calificarEstudiante").addEventListener("click", () => {
+    let estudiante = prompt("Introduce el nombre del estudiante:");
+    let asignatura = prompt("Introduce el nombre de la asignatura:");
+    let nota = prompt("Introduce la nota:");
+    calificarEstudiante(estudiante, asignatura, nota);
+});

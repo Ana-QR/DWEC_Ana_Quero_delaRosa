@@ -22,152 +22,169 @@
     <br>
 
     <main>
-    <p>Dime la opción que quieres realizar</p>
-    
-        <!-- Añadir estudiantes -->
-        <button onclick="mostrarSeccion(1)">1 - Añadir estudiante</button>
-        <section id="opcion1" class="opcion">
-            <h2>Registro de Estudiantes</h2>
-            <form action="#" method="get">
-                <label>Nombre: <input type="text" id="nombre" required></label>
-                <label>Edad: <input type="number" id="edad" required></label>
-                <h3>Dirección</h3>
-                <label>Calle: <input type="text" id="calle" required></label>
-                <label>Número: <input type="number" id="numero" required></label>
-                <label>Piso: <input type="text" id="piso" required></label>
-                <label>Código Postal: <input type="text" id="codigo_postal" required pattern="\d{5}"></label>
-                <label>Provincia: <input type="text" id="provincia" required></label>
-                <label>Localidad: <input type="text" id="localidad" required></label>
+        <p>Dime la opción que quieres realizar</p>
 
-                <button id="submit" type="submit">Registrar Estudiante</button>
-            </form>
-        </section> 
-        <section id="mostrar"></section>
+        <!-- Fase 1: Gestión de Estudiantes -->
+        <button onclick="mostrarFase(1)">Fase 1 - Gestión de Estudiantes</button>
+        <section id="fase1" class="fase">
+            <button onclick="mostrarSeccion(1)">1 - Añadir estudiante</button>
+            <section id="opcion1" class="opcion">
+                <h2>Registro de Estudiantes</h2>
+                <form action="#" method="get">
+                    <label>Nombre: <input type="text" id="nombre" required></label>
+                    <label>Edad: <input type="number" id="edad" required></label>
+                    <h3>Dirección</h3>
+                    <label>Calle: <input type="text" id="calle" required></label>
+                    <label>Número: <input type="number" id="numero" required></label>
+                    <label>Piso: <input type="text" id="piso" required></label>
+                    <label>Código Postal: <input type="text" id="codigo_postal" required pattern="\d{5}"></label>
+                    <label>Provincia: <input type="text" id="provincia" required></label>
+                    <label>Localidad: <input type="text" id="localidad" required></label>
 
-        <!-- Eliminar estudiantes -->
-        <button onclick="mostrarSeccion(2)">2 - Eliminar estudiante</button>
-        <section id="opcion2" class="opcion">
-            <h2>Eliminar estudiante</h2>
-            <form action="#" method="get"></form>
-                <label>Nombre del estudiante a eliminar: <input type="text" id="nombreEliminar" required></label>
-                <button id="submit2" type="submit">Eliminar Estudiante</button>
-            </form>
+                    <button id="submit" type="submit">Registrar Estudiante</button>
+                </form>
+            </section>
+            <section id="mostrar"></section>
+
+            <button onclick="mostrarSeccion(2)">2 - Eliminar estudiante</button>
+            <section id="opcion2" class="opcion">
+                <h2>Eliminar estudiante</h2>
+                <form action="#" method="get">
+                    <label>Nombre del estudiante a eliminar: <input type="text" id="nombreEliminar" required></label>
+                    <button id="submit2" type="submit">Eliminar Estudiante</button>
+                </form>
+            </section>
+            <section id="mostrar2"></section>
+
+            <button onclick="mostrarSeccion(3)">3 - Mostrar estudiantes</button>
+            <section id="opcion3" class="opcion">
+                <h2>Lista de Estudiantes</h2>
+                <button id="mostrarEstudiantes">Mostrar Estudiantes</button>
+                <ul id="listaEstudiantes"></ul>
+            </section>
+            <section id="mostrar3"></section>
         </section>
-        <section id="mostrar2"></section>
 
-        <!-- Mostrar estudiantes -->
-        <button onclick="mostrarSeccion(3)">3 - Mostrar estudiantes</button>
-        <section id="opcion3" class="opcion">
-            <h2>Lista de Estudiantes</h2>
-            <button id="mostrarEstudiantes">Mostrar Estudiantes</button>
-            <ul id="listaEstudiantes"></ul>
-        </section>
-        <section id="mostrar3"></section>
+        <!-- Fase 2: Gestión de Asignaturas -->
+        <button onclick="mostrarFase(2)">Fase 2 - Gestión de Asignaturas</button>
+        <section id="fase2" class="fase">
+            <button onclick="mostrarSeccion(4)">4 - Añadir asignatura</button>
+            <section id="opcion4" class="opcion">
+                <h2>Añadir Asignatura</h2>
+                <form action="#" method="get">
+                    <label>Nombre de la asignatura: <input type="text" id="nombreAsig" required></label>
+                    <label>Nombre del estudiante: <input type="text" id="nombreEstudiante" required></label>
+                    <button id="submit4" type="submit">Añadir Asignatura</button>
+                </form>
+            </section>
+            <section id="mostrar4"></section>
 
-        <!-- Añadir asignaturas -->
-        <button onclick="mostrarSeccion(4)">4 - Añadir asignatura</button>
-        <section id="opcion4" class="opcion">
-            <h2>Añadir Asignatura</h2>
-            <form action="#" method="get"></form>
-                <label>Nombre de la asignatura: <input type="text" id="nombreAsig" required></label>
-                <label>Nombre del estudiante: <input type="text" id="nombreEstudiante" required></label>
-                <button id="submit4" type="submit">Añadir Asignatura</button>
-            </form>
-        </section>
-        <section id="mostrar4"></section>
+            <button onclick="mostrarSeccion(5)">5 - Eliminar asignatura</button>
+            <section id="opcion5" class="opcion">
+                <h2>Eliminar asignatura</h2>
+                <form action="#" method="get">
+                    <label>Nombre de la asignatura a eliminar: <input type="text" id="nombreAsigEliminar" required></label>
+                    <label>Nombre del estudiante: <input type="text" id="nombreEstudianteEliminar" required></label>
+                    <button id="submit5" type="submit">Eliminar asignatura</button>
+                </form>
+            </section>
+            <section id="mostrar5"></section>
 
-        <!-- Eliminar asignaturas -->
-        <button onclick="mostrarSeccion(5)">5 - Eliminar asignatura</button>
-        <section id="opcion5" class="opcion">
-            <h2>Eliminar asignatura</h2>
-            <form action="#" method="get">
-                <label>Nombre de la asignatura a eliminar: <input type="text" id="nombreAsigEliminar" required></label>
-                <label>Nombre del estudiante: <input type="text" id="nombreEstudianteEliminar" required></label>
-                <button id="submit5" type="submit">Eliminar asignatura</button>
-            </form>
+            <button onclick="mostrarSeccion(6)">6 - Mostrar asignaturas</button>
+            <section id="opcion6" class="opcion">
+                <h2>Lista de Asignaturas</h2>
+                <button id="mostrarAsignaturas">Mostrar Asignaturas</button>
+                <ul id="listaAsignaturas"></ul>
+            </section>
+            <section id="mostrar6"></section>
         </section>
-        <section id="mostrar5"></section>
 
-        <!-- Mostrar asignaturas -->
-        <button onclick="mostrarSeccion(6)">6 - Mostrar asignaturas</button>
-        <section id="opcion6" class="opcion">
-            <h2>Lista de Asignaturas</h2>
-            <button id="mostrarAsignaturas">Mostrar Asignaturas</button>
-            <ul id="listaAsignaturas"></ul>
-        </section>
-        <section id="mostrar6"></section>
+        <!-- Fase 3: Matrículas y Calificaciones -->
+        <button onclick="mostrarFase(3)">Fase 3 - Matrículas y Calificaciones</button>
+        <section id="fase3" class="fase">
+            <button onclick="mostrarSeccion(7)">7 - Matricular estudiante en asignatura</button>
+            <section id="opcion7" class="opcion">
+                <h2>Matricular estudiante en asignatura</h2>
+                <form action="#" method="get">
+                    <label>Nombre del estudiante: <input type="text" id="nombreEstudianteMatricula" required></label>
+                    <label>Nombre de la asignatura: <input type="text" id="nombreAsignaturaMatricula" required></label>
+                    <button id="submit7" type="submit">Matricular</button>
+                </form>
+            </section>
+            <section id="mostrar7"></section>
 
-        <!-- Matricular estudiante en asignatura -->
-        <button onclick="mostrarSeccion(7)">7 - Matricular estudiante en asignatura</button>
-        <section id="opcion7" class="opcion">
-            <h2>Matricular estudiante en asignatura</h2>
-            <form action="#" method="get"></form>
-                <label>Nombre del estudiante: <input type="text" id="nombreEstudianteMatricula" required></label>
-                <label>Nombre de la asignatura: <input type="text" id="nombreAsignaturaMatricula" required></label>
-                <button id="submit7" type="submit">Matricular</button>
-            </form>
-        </section>
-        <section id="mostrar7"></section>
+            <button onclick="mostrarSeccion(8)">8 - Desmatricular estudiante de asignatura</button>
+            <section id="opcion8" class="opcion">
+                <h2>Desmatricular estudiante de asignatura</h2>
+                <form action="#" method="get">
+                    <label>Nombre del estudiante: <input type="text" id="nombreEstudianteDesmatricula" required></label>
+                    <label>Nombre de la asignatura: <input type="text" id="nombreAsignaturaDesmatricula" required></label>
+                    <button id="submit8" type="submit">Desmatricular</button>
+                </form>
+            </section>
+            <section id="mostrar8"></section>
 
-        <!-- Desmatricular estudiante de asignatura -->
-        <button onclick="mostrarSeccion(8)">8 - Desmatricular estudiante de asignatura</button>
-        <section id="opcion8" class="opcion">
-            <h2>Desmatricular estudiante de asignatura</h2>
-            <form action="#" method="get"></form>
-                <label>Nombre del estudiante: <input type="text" id="nombreEstudianteDesmatricula" required></label>
-                <label>Nombre de la asignatura: <input type="text" id="nombreAsignaturaDesmatricula" required></label>
-                <button id="submit8" type="submit">Desmatricular</button>
-            </form>
-        </section>
-        <section id="mostrar8"></section>
+            <button onclick="mostrarSeccion(9)">9 - Calificar a un estudiante</button>
+            <section id="opcion9" class="opcion">
+                <h2>Calificar a un estudiante en una asignatura: </h2>
+                <form action="#" method="get">
+                    <label>Nombre del estudiante: <input type="text" id="nombreEstudianteCalificar" required></label>
+                    <label>Nombre de la asignatura: <input type="text" id="nombreAsignaturaCalificar" required></label>
+                    <label>Calificación: <input type="number" id="calificacion" required min="0" max="10"></label>
+                    <button id="submit9" type="submit">Calificar</button>
+                </form>
+            </section>
+            <section id="mostrar9"></section>
 
-        <!-- Calificar a un estudiante -->
-        <button onclick="mostrarSeccion(9)">9 - Calificar a un estudiante</button>
-        <section id="opcion9" class="opcion">
-            <h2>Calificar a un estudiante en una asignatura: </h2>
-            <form action="#" method="get">
-                <label>Nombre del estudiante: <input type="text" id="nombreEstudianteCalificar" required></label>
-                <label>Nombre de la asignatura: <input type="text" id="nombreAsignaturaCalificar" required></label>
-                <label>Calificación: <input type="number" id="calificacion" required min="0" max="10"></label>
-                <button id="submit9" type="submit">Calificar</button>
-            </form>
-        </section>
-        <section id="mostrar9"></section>
+            <button onclick="mostrarSeccion(10)">10 - Calcular promedio de un estudiante: </button>
+            <section id="opcion10" class="opcion">
+                <h2>Calcular promedio de un estudiante</h2>
+                <form action="#" method="get">
+                    <label>Nombre del estudiante: <input type="text" id="nombreEstudiantePromedio" required></label>
+                    <button id="submit10" type="submit">Calcular promedio</button>
+                </form>
+            </section>
+            <section id="mostrar10"></section>
 
-        <!-- Calcular promedio de un estudiante -->
-        <button onclick="mostrarSeccion(10)">10 - Calcular promedio de un estudiante: </button>
-        <section id="opcion10" class="opcion">
-            <h2>Calcular promedio de un estudiante</h2>
-            <form action="#" method="get"></form>
-                <label>Nombre del estudiante: <input type="text" id="nombreEstudiantePromedio" required></label>
-                <button id="submit10" type="submit">Calcular promedio</button>
-            </form>
+            <button onclick="mostrarSeccion(11)">11 - Calcular promedio general</button>
+            <section id="opcion11" class="opcion">
+                <h2>Calcular promedio general de los estudiantes</h2>
+                <button id="calcularPromedioGeneral">Calcular Promedio General</button>
+                <p id="promedioGeneral"></p>
+            </section>
+            <section id="mostrar11"></section>
         </section>
-        <section id="mostrar10"></section>
 
-        <!-- Calcular promedio general de los estudiantes -->
-        <button onclick="mostrarSeccion(11)">11 - Calcular promedio general</button>
-        <section id="opcion11" class="opcion"></section>
-            <h2>Calcular promedio general de los estudiantes</h2>
-            <button id="calcularPromedioGeneral">Calcular Promedio General</button>
-            <p id="promedioGeneral"></p>
+        <!-- Fase 4: Otros -->
+        <button onclick="mostrarFase(4)">Fase 4 - Otros</button>
+        <section id="fase4" class="fase">
+            <button onclick="mostrarSeccion(12)">12 - Limpiar localStorage</button>
+            <section id="opcion12" class="opcion">
+                <h1 id="mostrar"></h1>
+            </section>
         </section>
-        <section id="mostrar11"></section>
-
-        <!-- Limpiar localStorage -->
-        <button onclick="mostrarSeccion(12)">12 - Limpiar localStorage</button>
-        <section id="opcion12" class="opcion">
-            <h1 id="mostrar"></h1>
-        </section>
-        
     </main>
 
     <script>
+        function mostrarFase(fase) {
+            const fases = document.querySelectorAll('.fase');
+            fases.forEach(f => f.style.display = 'none');
+            document.getElementById(`fase${fase}`).style.display = 'block';
+        }
+
         function mostrarSeccion(opcion) {
             const secciones = document.querySelectorAll('.opcion');
             secciones.forEach(seccion => seccion.style.display = 'none');
             document.getElementById(`opcion${opcion}`).style.display = 'block';
         }
+
+        // Inicialmente ocultar todas las fases y secciones
+        document.addEventListener('DOMContentLoaded', () => {
+            const fases = document.querySelectorAll('.fase');
+            const secciones = document.querySelectorAll('.opcion');
+            fases.forEach(fase => fase.style.display = 'none');
+            secciones.forEach(seccion => seccion.style.display = 'none');
+        });
     </script>
 </body>
 
