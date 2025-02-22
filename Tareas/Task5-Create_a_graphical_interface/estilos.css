@@ -12,7 +12,7 @@ header {
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    text-align: justify;
+    text-align:left;
     background-color: #dcdcdc89;
     margin: 30px;
     padding: 0;

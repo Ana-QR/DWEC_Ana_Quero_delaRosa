@@ -26,18 +26,25 @@
         <section id="fase1" class="fase">
             <button onclick="mostrarSeccion(1)">1 - Añadir estudiante</button>
             <section id="opcion1" class="opcion">
-                <h2>Registro de Estudiantes</h2>
+                <h2>Registro de Estudiantes</h2><br>
                 <form action="#" method="get">
                     <label>Nombre: <input type="text" id="nombre" required></label>
+                    <br>
                     <label>Edad: <input type="number" id="edad" required></label>
+                    <br>
                     <h3>Dirección</h3>
                     <label>Calle: <input type="text" id="calle" required></label>
+                    <br>
                     <label>Número: <input type="number" id="numero" required></label>
+                    <br>
                     <label>Piso: <input type="text" id="piso" required></label>
+                    <br>
                     <label>Código Postal: <input type="text" id="codigo_postal" required pattern="\d{5}"></label>
+                    <br>
                     <label>Provincia: <input type="text" id="provincia" required></label>
+                    <br>
                     <label>Localidad: <input type="text" id="localidad" required></label>
-
+                    <br>
                     <button id="submit" type="submit">Registrar Estudiante</button>
                 </form>
             </section>
@@ -47,7 +54,7 @@
             <section id="opcion2" class="opcion">
                 <h2>Eliminar estudiante</h2>
                 <form action="#" method="get">
-                    <label>Nombre del estudiante a eliminar: <input type="text" id="nombreEliminar" required></label>
+                    <label>Nombre del estudiante a eliminar: <input type="text" id="nombreEliminar" required></label><br>
                     <button id="submit2" type="submit">Eliminar Estudiante</button>
                 </form>
             </section>
@@ -55,8 +62,8 @@
 
             <button onclick="mostrarSeccion(3)">3 - Mostrar estudiantes</button>
             <section id="opcion3" class="opcion">
-                <h2>Lista de Estudiantes</h2>
-                <button id="mostrarEstudiantes">Mostrar Estudiantes</button>
+                <h2>Lista de Estudiantes</h2><br>
+                <button id="mostrarEstudiantes" onclick="mostrarEstudiantes()">Mostrar Estudiantes</button>
                 <ul id="listaEstudiantes"></ul>
             </section>
             <section id="mostrar3"></section>
@@ -69,8 +76,7 @@
             <section id="opcion4" class="opcion">
                 <h2>Añadir Asignatura</h2>
                 <form action="#" method="get">
-                    <label>Nombre de la asignatura: <input type="text" id="nombreAsig" required></label>
-                    <label>Nombre del estudiante: <input type="text" id="nombreEstudiante" required></label>
+                    <label>Nombre de la asignatura: <input type="text" id="nombreAsig" required></label><br>
                     <button id="submit4" type="submit">Añadir Asignatura</button>
                 </form>
             </section>
@@ -78,10 +84,10 @@
 
             <button onclick="mostrarSeccion(5)">5 - Eliminar asignatura</button>
             <section id="opcion5" class="opcion">
-                <h2>Eliminar asignatura</h2>
+                <h2>Eliminar asignatura</h2><br>
                 <form action="#" method="get">
-                    <label>Nombre de la asignatura a eliminar: <input type="text" id="nombreAsigEliminar" required></label>
-                    <label>Nombre del estudiante: <input type="text" id="nombreEstudianteEliminar" required></label>
+                    <label>Nombre de la asignatura a eliminar: <input type="text" id="nombreAsigEliminar" required></label><br>
+                    <label>Nombre del estudiante: <input type="text" id="nombreEstudianteEliminar" required></label><br>
                     <button id="submit5" type="submit">Eliminar asignatura</button>
                 </form>
             </section>
@@ -89,8 +95,8 @@
 
             <button onclick="mostrarSeccion(6)">6 - Mostrar asignaturas</button>
             <section id="opcion6" class="opcion">
-                <h2>Lista de Asignaturas</h2>
-                <button id="mostrarAsignaturas">Mostrar Asignaturas</button>
+                <h2>Lista de Asignaturas</h2><br>
+                <button id="mostrarAsignaturas" onclick="mostrarAsignaturas()">Mostrar Asignaturas</button>
                 <ul id="listaAsignaturas"></ul>
             </section>
             <section id="mostrar6"></section>
@@ -101,10 +107,10 @@
         <section id="fase3" class="fase">
             <button onclick="mostrarSeccion(7)">7 - Matricular estudiante en asignatura</button>
             <section id="opcion7" class="opcion">
-                <h2>Matricular estudiante en asignatura</h2>
+                <h2>Matricular estudiante en asignatura</h2><br>
                 <form action="#" method="get">
-                    <label>Nombre del estudiante: <input type="text" id="nombreEstudianteMatricula" required></label>
-                    <label>Nombre de la asignatura: <input type="text" id="nombreAsignaturaMatricula" required></label>
+                    <label>Nombre del estudiante: <input type="text" id="nombreEstudianteMatricula" required></label><br>
+                    <label>Nombre de la asignatura: <input type="text" id="nombreAsignaturaMatricula" required></label><br>
                     <button id="submit7" type="submit">Matricular</button>
                 </form>
             </section>
@@ -112,10 +118,10 @@
 
             <button onclick="mostrarSeccion(8)">8 - Desmatricular estudiante de asignatura</button>
             <section id="opcion8" class="opcion">
-                <h2>Desmatricular estudiante de asignatura</h2>
+                <h2>Desmatricular estudiante de asignatura</h2><br>
                 <form action="#" method="get">
-                    <label>Nombre del estudiante: <input type="text" id="nombreEstudianteDesmatricula" required></label>
-                    <label>Nombre de la asignatura: <input type="text" id="nombreAsignaturaDesmatricula" required></label>
+                    <label>Nombre del estudiante: <input type="text" id="nombreEstudianteDesmatricula" required></label><br>
+                    <label>Nombre de la asignatura: <input type="text" id="nombreAsignaturaDesmatricula" required></label><br>
                     <button id="submit8" type="submit">Desmatricular</button>
                 </form>
             </section>
@@ -123,10 +129,10 @@
 
             <button onclick="mostrarSeccion(9)">9 - Calificar a un estudiante</button>
             <section id="opcion9" class="opcion">
-                <h2>Calificar a un estudiante en una asignatura: </h2>
+                <h2>Calificar a un estudiante en una asignatura: </h2><br>
                 <form action="#" method="get">
-                    <label>Nombre del estudiante: <input type="text" id="nombreEstudianteCalificar" required></label>
-                    <label>Nombre de la asignatura: <input type="text" id="nombreAsignaturaCalificar" required></label>
+                    <label>Nombre del estudiante: <input type="text" id="nombreEstudianteCalificar" required></label><br>
+                    <label>Nombre de la asignatura: <input type="text" id="nombreAsignaturaCalificar" required></label><br>
                     <label>Calificación: <input type="number" id="calificacion" required min="0" max="10"></label>
                     <button id="submit9" type="submit">Calificar</button>
                 </form>
@@ -135,9 +141,9 @@
 
             <button onclick="mostrarSeccion(10)">10 - Calcular promedio de un estudiante: </button>
             <section id="opcion10" class="opcion">
-                <h2>Calcular promedio de un estudiante</h2>
+                <h2>Calcular promedio de un estudiante</h2><br>
                 <form action="#" method="get">
-                    <label>Nombre del estudiante: <input type="text" id="nombreEstudiantePromedio" required></label>
+                    <label>Nombre del estudiante: <input type="text" id="nombreEstudiantePromedio" required></label><br>
                     <button id="submit10" type="submit">Calcular promedio</button>
                 </form>
             </section>
@@ -145,7 +151,7 @@
 
             <button onclick="mostrarSeccion(11)">11 - Calcular promedio general</button>
             <section id="opcion11" class="opcion">
-                <h2>Calcular promedio general de los estudiantes</h2>
+                <h2>Calcular promedio general de los estudiantes</h2><br>
                 <button id="calcularPromedioGeneral">Calcular Promedio General</button>
                 <p id="promedioGeneral"></p>
             </section>
