@@ -168,200 +168,185 @@ cargarCalificaciones();
 
 
 // ************* INTERACCIÓN CON EL DOM ******************
+// Crear estudiantes caso 1
 document.addEventListener("DOMContentLoaded", function () {
     const boton = document.getElementById("1");
-    const articleElement = document.querySelector("opcion1");
-    const form = document.querySelector("opcion1 form");
-    const mostrar = document.getElementById("output");
+    const articulo = document.getElementById("opcion1");
+    const form = document.getElementById("opcion1_form");
+    const mostrar = document.getElementById("mostrar1");
 
     // Verificar que los elementos existen
-    if (!articleElement) {
+    if (!articulo) {
         console.error("Elemento con clase 'opcion1' no encontrado en el DOM.");
         return;
     }
 
     if (!form) {
-        console.error("Formulario dentro de 'opcion1' no encontrado en el DOM.");
+        console.error("Formulario dentro de 'opcion1_form' no encontrado en el DOM.");
         return;
     }
 
     if (!mostrar) {
-        console.error("Elemento con ID 'output' no encontrado en el DOM.");
+        console.error("Elemento con ID 'mostrar1' no encontrado en el DOM.");
         return;
     }
 
     // Ocultar el artículo al cargar la página
-    articleElement.style.display = "none";
-
-    // Función para guardar estudiantes en localStorage
-    function guardarEstudiantes() {
-        let estudiantes_1 = listaEstu.listadoEstudiantes.map(valor => ({
-            nombre: valor.nombre,
-            edad: valor.edad,
-            direccion: {
-                calle: valor.direccion.calle,
-                numero: valor.direccion.numero,
-                piso: valor.direccion.piso,
-                codigo_postal: valor.direccion.codigo_postal,
-                provincia: valor.direccion.provincia,
-                localidad: valor.direccion.localidad
-            }
-        }));
-        localStorage.setItem("listaEstudiantes_1", JSON.stringify(estudiantes_1));
-    }
-
-    // Función para mostrar estudiantes en pantalla
-    function mostrarEstudiantes() {
-        mostrar.innerHTML = ""; // Limpiar el contenido
-        listaEstu.listadoEstudiantes.forEach(estudiante => {
-            const estudianteInfo = `Nombre: ${estudiante.nombre}, Edad: ${estudiante.edad}, Dirección: ${estudiante.direccion.calle}, ${estudiante.direccion.numero}, ${estudiante.direccion.piso}, ${estudiante.direccion.codigo_postal}, ${estudiante.direccion.provincia}, ${estudiante.direccion.localidad}`;
-            const p = document.createElement("p");
-            p.textContent = estudianteInfo;
-            mostrar.appendChild(p);
-        });
-    }
-
-    mostrarEstudiantes();
+    articulo.style.display = "none";
 
     // Mostrar el artículo al hacer clic en el botón
-    boton?.addEventListener("click", function () {
-        articleElement.style.display = (articleElement.style.display === "none") ? "block" : "none";
+    boton.addEventListener("click", function () {
+        form.classList.toggle("oculto");
     });
 
-    // Validar formulario antes de enviarlo
-    form.addEventListener("submit", function (event) {
-        let valido = true;
-        let datos = {};
-        let inputs = form.querySelectorAll("input");
+    // Validación de formulario
+    document.getElementById("opcion1").querySelector("form").addEventListener("submit", function (e) {
 
-        inputs.forEach(input => {
-            if (input.value.trim() === "") {
-                valido = false;
-                input.style.border = "2px solid red"; // Resalta el input vacío
-            } else {
-                input.style.border = ""; // Elimina el borde rojo si se completa
-                datos[input.id] = input.value.trim(); // Guardamos los valores de los inputs en un objeto
-            }
-        });
+        const nombre = document.getElementById("nombre").value;
+        const edad = document.getElementById("edad").value;
+        const calle = document.getElementById("calle").value;
+        const numero = document.getElementById("numero").value;
+        const piso = document.getElementById("piso").value;
+        const codigoPostal = document.getElementById("codigopostal").value;
+        const provincia = document.getElementById("provincia").value;
+        const localidad = document.getElementById("localidad").value;
 
-        if (!valido) {
-            event.preventDefault(); // Evita el envío del formulario
-            alert("Por favor, completa todos los campos antes de continuar.");
-        } else {
-            console.log("Formulario enviado correctamente");
-
-            // Crear la dirección
-            let nuevaDireccion = new Direccion(
-                datos.calle,
-                Number(datos.numero),
-                datos.piso,
-                datos.codigo_postal,
-                datos.provincia,
-                datos.localidad
-            );
-
-            let nuevoEstudiante = new Estudiante(datos.nombre, Number(datos.edad), nuevaDireccion);
-
-            let comprobacion_es = listaEstu.addEstudiante(nuevoEstudiante);
-
-            if (comprobacion_es) {
-                console.log("Estudiante creado y agregado con éxito:");
-                guardarEstudiantes();
-                mostrarEstudiantes();
-                form.reset();
-            }
+        let direccion = new Direccion(calle, numero, piso, codigoPostal, provincia, localidad);
+        let estudiante = new Estudiante(nombre, edad, direccion);
+        try {
+            listaEstu.agregaEstudiante(estudiante);
+            alert("Estudiante añadido con éxito");
+        } catch (error) {
+            alert(error.message);
         }
+
+        // Función para guardar estudiantes en localStorage
+        function guardarEstudiantes() {
+            let estudiantes = listaEstu.listadoEstudiantes.map(estu => ({
+                nombre: estu.nombre,
+                edad: estu.edad,
+                direccion: {
+                    calle: estu.direccion.calle,
+                    numero: estu.direccion.numero,
+                    piso: estu.direccion.piso,
+                    codigoPostal: estu.direccion.codigoPostal,
+                    provincia: estu.direccion.provincia,
+                    localidad: estu.direccion.localidad
+                }
+            }));
+            localStorage.setItem("listaEstudiantes", JSON.stringify(estudiantes));
+        }
+
+        guardarEstudiantes();
     });
 });
 
 
 //Eliminar estudiantes caso 2
 document.addEventListener("DOMContentLoaded", function () {
-    const boton = document.getElementById("2");
-    const articulo = document.querySelector("opcion2");
-    const form = articulo ? articulo.querySelector("form") : null;
-    const mostrar = document.getElementById("output2");
+    const boton2 = document.getElementById("2");
+    const articulo2 = document.getElementById("opcion2");
+    const form2 = document.getElementById("opcion2_form");
+    const mostrar2 = document.getElementById("mostrar2");
 
-    if (articulo) {
-        articulo.style.display = "none";
-    } else {
+    // Verificar que los elementos existen
+    if (!articulo2) {
         console.error("Elemento con clase 'opcion2' no encontrado en el DOM.");
+        return;
     }
 
-    if (form) {
-        form.addEventListener("submit", function (evento) {
-            let valido = true;
-            const inputs = form.querySelectorAll("input");
-
-            inputs.forEach(input => {
-                if (input.value.trim() === "") {
-                    valido = false;
-                    input.style.border = "2px solid red";
-                } else {
-                    input.style.border = "";
-                }
-            });
-
-            if (!valido) {
-                evento.preventDefault();
-                alert("Por favor, completa todos los campos antes de continuar.");
-            } else {
-                console.log("Formulario enviado correctamente");
-                mostrar.innerHTML = "";
-                let mostrar_Estu = `Estudiantes en la lista:`;
-                mostrarTexto(mostrar_Estu);
-
-                listaEstu.listadoEstudiantes.forEach(persona => {
-                    let personas = `${persona.nombre}, ${persona.edad}, ${persona.direccion.calle}, ${persona.direccion.numero}, ${persona.direccion.piso}, ${persona.direccion.codigo_postal}, ${persona.direccion.provincia}, ${persona.direccion.localidad}`;
-                    mostrarTexto(personas);
-                });
-
-                listaEstu.mostrarEstudiantes(); 
-
-                let elim_estu = document.getElementById("ID_Eli");
-                if (elim_estu) {
-                    elim_estu = Number(elim_estu.value);
-                    if (isNaN(elim_estu) || elim_estu < 0) {
-                        mostrarTexto("El ID introducido debe ser un número positivo.");
-                    } else {
-                        let idEliminar = listaEstu.listadoEstudiantes[elim_estu];
-                        if (idEliminar) {
-                            listaEstu.eliminarEstudiante(idEliminar);
-                            guardarEstudiantes();
-                            mostrarTexto(`El estudiante ${idEliminar.nombre} ha sido eliminado correctamente.`);
-                        } else {
-                            mostrarTexto(`No se encontró ningún estudiante con el ID ${elim_estu}.`);
-                        }
-                    }
-                } else {
-                    console.error("Elemento con ID 'ID_Eli' no encontrado en el DOM.");
-                }
-                evento.preventDefault();
-            }
-        });
-    } else {
-        console.error("Formulario dentro de 'opcion2' no encontrado.");
+    if (!form2) {
+        console.error("Formulario dentro de 'opcion2_form' no encontrado en el DOM.");
+        return;
     }
+
+    if (!mostrar2) {
+        console.error("Elemento con ID 'mostrar2' no encontrado en el DOM.");
+        return;
+    }
+
+    // Ocultar el artículo al cargar la página
+    articulo2.style.display = "none";
+
+    // Mostrar el artículo al hacer clic en el botón
+    boton2.addEventListener("click", function () {
+        form2.classList.toggle("oculto");
+    });
+
+    // Validación de formulario
+    document.getElementById("opcion2").querySelector("form").addEventListener("submit", function (e) {
+        const nombre = document.getElementById("nombreEliminar").value;
+
+        let estudiante = listaEstu.busquedaPorNombre(nombre);
+        if (estudiante) {
+            listaEstu.eliminarEstudiante(estudiante);
+            alert("Estudiante eliminado con éxito");
+        } else {
+            alert("No se encontró ningún estudiante con ese nombre");
+        }
+
+        // Función para guardar estudiantes en localStorage
+        function eliminarEstudiantes() {
+            const estudiantes = listaEstu.listadoEstudiantes.map(estudiante => ({
+                nombre: estu.nombre,
+                edad: estu.edad,
+                direccion: {
+                    calle: estu.direccion.calle,
+                    numero: estu.direccion.numero,
+                    piso: estu.direccion.piso,
+                    codigoPostal: estu.direccion.codigoPostal,
+                    provincia: estu.direccion.provincia,
+                    localidad: estu.direccion.localidad
+                }
+            }));
+            localStorage.setItem("listaEstudiantes", JSON.stringify(estudiantes));
+        }
+        eliminarEstudiantes();
+    });
 });
-
 
 //Mostrar estudiantes caso 3
 document.addEventListener("DOMContentLoaded", function () {
-    const boton = document.getElementById("3");
-    const articulo = document.querySelector("opcion3");
-    const mostrar = document.getElementById("mostrar3");
+    const boton3 = document.getElementById("3");
+    const articulo3 = document.querySelector("opcion3");
+    const form3 = document.querySelector("opcion3_form");
+    const mostrar3 = document.getElementById("mostrar3");
+
+    // Verificar que los elementos existen
+    if (!articulo3) {
+        console.error("Elemento con clase 'opcion3' no encontrado en el DOM.");
+        return;
+    }
+
+    if (!form3) {
+        console.error("Formulario dentro de 'opcion3_form' no encontrado en el DOM.");
+        return;
+    }
+
+    if (!mostrar3) {
+        console.error("Elemento con ID 'mostrar3' no encontrado en el DOM.");
+        return;
+    }
 
     // Ocultar el articulo al cargar la página
-    articulo.style.display = "none";
-
+    articulo3.style.display = "none";
+    
     // Mostrar el articulo al hacer clic en el botón
-    boton.addEventListener("click", function () {
+    boton3.addEventListener("click", function () {
         if (elemento) { elemento.style.display = "none"; }
     });
 
-    // Mostrar estudiantes al hacer clic en el botón
-    mostrar.addEventListener("click", function () {
-        mostrarEstudiantes();
+    // Mostrar el promdio de las calificaciones de los estudiantes
+    mostrar3.innerHTML = "";
+    listaEstu.listadoEstudiantes.forEach(estudiante => {
+        mostrar3.innerHTML += `<h3>Nombre del estudiante: ${estudiante.nombre}</h3>`;
+        mostrar3.innerHTML += `<h4>Calificaciones:</h4>`;
+        estudiante.asignaturas.forEach(asignatura => {
+            const nota = Number(asignatura.calculaPromedio());
+            mostrar3.innerHTML += `<p>${asignatura.nombre}: ${nota}</p>`;
+        });
+        mostrar3.innerHTML += `<h4>Promedio: ${estudiante.promedioEstudiante()}</h4>`;
+        mostrar3.innerHTML += `<hr>`;
     });
 });
 
