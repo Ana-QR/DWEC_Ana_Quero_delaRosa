@@ -24,6 +24,8 @@
  *   - buscarAsignaturas: Busca asignaturas según un patrón de texto.
  *   - toString(): Devuelve una representación en texto del estudiante.
  */
+import { Persona } from "./Persona.js";
+
 export class Estudiante extends Persona {
     /**
      * ID único del estudiante, generado automáticamente.

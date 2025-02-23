@@ -93,53 +93,32 @@ try {
     console.error(error.message);
 }
 
-/* Guardar datos en localstorage */
-function guardarDatos(event) {
-    event.preventDefault();
-    guardarEstudiantes();
-    guardarAsignaturas();
-    alert("Datos guardados correctamente.");
-}
-
 // Función para cargar estudiantes desde localStorage
 function cargarEstudiantes() {
-    let estudiantesGuardados = localStorage.getItem("listaEstudiantes_1");
+    let estudiantesGuardados = localStorage.getItem("listaEstudiantes");
+
     if (estudiantesGuardados) {
         estudiantesGuardados = JSON.parse(estudiantesGuardados);
-        estudiantesGuardados.forEach(valor => {
+
+        estudiantesGuardados.forEach(estu => {
             let direccion = new Direccion(
-                valor.direccion.calle, valor.direccion.numero,
-                valor.direccion.piso, valor.direccion.codigo_postal,
-                valor.direccion.provincia, valor.direccion.localidad
+                estu.direccion.calle, estu.direccion.numero,
+                estu.direccion.piso, estu.direccion.codigo_postal,
+                estu.direccion.provincia, estu.direccion.localidad
             );
-            let estudiante = new Estudiante(valor.nombre, valor.edad, direccion);
+            let estudiante = new Estudiante(estu.nombre, estu.edad, direccion);
             listaEstu.addEstudiante(estudiante);
         });
     }
 }
 
-// Función para guardar la lista de estudiantes en localStorage
-function guardarEstudiantes() {
-    let estudiantes_1 = listaEstu.listadoEstudiantes.map(valor => ({
-        nombre: valor.nombre,
-        edad: valor.edad,
-        direccion: {
-            calle: valor.direccion.calle,
-            numero: valor.direccion.numero,
-            piso: valor.direccion.piso,
-            codigo_postal: valor.direccion.codigo_postal,
-            provincia: valor.direccion.provincia,
-            localidad: valor.direccion.localidad
-        }
-    }));
-    localStorage.setItem("listaEstudiantes_1", JSON.stringify(estudiantes_1));
-}
-
 // Función para cargar asignaturas desde localStorage
 function cargarAsignaturas() {
-    let asignaturasGuardadas = localStorage.getItem("listaAsignaturas_1");
+    let asignaturasGuardadas = localStorage.getItem("listaAsignaturas");
+
     if (asignaturasGuardadas) {
         asignaturasGuardadas = JSON.parse(asignaturasGuardadas);
+
         asignaturasGuardadas.forEach(asig => {
             let nuevaAsignatura = new Asignatura(asig.nombreA);
             listaAsig.addAsignatura(nuevaAsignatura);
@@ -147,106 +126,72 @@ function cargarAsignaturas() {
     }
 }
 
-// Función para guardar asignaturas en localStorage
-function guardarAsignaturas() {
-    let asignaturas_1 = listaAsig.listadoAsignaturas.map(asig => ({ nombreA: asig.nombre }));
-    localStorage.setItem("listaAsignaturas_1", JSON.stringify(asignaturas_1));
-}
+// Función para cargar matriculas desde localStorage
+function cargarMatriculas() {
+    let matriculasGuardadas = localStorage.getItem("matriculas");
 
-// Función para eliminar una asignatura
-function eliminarAsignatura(nombre) {
-    listaAsig.eliminarAsignatura(nombre);
-    guardarAsignaturas();
-}
+    if (matriculasGuardadas) {
+        matriculasGuardadas = JSON.parse(matriculasGuardadas);
 
-// Función para mostrar asignaturas
-function mostrarAsignaturas() {
-    const listaAsignaturasElement = document.getElementById('listaAsignaturas');
-    listaAsignaturasElement.innerHTML = ''; // Limpiar lista antes de agregar nuevas asignaturas
-
-    listaAsig.listadoAsignaturas.forEach(asig => {
-        const li = document.createElement('li');
-        li.textContent = `Asignatura: ${asig.nombre}`;
-        listaAsignaturasElement.appendChild(li);
-    });
-}
-
-// Función para matricular un estudiante en una asignatura
-function matricularEstudiante(estudiante, nombreAsig) {
-    let estEncontrado = listaEstu.busquedaPorNombre(estudiante);
-    let asignatura = listaAsig.listadoAsignaturas.find(asig => asig.nombre === nombreAsig);
-    if (estEncontrado && asignatura) {
-        estEncontrado.matricular(asignatura);
-        guardarEstudiantes();
+        matriculasGuardadas.forEach(mat => {
+            let estudiante = listaEstu.listadoEstudiantes.find(est => est.nombre === mat.estudiante);
+            let asignatura = listaAsig.listadoAsignaturas.find(asig => asig.nombre === mat.asignatura);
+            if (estudiante && asignatura) {
+                estudiante.matricular(asignatura);
+            }
+        });
     }
 }
 
-// Función para desmatricular un estudiante de una asignatura
-function desmatricularEstudiante(estudiante, nombreAsig) {
-    let estEncontrado = listaEstu.busquedaPorNombre(estudiante);
-    if (estEncontrado) {
-        estEncontrado.asignaturas = estEncontrado.asignaturas.filter(asig => asig.nombre !== nombreAsig);
-        guardarEstudiantes();
+// Función para cargar calificaciones desde localStorage
+function cargarCalificaciones() {
+    let calificacionesGuardadas = localStorage.getItem("calificaciones");
+
+    if (calificacionesGuardadas) {
+        calificacionesGuardadas = JSON.parse(calificacionesGuardadas);
+
+        calificacionesGuardadas.forEach(cal => {
+            let estudiante = listaEstu.listadoEstudiantes.find(est => est.nombre === cal.estudiante);
+            let asignatura = estudiante.asignaturas.find(asig => asig.nombre === cal.asignatura);
+            if (estudiante && asignatura) {
+                asignatura.nota = cal.nota;
+            }
+        });
     }
 }
 
-// Función para calificar a un estudiante
-function calificarEstudiante(estudiante, nombreAsig, nota) {
-    let estEncontrado = listaEstu.busquedaPorNombre(estudiante);
-    if (estEncontrado) {
-        let asignatura = estEncontrado.asignaturas.find(asig => asig.nombre === nombreAsig);
-        if (asignatura) {
-            asignatura.nota = nota;
-            guardarEstudiantes();
-        }
-    }
-}
-
-// Función para calcular el promedio de un estudiante
-function calcularPromedioEstudiante(estudiante) {
-    let estEncontrado = listaEstu.busquedaPorNombre(estudiante);
-    if (estEncontrado) {
-        let notas = estEncontrado.asignaturas.map(asig => asig.nota).filter(nota => nota !== undefined);
-        let promedio = notas.length ? (notas.reduce((a, b) => a + b, 0) / notas.length) : 0;
-        console.log(`Promedio de ${estEncontrado.nombre}: ${promedio.toFixed(2)}`);
-    }
-}
-
-// Función para calcular el promedio general de todos los estudiantes
-function calcularPromedioGeneral() {
-    let notasTotales = [];
-    listaEstu.forEach(est => {
-        let notas = est.asignaturas.map(asig => asig.nota).filter(nota => nota !== undefined);
-        notasTotales.push(...notas);
-    });
-    let promedio = notasTotales.length ? (notasTotales.reduce((a, b) => a + b, 0) / notasTotales.length) : 0;
-    console.log(`Promedio general de todos los estudiantes: ${promedio.toFixed(2)}`);
-}
-
-// Cargar datos al inicio
+// Cargar datos desde localStorage
 cargarEstudiantes();
 cargarAsignaturas();
+cargarMatriculas();
+cargarCalificaciones();
+
 
 // ************* INTERACCIÓN CON EL DOM ******************
-// Función para mostrar texto en un elemento
-function mostrarTexto(texto, elementId) {
-    const mostrar = document.getElementById(elementId);
-    const p = document.createElement("p");
-    p.textContent = texto;
-    mostrar.appendChild(p);
-}
-
-
-//Añadir estudiantes caso 1
 document.addEventListener("DOMContentLoaded", function () {
     const boton = document.getElementById("1");
-    const articulo = document.querySelector(".opcion1");
-    const form = document.querySelector("form");
-    const inputs = form.querySelectorAll("input");
-    const mostrar = document.getElementById("output"); // Añadido
+    const articleElement = document.querySelector("opcion1");
+    const form = document.querySelector("opcion1 form");
+    const mostrar = document.getElementById("output");
 
-    // Ocultar el articulo al cargar la página
-    articulo.style.display = "none";
+    // Verificar que los elementos existen
+    if (!articleElement) {
+        console.error("Elemento con clase 'opcion1' no encontrado en el DOM.");
+        return;
+    }
+
+    if (!form) {
+        console.error("Formulario dentro de 'opcion1' no encontrado en el DOM.");
+        return;
+    }
+
+    if (!mostrar) {
+        console.error("Elemento con ID 'output' no encontrado en el DOM.");
+        return;
+    }
+
+    // Ocultar el artículo al cargar la página
+    articleElement.style.display = "none";
 
     // Función para guardar estudiantes en localStorage
     function guardarEstudiantes() {
@@ -265,8 +210,9 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("listaEstudiantes_1", JSON.stringify(estudiantes_1));
     }
 
+    // Función para mostrar estudiantes en pantalla
     function mostrarEstudiantes() {
-        mostrar.innerHTML = ""; // Limpiar el contenido del div
+        mostrar.innerHTML = ""; // Limpiar el contenido
         listaEstu.listadoEstudiantes.forEach(estudiante => {
             const estudianteInfo = `Nombre: ${estudiante.nombre}, Edad: ${estudiante.edad}, Dirección: ${estudiante.direccion.calle}, ${estudiante.direccion.numero}, ${estudiante.direccion.piso}, ${estudiante.direccion.codigo_postal}, ${estudiante.direccion.provincia}, ${estudiante.direccion.localidad}`;
             const p = document.createElement("p");
@@ -277,15 +223,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     mostrarEstudiantes();
 
-    // Mostrar el articulo al hacer clic en el botón
-    boton.addEventListener("click", function () {
-        articulo.style.display = (articulo.style.display === "none") ? "block" : "none";
+    // Mostrar el artículo al hacer clic en el botón
+    boton?.addEventListener("click", function () {
+        articleElement.style.display = (articleElement.style.display === "none") ? "block" : "none";
     });
 
-    // Validar articulo antes de enviarlo
+    // Validar formulario antes de enviarlo
     form.addEventListener("submit", function (event) {
         let valido = true;
         let datos = {};
+        let inputs = form.querySelectorAll("input");
 
         inputs.forEach(input => {
             if (input.value.trim() === "") {
@@ -298,10 +245,10 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         if (!valido) {
-            event.preventDefault(); // Evita el envío del articulo
+            event.preventDefault(); // Evita el envío del formulario
             alert("Por favor, completa todos los campos antes de continuar.");
         } else {
-            console.log("articulo enviado correctamente");
+            console.log("Formulario enviado correctamente");
 
             // Crear la dirección
             let nuevaDireccion = new Direccion(
@@ -317,109 +264,91 @@ document.addEventListener("DOMContentLoaded", function () {
 
             let comprobacion_es = listaEstu.addEstudiante(nuevoEstudiante);
 
-            if (comprobacion_es != false) {
+            if (comprobacion_es) {
                 console.log("Estudiante creado y agregado con éxito:");
                 guardarEstudiantes();
                 mostrarEstudiantes();
                 form.reset();
-                articulo.style.display = "none"; // Ocultar el articulo
-
-
             }
         }
     });
 });
 
+
 //Eliminar estudiantes caso 2
-// Ocultar el articulo al cargar la página
-articulo.style.display = "none";
+document.addEventListener("DOMContentLoaded", function () {
+    const boton = document.getElementById("2");
+    const articulo = document.querySelector("opcion2");
+    const form = articulo ? articulo.querySelector("form") : null;
+    const mostrar = document.getElementById("output2");
 
-// Función para guardar la lista de estudiantes en localStorage
-function guardarEstudiantes() {
-    let estudiantes_1 = listaEstu.listadoEstudiantes.map(valor => ({ //se utiliza map para obtener bien el array de objetos en vez de un string
-        nombre: valor.nombre,
-        edad: valor.edad,
-        direccion: {
-            calle: valor.direccion.calle,
-            numero: valor.direccion.numero,
-            piso: valor.direccion.piso,
-            codigo_postal: valor.direccion.codigo_postal,
-            provincia: valor.direccion.provincia,
-            localidad: valor.direccion.localidad
-        }
-    }));
-
-    // Función para guardar la lista de estudiantes en localStorage
-
-    function guardarEstudiantes() {
-        let estudiantes_1 = listaEstu.listadoEstudiantes.map(valor => ({
-            nombre: valor.nombre,
-            edad: valor.edad,
-            direccion: {
-                calle: valor.direccion.calle,
-                numero: valor.direccion.numero,
-                piso: valor.direccion.piso,
-                codigo_postal: valor.direccion.codigo_postal,
-                provincia: valor.direccion.provincia,
-                localidad: valor.direccion.localidad
-            }
-        }));
-        localStorage.setItem("listaEstudiantes_1", JSON.stringify(estudiantes_1));
-    }
-
-    if (!valido) {
-        evento.preventDefault(); // Evita el envío del articulo
-        alert("Por favor, completa todos los campos antes de continuar.");
+    if (articulo) {
+        articulo.style.display = "none";
     } else {
-        console.log("articulo enviado correctamente");
-
-        mostrar.innerHTML = ""; // Limpiar el contenido del section
-
-        let mostrar_Estu = `Estudiantes en la lista:`;
-
-        mostrarTexto(mostrar_Estu);
-
-
-        for (let persona of listaEstu.listadoEstudiantes) {
-            let personas = `${persona.nombre}, ${persona.edad}, ${persona.direccion.calle}, ${persona.direccion.numero}, ${persona.direccion.piso}, ${persona.direccion.codigo_postal}, ${persona.direccion.provincia}, ${persona.direccion.localidad}`;
-            mostrarTexto(personas);
-        }
-        listaEstu.mostrarEstudiantes(); //lo muestra en consola
-
-
-
-        let elim_estu = document.getElementById("ID_Eli").value;
-        elim_estu = Number(elim_estu);
-
-        if (isNaN(elim_estu) || elim_estu < 0) {
-            const error = `El ID introducido debe ser un número positivo.`;
-            mostrarTexto(error);
-        }
-
-        let idEliminar = listaEstu.listadoEstudiantes[elim_estu];
-        console.log(idEliminar);
-
-        // Liberar el ID eliminado en Estudiantes.numeros
-        //eliminamos tambien al estudiante de la clase
-        if (idEliminar) {
-            listaEstu.eliminarEstudiante(idEliminar);
-            guardarEstudiantes();
-            const eliminado = `El estudiante ${idEliminar.nombre} ha sido eliminado correctamente.`;
-            mostrarTexto(eliminado);
-        } else {
-            const error = `No se encontró ningún estudiante con el ID ${elim_estu}.`;
-            mostrarTexto(error);
-        }
-
-        evento.preventDefault();
+        console.error("Elemento con clase 'opcion2' no encontrado en el DOM.");
     }
-}
+
+    if (form) {
+        form.addEventListener("submit", function (evento) {
+            let valido = true;
+            const inputs = form.querySelectorAll("input");
+
+            inputs.forEach(input => {
+                if (input.value.trim() === "") {
+                    valido = false;
+                    input.style.border = "2px solid red";
+                } else {
+                    input.style.border = "";
+                }
+            });
+
+            if (!valido) {
+                evento.preventDefault();
+                alert("Por favor, completa todos los campos antes de continuar.");
+            } else {
+                console.log("Formulario enviado correctamente");
+                mostrar.innerHTML = "";
+                let mostrar_Estu = `Estudiantes en la lista:`;
+                mostrarTexto(mostrar_Estu);
+
+                listaEstu.listadoEstudiantes.forEach(persona => {
+                    let personas = `${persona.nombre}, ${persona.edad}, ${persona.direccion.calle}, ${persona.direccion.numero}, ${persona.direccion.piso}, ${persona.direccion.codigo_postal}, ${persona.direccion.provincia}, ${persona.direccion.localidad}`;
+                    mostrarTexto(personas);
+                });
+
+                listaEstu.mostrarEstudiantes(); 
+
+                let elim_estu = document.getElementById("ID_Eli");
+                if (elim_estu) {
+                    elim_estu = Number(elim_estu.value);
+                    if (isNaN(elim_estu) || elim_estu < 0) {
+                        mostrarTexto("El ID introducido debe ser un número positivo.");
+                    } else {
+                        let idEliminar = listaEstu.listadoEstudiantes[elim_estu];
+                        if (idEliminar) {
+                            listaEstu.eliminarEstudiante(idEliminar);
+                            guardarEstudiantes();
+                            mostrarTexto(`El estudiante ${idEliminar.nombre} ha sido eliminado correctamente.`);
+                        } else {
+                            mostrarTexto(`No se encontró ningún estudiante con el ID ${elim_estu}.`);
+                        }
+                    }
+                } else {
+                    console.error("Elemento con ID 'ID_Eli' no encontrado en el DOM.");
+                }
+                evento.preventDefault();
+            }
+        });
+    } else {
+        console.error("Formulario dentro de 'opcion2' no encontrado.");
+    }
+});
 
 
 //Mostrar estudiantes caso 3
 document.addEventListener("DOMContentLoaded", function () {
     const boton = document.getElementById("3");
-    const articulo = document.querySelector(".opcion3");
+    const articulo = document.querySelector("opcion3");
     const mostrar = document.getElementById("mostrar3");
 
     // Ocultar el articulo al cargar la página
@@ -427,7 +356,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Mostrar el articulo al hacer clic en el botón
     boton.addEventListener("click", function () {
-        articulo.style.display = (articulo.style.display === "none") ? "block" : "none";
+        if (elemento) { elemento.style.display = "none"; }
     });
 
     // Mostrar estudiantes al hacer clic en el botón
@@ -439,8 +368,8 @@ document.addEventListener("DOMContentLoaded", function () {
 //Añadir asignaturas caso 4
 document.addEventListener("DOMContentLoaded", function () {
     const boton = document.getElementById("4");
-    const articulo = document.querySelector(".opcion4");
-    const form = document.querySelector(".opcion4 form");
+    const articulo = document.querySelector("opcion4");
+    const form = document.querySelector("opcion4 form");
     const inputs = form.querySelectorAll("input");
     const mostrar = document.getElementById("output4"); // Añadido
 
@@ -508,74 +437,77 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-//Eliminar asignaturas caso 5
-document.addEventListener("DOMContentLoaded", function () {
-    const boton = document.getElementById("5");
-    const articulo = document.querySelector(".opcion5");
-    const form = document.querySelector(".opcion5 form");
-    mostrarTexto(texto, "mostrar5");
-    // Ocultar el articulo al cargar la página
-    articulo.style.display = "none";
+let texto = "Texto de ejemplo";
+mostrarTexto(texto, "mostrar5");
+const boton = document.getElementById("5");
+const articulo = document.querySelector("opcion5");
+const form = document.querySelector("opcion5 form");
+const inputs = form ? form.querySelectorAll("input") : [];
+const mostrar = document.getElementById("mostrar5");
 
-    // Mostrar el articulo al hacer clic en el botón
-    boton.addEventListener("click", function () {
-        articulo.style.display = (articulo.style.display === "none") ? "block" : "none";
-    });
 
-    form.addEventListener("submit", function (evento) {
-        let valido = true;
+// Ocultar el articulo al cargar la página
+articulo.style.display = "none";
 
-        inputs.forEach(input => {
-            if (input.value.trim() === "") {
-                valido = false;
-                input.style.border = "2px solid red"; // Resalta el input vacío
-            } else {
-                input.style.border = ""; // Elimina el borde rojo si se completa
-            }
-        });
+// Mostrar el articulo al hacer clic en el botón
+boton.addEventListener("click", function () {
+    articulo.style.display = (articulo.style.display === "none") ? "block" : "none";
+});
 
-        if (!valido) {
-            evento.preventDefault(); // Evita el envío del formulario
-            alert("Por favor, completa todos los campos antes de continuar.");
+form.addEventListener("submit", function (evento) {
+    let valido = true;
+
+    inputs.forEach(input => {
+        if (input.value.trim() === "") {
+            valido = false;
+            input.style.border = "2px solid red"; // Resalta el input vacío
         } else {
-            console.log("Formulario enviado correctamente");
-
-            mostrar.innerHTML = ""; // Limpiar el contenido del section
-
-            let mostrar_Asig = `Asignaturas en la lista:`;
-
-            mostrarTexto(mostrar_Asig);
-
-            listaAsig.listadoAsignaturas.forEach(asig => {
-                let asignaturas = `Asignatura: ${asig.nombre}`;
-                mostrarTexto(asignaturas);
-            });
-
-            let elim_asig = document.getElementById("ID_Eli_Asig").value;
-            elim_asig = elim_asig.trim();
-
-            let asignaturaEliminar = listaAsig.listadoAsignaturas.find(asig => asig.nombre === elim_asig);
-            console.log(asignaturaEliminar);
-
-            if (asignaturaEliminar) {
-                listaAsig.eliminarAsignatura(asignaturaEliminar.nombre);
-                guardarAsignaturas();
-                const eliminado = `La asignatura ${asignaturaEliminar.nombre} ha sido eliminada correctamente.`;
-                mostrarTexto(eliminado);
-            } else {
-                const error = `No se encontró ninguna asignatura con el nombre ${elim_asig}.`;
-                mostrarTexto(error);
-            }
-
-            evento.preventDefault();
+            input.style.border = ""; // Elimina el borde rojo si se completa
         }
     });
+
+    if (!valido) {
+        evento.preventDefault(); // Evita el envío del formulario
+        alert("Por favor, completa todos los campos antes de continuar.");
+    } else {
+        console.log("Formulario enviado correctamente");
+
+        mostrar.innerHTML = ""; // Limpiar el contenido del section
+
+        let mostrar_Asig = `Asignaturas en la lista:`;
+
+        mostrarTexto(mostrar_Asig);
+
+        listaAsig.listadoAsignaturas.forEach(asig => {
+            let asignaturas = `Asignatura: ${asig.nombre}`;
+            mostrarTexto(asignaturas);
+        });
+
+        let elim_asig = document.getElementById("ID_Eli_Asig").value;
+        elim_asig = elim_asig.trim();
+
+        let asignaturaEliminar = listaAsig.listadoAsignaturas.find(asig => asig.nombre === elim_asig);
+        console.log(asignaturaEliminar);
+
+        if (asignaturaEliminar) {
+            listaAsig.eliminarAsignatura(asignaturaEliminar.nombre);
+            guardarAsignaturas();
+            const eliminado = `La asignatura ${asignaturaEliminar.nombre} ha sido eliminada correctamente.`;
+            mostrarTexto(eliminado);
+        } else {
+            const error = `No se encontró ninguna asignatura con el nombre ${elim_asig}.`;
+            mostrarTexto(error);
+        }
+
+        evento.preventDefault();
+    }
 });
+
 
 //Mostar asignaturas caso 6
 document.addEventListener("DOMContentLoaded", function () {
     const boton = document.getElementById("6");
-    const articulo = document.querySelector(".opcion6");
+    const articulo = document.querySelector("opcion6");
     const mostrar = document.getElementById("mostrar6");
 
     // Ocultar el articulo al cargar la página
@@ -595,9 +527,9 @@ document.addEventListener("DOMContentLoaded", function () {
 //Matricular estudiante en asignatura caso 7
 document.addEventListener("DOMContentLoaded", function () { // DOMContentLoaded se utiliza para asegurarse de que el DOM esté listo antes de intentar manipularlo
     const boton = document.getElementById("7");
-    const articulo = document.querySelector(".opcion7");
-    const form = document.querySelector(".opcion7 form");
-    const inputs = form.querySelectorAll("input");
+    const articulo = document.querySelector("opcion7");
+    const form = document.querySelector("opcion7 form");
+    const inputs = form ? form.querySelectorAll("input") : [];
     const mostrar = document.getElementById("mostrar7"); // Añadido
 
     // Reuse the mostrarTexto function
@@ -655,10 +587,8 @@ document.addEventListener("DOMContentLoaded", function () { // DOMContentLoaded 
 //Desmatricular estudiante en asignatura caso 8
 document.addEventListener("DOMContentLoaded", function () { // DOMContentLoaded se utiliza para asegurarse de que el DOM esté listo antes de intentar manipularlo
     const boton = document.getElementById("8");
-    const articulo = document.querySelector(".opcion8");
-    const form = document.querySelector(".opcion8 form");
-    const inputs = form.querySelectorAll("input");
-    const mostrar = document.getElementById("mostrar8"); // Añadido
+    const articulo = document.querySelector("opcion8");
+    const form = document.querySelector("opcion8 form");
 
     function mostrarTexto(texto) {
         const p = document.createElement("p");// crea la etiqueta p
@@ -666,132 +596,135 @@ document.addEventListener("DOMContentLoaded", function () { // DOMContentLoaded 
         mostrar.appendChild(p);//pone la etiqueta al final
     }
 
-    // Ocultar el articulo al cargar la página
-    articulo.style.display = "none";
-
-    // Validar articulo antes de enviarlo
-    form.addEventListener("submit", function (evento) {
-        let valido = true;
-
-        inputs.forEach(input => {
-            if (input.value.trim() === "") {
-                valido = false;
-                input.style.border = "2px solid red"; // Resalta el input vacío
-            } else {
-                input.style.border = ""; // Elimina el borde rojo si se completa
-            }
-        });
-
-        if (!valido) {
-            evento.preventDefault(); // Evita el envío del articulo
-            alert("Por favor, completa todos los campos antes de continuar.");
-        } else {
-            console.log("articulo enviado correctamente");
-
-            let nombreEstudiante = document.querySelector("#nombreEstudianteDes").value;
-            let nombreAsignatura = document.querySelector("#nombreAsignaturaDes").value;
-
-            let estEncontrado = listaEstu.busquedaPorNombre(nombreEstudiante);
-            if (estEncontrado) {
-                let desmatriculado = estEncontrado.desmatricular(nombreAsignatura);
-                if (desmatriculado) {
-                    console.log(`${estEncontrado.nombre} ha sido desmatriculado de ${nombreAsignatura} con éxito.`);
-                    mostrar.innerHTML = ""; // Limpiar el contenido del section
-                    const exito = `${estEncontrado.nombre} ha sido desmatriculado de ${nombreAsignatura} con éxito.`;
-                    mostrarTexto(exito);
-                    guardarEstudiantes();
-                } else {
-                    mostrar.innerHTML = ""; // Limpiar el contenido del section
-                    const error = `El estudiante ${estEncontrado.nombre} no está matriculado en la asignatura ${nombreAsignatura}.`;
-                    mostrarTexto(error);
-                    evento.preventDefault(); // Evita el envío del formulario
-                }
-            } else {
-                mostrar.innerHTML = ""; // Limpiar el contenido del section
-                const error = `No se encontró el estudiante especificado.`;
-                mostrarTexto(error);
-            }
-        }
-    });
-});
-
-//Calificar estudiante en asignatura caso 9
-
-document.addEventListener("DOMContentLoaded", function () { // DOMContentLoaded se utiliza para asegurarse de que el DOM esté listo antes de intentar manipularlo
-    const boton = document.getElementById("9");
-    const articulo = document.querySelector(".opcion9");
-    const form = document.querySelector(".opcion9 form");
-    const inputs = form.querySelectorAll("input");
-    const mostrar = document.getElementById("mostrar9"); // Añadido
-
-    function mostrarTexto(texto) {
-        const p = document.createElement("p");// crea la etiqueta p
-        p.textContent = texto;//pone la etiqueta al principio
-        mostrar.appendChild(p);//pone la etiqueta al final
+    if (articulo) {
+        // Ocultar el articulo al cargar la página
+        articulo.style.display = "none";
+    } else {
+        console.error("Elemento con clase 'opcion8' no encontrado en el DOM.");
     }
 
-    // Ocultar el articulo al cargar la página
-    articulo.style.display = "none";
+    if (form) {
+        form.addEventListener("submit", function (evento) {
+            let valido = true;
+            const inputs = form.querySelectorAll("input");
 
-    // Mostrar el articulo al hacer clic en el botón
-    boton.addEventListener("click", function () {
-        articulo.style.display = (articulo.style.display === "none") ? "block" : "none";
-    });
+            inputs.forEach(input => {
+                if (input.value.trim() === "") {
+                    valido = false;
+                    input.style.border = "2px solid red"; // Resalta el input vacío
+                } else {
+                    input.style.border = ""; // Elimina el borde rojo si se completa
+                }
+            });
 
-    // Validar articulo antes de enviarlo
-    form.addEventListener("submit", function (evento) {
-        let valido = true;
-
-        inputs.forEach(input => {
-            if (input.value.trim() === "") {
-                valido = false;
-                input.style.border = "2px solid red"; // Resalta el input vacío
+            if (!valido) {
+                evento.preventDefault(); // Evita el envío del articulo
+                alert("Por favor, completa todos los campos antes de continuar.");
             } else {
-                input.style.border = ""; // Elimina el borde rojo si se completa
-            }
-        });
+                console.log("articulo enviado correctamente");
 
-        if (!valido) {
-            evento.preventDefault(); // Evita el envío del articulo
-            alert("Por favor, completa todos los campos antes de continuar.");
-        } else {
-            console.log("articulo enviado correctamente");
+                let nombreEstudiante = document.querySelector("#nombreEstudianteDes").value;
+                let nombreAsignatura = document.querySelector("#nombreAsignaturaDes").value;
 
-            let nombreEstudiante = document.querySelector("#nombreEstudianteCal").value;
-            let nombreAsignatura = document.querySelector("#nombreAsignaturaCal").value;
-            let nota = document.querySelector("#nota").value;
-
-            let estEncontrado = listaEstu.busquedaPorNombre(nombreEstudiante);
-            if (estEncontrado) {
-                let asignatura = estEncontrado.asignaturas.find(asig => asig.nombre === nombreAsignatura);
-                if (asignatura) {
-                    asignatura.nota = Number(nota);
-                    console.log(`El estudiante ${estEncontrado.nombre} ha sido calificado en ${asignatura.nombre} con éxito.`);
-                    mostrar.innerHTML = ""; // Limpiar el contenido del section
-                    const exito = `El estudiante ${estEncontrado.nombre} ha sido calificado en ${asignatura.nombre} con éxito.`;
-                    mostrarTexto(exito);
-                    guardarEstudiantes();
+                let estEncontrado = listaEstu.busquedaPorNombre(nombreEstudiante);
+                if (estEncontrado) {
+                    let desmatriculado = estEncontrado.desmatricular(nombreAsignatura);
+                    if (desmatriculado) {
+                        console.log(`${estEncontrado.nombre} ha sido desmatriculado de ${nombreAsignatura} con éxito.`);
+                        mostrar.innerHTML = ""; // Limpiar el contenido del section
+                        const exito = `${estEncontrado.nombre} ha sido desmatriculado de ${nombreAsignatura} con éxito.`;
+                        mostrarTexto(exito);
+                        guardarEstudiantes();
+                    } else {
+                        mostrar.innerHTML = ""; // Limpiar el contenido del section
+                        const error = `El estudiante ${estEncontrado.nombre} no está matriculado en la asignatura ${nombreAsignatura}.`;
+                        mostrarTexto(error);
+                        evento.preventDefault(); // Evita el envío del formulario
+                    }
                 } else {
                     mostrar.innerHTML = ""; // Limpiar el contenido del section
-                    const error = `El estudiante ${estEncontrado.nombre} no está matriculado en la asignatura ${nombreAsignatura}.`;
+                    const error = `No se encontró el estudiante especificado.`;
                     mostrarTexto(error);
                 }
-            } else {
-                mostrar.innerHTML = ""; // Limpiar el contenido del section
-                const error = `No se encontró el estudiante especificado.`;
-                mostrarTexto(error);
             }
+        });
+    } else {
+        const boton = document.getElementById("9");
+        const articulo = document.querySelector("opcion9");
+        const form = document.querySelector("opcion9 form");
+
+        function mostrarTexto(texto) {
+            const p = document.createElement("p");// crea la etiqueta p
+            p.textContent = texto;//pone la etiqueta al principio
+            mostrar.appendChild(p);//pone la etiqueta al final
         }
-    });
+
+        if (articulo) {
+            // Ocultar el articulo al cargar la página
+            articulo.style.display = "none";
+        } else {
+            console.error("Elemento con clase 'opcion9' no encontrado en el DOM.");
+        }
+
+        if (form) {
+            form.addEventListener("submit", function (evento) {
+                let valido = true;
+                const inputs = form.querySelectorAll("input");
+
+                inputs.forEach(input => {
+                    if (input.value.trim() === "") {
+                        valido = false;
+                        input.style.border = "2px solid red"; // Resalta el input vacío
+                    } else {
+                        input.style.border = ""; // Elimina el borde rojo si se completa
+                    }
+                });
+
+                if (!valido) {
+                    evento.preventDefault(); // Evita el envío del articulo
+                    alert("Por favor, completa todos los campos antes de continuar.");
+                } else {
+                    console.log("articulo enviado correctamente");
+
+                    let nombreEstudiante = document.querySelector("#nombreEstudianteCal").value;
+                    let nombreAsignatura = document.querySelector("#nombreAsignaturaCal").value;
+                    let nota = document.querySelector("#nota").value;
+
+                    let estEncontrado = listaEstu.busquedaPorNombre(nombreEstudiante);
+                    if (estEncontrado) {
+                        let asignatura = estEncontrado.asignaturas.find(asig => asig.nombre === nombreAsignatura);
+                        if (asignatura) {
+                            asignatura.nota = Number(nota);
+                            console.log(`El estudiante ${estEncontrado.nombre} ha sido calificado en ${asignatura.nombre} con éxito.`);
+                            mostrar.innerHTML = ""; // Limpiar el contenido del section
+                            const exito = `El estudiante ${estEncontrado.nombre} ha sido calificado en ${asignatura.nombre} con éxito.`;
+                            mostrarTexto(exito);
+                            guardarEstudiantes();
+                        } else {
+                            mostrar.innerHTML = ""; // Limpiar el contenido del section
+                            const error = `El estudiante ${estEncontrado.nombre} no está matriculado en la asignatura ${nombreAsignatura}.`;
+                            mostrarTexto(error);
+                        }
+                    } else {
+                        mostrar.innerHTML = ""; // Limpiar el contenido del section
+                        const error = `No se encontró el estudiante especificado.`;
+                        mostrarTexto(error);
+                    }
+                }
+            });
+        } else {
+            console.error("Form element not found in the DOM.");
+        }
+
+    }
 });
 
 //Calcular promedio de un estudiante caso 10
 document.addEventListener("DOMContentLoaded", function () { // DOMContentLoaded se utiliza para asegurarse de que el DOM esté listo antes de intentar manipularlo
     const boton = document.getElementById("10");
-    const articulo = document.querySelector(".opcion10");
-    const form = document.querySelector(".opcion10 form");
-    const inputs = form.querySelectorAll("input");
-    const mostrar = document.getElementById("mostrar10"); // Añadido
+    const articulo = document.querySelector("opcion10");
+    const form = document.querySelector("opcion10 form");
+    const inputs = form ? form.querySelectorAll("input") : [];
 
     function mostrarTexto(texto) {
         const p = document.createElement("p");// crea la etiqueta p
@@ -849,7 +782,7 @@ document.addEventListener("DOMContentLoaded", function () { // DOMContentLoaded 
 //Calcular promedio general de todos los estudiantes caso 11
 document.addEventListener("DOMContentLoaded", function () { // DOMContentLoaded se utiliza para asegurarse de que el DOM esté listo antes de intentar manipularlo
     const boton = document.getElementById("11");
-    const articulo = document.querySelector(".opcion11");
+    const articulo = document.querySelector("opcion11");
     const mostrar = document.getElementById("mostrar11");
 
     function mostrarTexto(texto) {
@@ -882,33 +815,52 @@ document.addEventListener("DOMContentLoaded", function () { // DOMContentLoaded 
 });
 
 // ************* EVENTOS ******************
-document.getElementById("guardarDatos").addEventListener("click", guardarDatos);
-document.getElementById("mostrarEstudiantes").addEventListener("click", mostrarEstudiantes);
-document.getElementById("mostrarAsignaturas").addEventListener("click", mostrarAsignaturas);
-document.getElementById("calcularPromedioGeneral").addEventListener("click", calcularPromedioGeneral);
-document.getElementById("calcularPromedioEstudiante").addEventListener("click", () => {
+const guardarDatosBtn = document.getElementById("guardarDatos");
+if (guardarDatosBtn) guardarDatosBtn.addEventListener("click", guardarDatos);
+
+const mostrarEstudiantesBtn = document.getElementById("mostrarEstudiantes");
+if (mostrarEstudiantesBtn) mostrarEstudiantesBtn.addEventListener("click", mostrarEstudiantes);
+
+const mostrarAsignaturasBtn = document.getElementById("mostrarAsignaturas");
+if (mostrarAsignaturasBtn) mostrarAsignaturasBtn.addEventListener("click", mostrarAsignaturas);
+
+const calcularPromedioGeneralBtn = document.getElementById("calcularPromedioGeneral");
+if (calcularPromedioGeneralBtn) calcularPromedioGeneralBtn.addEventListener("click", calcularPromedioGeneral);
+
+const calcularPromedioEstudianteBtn = document.getElementById("calcularPromedioEstudiante");
+if (calcularPromedioEstudianteBtn) calcularPromedioEstudianteBtn.addEventListener("click", () => {
     let estudiante = prompt("Introduce el nombre del estudiante:");
     calcularPromedioEstudiante(estudiante);
 });
-document.getElementById("eliminarEstudiante").addEventListener("click", () => {
+
+const eliminarEstudianteBtn = document.getElementById("eliminarEstudiante");
+if (eliminarEstudianteBtn) eliminarEstudianteBtn.addEventListener("click", () => {
     let estudiante = prompt("Introduce el nombre del estudiante:");
     eliminarEstudiante(estudiante);
 });
-document.getElementById("eliminarAsignatura").addEventListener("click", () => {
+
+const eliminarAsignaturaBtn = document.getElementById("eliminarAsignatura");
+if (eliminarAsignaturaBtn) eliminarAsignaturaBtn.addEventListener("click", () => {
     let asignatura = prompt("Introduce el nombre de la asignatura:");
     eliminarAsignatura(asignatura);
 });
-document.getElementById("matricularEstudiante").addEventListener("click", () => {
+
+const matricularEstudianteBtn = document.getElementById("matricularEstudiante");
+if (matricularEstudianteBtn) matricularEstudianteBtn.addEventListener("click", () => {
     let estudiante = prompt("Introduce el nombre del estudiante:");
     let asignatura = prompt("Introduce el nombre de la asignatura:");
     matricularEstudiante(estudiante, asignatura);
 });
-document.getElementById("desmatricularEstudiante").addEventListener("click", () => {
+
+const desmatricularEstudianteBtn = document.getElementById("desmatricularEstudiante");
+if (desmatricularEstudianteBtn) desmatricularEstudianteBtn.addEventListener("click", () => {
     let estudiante = prompt("Introduce el nombre del estudiante:");
     let asignatura = prompt("Introduce el nombre de la asignatura:");
     desmatricularEstudiante(estudiante, asignatura);
 });
-document.getElementById("calificarEstudiante").addEventListener("click", () => {
+
+const calificarEstudianteBtn = document.getElementById("calificarEstudiante");
+if (calificarEstudianteBtn) calificarEstudianteBtn.addEventListener("click", () => {
     let estudiante = prompt("Introduce el nombre del estudiante:");
     let asignatura = prompt("Introduce el nombre de la asignatura:");
     let nota = prompt("Introduce la nota:");

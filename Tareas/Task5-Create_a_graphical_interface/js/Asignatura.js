@@ -83,9 +83,7 @@ export class Asignatura {
             throw new Error("La calificación debe estar entre 0 y 10.");
         }
     
-        const index = this.#estudiantes.findIndex(e => e.nombre === estudiante.nombre);
-    
-        if (index !== -1) {
+        if (this.#estudiantes.has(estudiante)) {
             console.log(`Calificación añadida: ${calificacion} para ${estudiante.nombre} en ${this.nombre}`);
             this.#calificaciones.push(calificacion); // Asegurar que solo se agregan números
         } else {
