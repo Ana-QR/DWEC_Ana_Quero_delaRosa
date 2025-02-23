@@ -11,46 +11,6 @@ import { ListaAsignaturas } from "./ListaAsignaturas.js";
 const listaEstu = new ListaEstudiantes();
 const listaAsig = new ListaAsignaturas();
 
-function guardarEstudiantes(){
-    let estudiantes = listaEstu.listadoEstudiantes.map(estu => ({
-        nombre: estu.nombre,
-        edad: estu.edad,
-        direccion: {
-            calle: estu.direccion.calle,
-            numero: estu.direccion.numero,
-            piso: estu.direccion.piso,
-            codigoPostal: estu.direccion.codigoPostal,
-            provincia: estu.direccion.provincia,
-            localidad: estu.direccion.localidad
-        }
-    }));
-    localStorage.setItem("listaEstudiantes", JSON.stringify(estudiantes));
-}
-
-function guardarAsignaturas(){
-    let asignaturas = listaAsig.listadoAsignaturas.map(asig => ({
-        nombre: asig.nombre
-    }));
-    localStorage.setItem("listaAsignaturas", JSON.stringify(asignaturas));
-}
-
-function guardarMatriculas(){
-    let matriculas = listaEstu.listadoEstudiantes.map(estu => estu.asignaturas.map(asig => ({
-        estudiante: estu.nombre,
-        asignatura: asig.nombre
-    }))).flat();
-    localStorage.setItem("matriculas", JSON.stringify(matriculas));
-}
-
-function guardarCalificaciones(){
-    let calificaciones = listaEstu.listadoEstudiantes.map(estu => estu.asignaturas.map(asig => ({
-        estudiante: estu.nombre,
-        asignatura: asig.nombre,
-        nota: asig.nota
-    }))).flat();
-    localStorage.setItem("calificaciones", JSON.stringify(calificaciones));
-}
-
 // Función para cargar estudiantes desde localStorage
 function cargarEstudiantes() {
     let estudiantesGuardados = localStorage.getItem("listaEstudiantes");
@@ -127,6 +87,46 @@ cargarEstudiantes();
 cargarAsignaturas();
 cargarMatriculas();
 cargarCalificaciones();
+
+function guardarEstudiantes(){
+    let estudiantes = listaEstu.listadoEstudiantes.map(estu => ({
+        nombre: estu.nombre,
+        edad: estu.edad,
+        direccion: {
+            calle: estu.direccion.calle,
+            numero: estu.direccion.numero,
+            piso: estu.direccion.piso,
+            codigoPostal: estu.direccion.codigoPostal,
+            provincia: estu.direccion.provincia,
+            localidad: estu.direccion.localidad
+        }
+    }));
+    localStorage.setItem("listaEstudiantes", JSON.stringify(estudiantes));
+}
+
+function guardarAsignaturas(){
+    let asignaturas = listaAsig.listadoAsignaturas.map(asig => ({
+        nombre: asig.nombre
+    }));
+    localStorage.setItem("listaAsignaturas", JSON.stringify(asignaturas));
+}
+
+function guardarMatriculas(){
+    let matriculas = listaEstu.listadoEstudiantes.map(estu => estu.asignaturas.map(asig => ({
+        estudiante: estu.nombre,
+        asignatura: asig.nombre
+    }))).flat();
+    localStorage.setItem("matriculas", JSON.stringify(matriculas));
+}
+
+function guardarCalificaciones(){
+    let calificaciones = listaEstu.listadoEstudiantes.map(estu => estu.asignaturas.map(asig => ({
+        estudiante: estu.nombre,
+        asignatura: asig.nombre,
+        nota: asig.nota
+    }))).flat();
+    localStorage.setItem("calificaciones", JSON.stringify(calificaciones));
+}
 
 // ************* INTERACCIÓN CON EL DOM ******************
 // Crear estudiantes caso 1
