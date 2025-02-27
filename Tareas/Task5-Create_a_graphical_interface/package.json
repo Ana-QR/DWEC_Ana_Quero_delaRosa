@@ -1,14 +1,16 @@
 {
-  "name": "task5",
+  "type":"module",
+  "name": "script",
   "version": "1.0.0",
   "description": "",
-  "main": "Task5.js",
+  "main": "js/script.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "docs": "jsdoc -c jsdoc.json"
+    "doc": "npx jsdoc -c jsdoc.json",
+    "clean": "rimraf docs",
+    "all": "npm-run-all clean doc"
   },
   "keywords": [],
-  "author": "",
+  "author": "Ana Quero",
   "license": "ISC",
   "dependencies": {
     "clean-jsdoc-theme": "^4.3.0",
@@ -18,7 +20,15 @@
     "taffydb": "^2.7.3"
   },
   "devDependencies": {
-    "jsdoc": "^4.0.4"
+    "jsdoc": "^4.0.4",
+    "webpack": "^5.64.4",
+    "webpack-cli": "^4.9.1",
+    "webpack-merge": "^5.8.0",
+    "babel-loader": "^8.2.3",
+    "@babel/core": "^7.15.5",
+    "@babel/preset-env": "^7.15.6",
+    "clean-webpack-plugin": "^4.0.0",
+    "compression-webpack-plugin": "^9.0.1",
+    "terser-webpack-plugin": "^5.2.4"
   }
-
 }

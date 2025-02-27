@@ -1,9 +1,9 @@
 {
     "source":{
-        "include": ["Task5.js"],
-        "exclude": ["node_modules", "docs"],
-        "includePattern": ".*\\.js$",
-        "excludePattern": ".*\\.test\\.js$"
+        "include": ["./js"],
+        "exclude": ["node_modules"],
+        "includePattern": ".+\\.js(doc|x)?$",
+        "excludePattern": "(^|\\/|\\\\)_"
     },
 
     "opts":{
