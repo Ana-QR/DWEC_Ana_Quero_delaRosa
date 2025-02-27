@@ -130,26 +130,26 @@ function guardarCalificaciones() {
 // ************* INTERACCIÓN CON EL DOM ******************
 // Crear estudiantes caso 1
 document.addEventListener("DOMContentLoaded", function () { // DOMContentLoaded se utiliza para asegurarse de que el DOM esté listo antes de intentar manipularlo
-    const boton = document.getElementById("1");
-    const form = document.getElementById("opcion1");
+    const boton1 = document.getElementById("1");
+    const form1 = document.getElementById("opcion1");
 
     // Verificar que los elementos existen
-    if (!form) {
-        console.error("Formulario dentro de 'opcion1' no encontrado en el DOM.");
+    if (!boton1 || !form1) {
+        console.error("Elementos necesarios para el caso 1 no encontrados en el DOM.");
         return;
     }
 
     // Ocultar el formulario al cargar la página
-    form.style.display = "none";
+    form1.style.display = "none";
 
     // Mostrar el formulario al hacer clic en el botón
-    boton.addEventListener("click", function () {
-        form.style.display = form.style.display === "none" ? "block" : "none";
-    });
+    boton1.addEventListener("click", function () {
+        form1.style.display = form1.style.display === "none" ? "block" : "none";
+    }); 
 
     // Validación de formulario
-    document.getElementById("opcion1").querySelector("form").addEventListener("submit", function (e) {
-        e.preventDefault(); // Evitar el envío del formulario por defecto
+    form1.querySelector("form").addEventListener("submit", function (e) {
+        e.preventDefault();
 
         const nombre = document.getElementById("nombre").value.trim();
         const edad = document.getElementById("edad").value.trim();
@@ -174,7 +174,6 @@ document.addEventListener("DOMContentLoaded", function () { // DOMContentLoaded 
             alert(error.message);
         }
 
-        // Guardar estudiantes en localStorage
         guardarEstudiantes();
     });
 });
@@ -186,8 +185,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const salida2 = document.getElementById("salida2");
 
     // Verificar que los elementos existen
-    if (!form2) {
-        console.error("Formulario dentro de 'opcion2' no encontrado en el DOM.");
+    if (!boton2 || !form2 || !salida2) {
+        console.error("Elementos necesarios para el caso 2 no encontrados en el DOM.");
         return;
     }
 
@@ -196,12 +195,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Mostrar el formulario al hacer clic en el botón
     boton2.addEventListener("click", function () {
-        form2.style.display = (form2.style.display === "none") ? "block" : "none";
+        form2.style.display = form2.style.display === "none" ? "block" : "none";
     });
 
     // Validación de formulario
-    document.getElementById("opcion2").querySelector("form").addEventListener("submit", function (e) {
-        e.preventDefault(); // Evitar el envío del formulario por defecto
+    form2.querySelector("form").addEventListener("submit", function (e) {
+        e.preventDefault();
 
         const nombre = document.getElementById("nombreEliminar").value.trim();
 
@@ -225,10 +224,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Obtener datos de localStorage
     if (localStorage.getItem("listaEstudiantes") !== null) {
         const datos = JSON.parse(localStorage.getItem("listaEstudiantes"));
-        // Mostrarlo en el HTML
         datos.forEach(estudiante => {
             salida2.innerHTML += `<li style="color: white;">${estudiante.nombre}</li>`;
         });
@@ -242,15 +239,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const salida3 = document.getElementById("salida3");
 
     // Verificar que los elementos existen
-    if (!form3) {
-        console.error("Formulario dentro de 'opcion3' no encontrado en el DOM.");
+    if (!boton3 || !form3 || !salida3) {
+        console.error("Elementos necesarios para el caso 3 no encontrados en el DOM.");
         return;
     }
 
-    if (!salida3) {
-        console.error("Elemento con ID 'salida3' no encontrado en el DOM.");
-        return;
-    }
+    // Ocultar el formulario al cargar la página
+    form3.style.display = "none";
 
     // Mostrar el formulario al hacer clic en el botón
     boton3.addEventListener("click", function () {
@@ -278,8 +273,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const form4 = document.getElementById("opcion4");
 
     // Verificar que los elementos existen
-    if (!form4) {
-        console.error("Formulario dentro de 'opcion4' no encontrado en el DOM.");
+    if (!boton4 || !form4) {
+        console.error("Elementos necesarios para el caso 4 no encontrados en el DOM.");
         return;
     }
 
@@ -292,8 +287,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Validar formulario antes de enviarlo
-    document.getElementById("opcion4").querySelector("form").addEventListener("submit", function (e) {
-        e.preventDefault(); // Evitar el envío del formulario por defecto
+    form4.querySelector("form").addEventListener("submit", function (e) {
+        e.preventDefault();
 
         let nombreAsignatura = document.getElementById("nombreAsignatura").value.trim();
 
@@ -320,8 +315,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const salida5 = document.getElementById("salida5");
 
     // Verificar que los elementos existen
-    if (!form5) {
-        console.error("Formulario dentro de 'opcion5' no encontrado en el DOM.");
+    if (!boton5 || !form5 || !salida5) {
+        console.error("Elementos necesarios para el caso 5 no encontrados en el DOM.");
         return;
     }
 
@@ -334,8 +329,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Validar formulario antes de enviarlo
-    document.getElementById("opcion5").querySelector("form").addEventListener("submit", function (e) {
-        e.preventDefault(); // Evitar el envío del formulario por defecto
+    form5.querySelector("form").addEventListener("submit", function (e) {
+        e.preventDefault();
 
         const nombre = document.getElementById("nombreEliminarAsignatura").value.trim();
 
@@ -358,14 +353,12 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("Ocurrió un error al intentar eliminar la asignatura. Por favor, inténtalo de nuevo.");
         }
 
-        // Eliminar datos de localStorage
         localStorage.setItem("listaAsignaturas", JSON.stringify(listaAsig.listadoAsignaturas));
     });
 
-    // Obtener datos de localStorage
+    // Mostrar las asignaturas en el HTML
     if (localStorage.getItem("listaAsignaturas") !== null) {
         const datos = JSON.parse(localStorage.getItem("listaAsignaturas"));
-        // Mostrarlo en el HTML
         datos.forEach(asignatura => {
             salida5.innerHTML += `<li style="color: white;">${asignatura.nombre}</li>`;
         });
@@ -379,13 +372,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const salida6 = document.getElementById("salida6");
 
     // Verificar que los elementos existen
-    if (!form6) {
-        console.error("Formulario dentro de 'opcion6' no encontrado en el DOM.");
-        return;
-    }
-
-    if (!salida6) {
-        console.error("Elemento con ID 'salida6' no encontrado en el DOM.");
+    if (!boton6 || !form6 || !salida6) {
+        console.error("Elementos necesarios para el caso 6 no encontrados en el DOM.");
         return;
     }
 
@@ -423,8 +411,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const form7 = document.getElementById("opcion7");
 
     // Verificar que los elementos existen
-    if (!form7) {
-        console.error("Formulario dentro de 'opcion7' no encontrado en el DOM.");
+    if (!boton7 || !form7) {
+        console.error("Elementos necesarios para el caso 7 no encontrados en el DOM.");
         return;
     }
 
@@ -437,8 +425,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Validar formulario antes de enviarlo
-    document.getElementById("opcion7").querySelector("form").addEventListener("submit", function (e) {
-        e.preventDefault(); // Evitar el envío del formulario por defecto
+    form7.querySelector("form").addEventListener("submit", function (e) {
+        e.preventDefault();
 
         const nombreEstudiante = document.getElementById("nombreEstudianteMatricula").value.trim();
         const nombreAsignatura = document.getElementById("nombreAsignaturaMatricula").value.trim();
@@ -473,10 +461,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const salida8 = document.getElementById("salida8");
 
     // Verificar que los elementos existen
-    if (!form8) {
-        console.error("Formulario dentro de 'opcion8' no encontrado en el DOM.");
+    if (!boton8 || !form8 || !salida8) {
+        console.error("Elementos necesarios para el caso 8 no encontrados en el DOM.");
         return;
     }
+
+    // Ocultar el formulario al cargar la página
+    form8.style.display = "none";
 
     // Mostrar el formulario al hacer clic en el botón
     boton8.addEventListener("click", function () {
@@ -484,8 +475,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Validar formulario antes de enviarlo
-    document.getElementById("opcion8").querySelector("form").addEventListener("submit", function (e) {
-        e.preventDefault(); // Evitar el envío del formulario por defecto
+    form8.querySelector("form").addEventListener("submit", function (e) {
+        e.preventDefault();
 
         const nombreEstudiante = document.getElementById("nombreEstudianteDesmatricula").value.trim();
         const nombreAsignatura = document.getElementById("nombreAsignaturaDesmatricula").value.trim();
@@ -502,7 +493,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 estudiante.desmatricular(asignatura);
                 alert("Estudiante desmatriculado con éxito");
 
-                // Eliminar del LocalStorage
                 const matriculas = JSON.parse(localStorage.getItem("matriculas")) || [];
                 const index = matriculas.findIndex(m => m.estudiante === nombreEstudiante && m.asignatura === nombreAsignatura);
                 if (index !== -1) {
@@ -513,10 +503,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 alert("No se encontró el estudiante o la asignatura especificada");
             }
             guardarMatriculas();
-            // Obtener datos del LocalStorage
-            const datos = JSON.parse(localStorage.getItem("matriculas")) || [];
 
-            // Mostrar las matriculas en el HTML
+            const datos = JSON.parse(localStorage.getItem("matriculas")) || [];
             salida8.innerHTML = "";
             for (let matricula of datos) {
                 salida8.innerHTML += `<li style="color: white;">${matricula.estudiante} - ${matricula.asignatura}</li>`;
@@ -535,10 +523,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const salida9 = document.getElementById("salida9");
 
     // Verificar que los elementos existen
-    if (!form9) {
-        console.error("Formulario dentro de 'opcion9' no encontrado en el DOM.");
+    if (!boton9 || !form9 || !salida9) {
+        console.error("Elementos necesarios para el caso 9 no encontrados en el DOM.");
         return;
     }
+
+    // Ocultar el formulario al cargar la página
+    form9.style.display = "none";
 
     // Mostrar el formulario al hacer clic en el botón
     boton9.addEventListener("click", function () {
@@ -546,8 +537,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Validar formulario antes de enviarlo
-    document.getElementById("opcion9").querySelector("form").addEventListener("submit", function (e) {
-        e.preventDefault(); // Evitar el envío del formulario por defecto
+    form9.querySelector("form").addEventListener("submit", function (e) {
+        e.preventDefault();
 
         const nombreEstudiante = document.getElementById("nombreEstudianteCal").value.trim();
         const nombreAsignatura = document.getElementById("nombreAsignaturaCal").value.trim();
@@ -570,7 +561,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 estudiante.calificar(asignatura, parseFloat(nota));
                 alert("Estudiante calificado con éxito");
 
-                // Guardar calificaciones en localStorage
                 const calificaciones = JSON.parse(localStorage.getItem("calificaciones")) || [];
                 calificaciones.push({ estudiante: nombreEstudiante, asignatura: nombreAsignatura, nota: parseFloat(nota) });
                 localStorage.setItem("calificaciones", JSON.stringify(calificaciones));
@@ -579,10 +569,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             guardarCalificaciones();
 
-            // Obtener datos del LocalStorage
             const datos = JSON.parse(localStorage.getItem("calificaciones")) || [];
-
-            // Mostrar las calificaciones en el HTML
             salida9.innerHTML = "";
             for (let calificacion of datos) {
                 salida9.innerHTML += `<li style="color: white;">${calificacion.estudiante} - ${calificacion.asignatura} - ${calificacion.nota}</li>`;
@@ -601,10 +588,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const salida10 = document.getElementById("salida10");
 
     // Verificar que los elementos existen
-    if (!form10) {
-        console.error("Formulario dentro de 'opcion10' no encontrado en el DOM.");
+    if (!boton10 || !form10 || !salida10) {
+        console.error("Elementos necesarios para el caso 10 no encontrados en el DOM.");
         return;
     }
+
+    // Ocultar el formulario al cargar la página
+    form10.style.display = "none";
 
     // Mostrar el formulario al hacer clic en el botón
     boton10.addEventListener("click", function () {
@@ -612,8 +602,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Validar el formulario antes de enviarlo
-    document.getElementById("opcion10").querySelector("form").addEventListener("submit", function (e) {
-        e.preventDefault(); // Evitar el envío del formulario por defecto
+    form10.querySelector("form").addEventListener("submit", function (e) {
+        e.preventDefault();
 
         const nombreEstudiante = document.getElementById("nombreEstudianteProm").value.trim();
 
@@ -650,13 +640,16 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
+    // Ocultar el formulario al cargar la página
+    form11.style.display = "none";
+    
     // Mostrar el formulario al hacer clic en el botón
     boton11.addEventListener("click", function () {
         form11.style.display = (form11.style.display === "none") ? "block" : "none";
     });
 
-    const form11Element = document.getElementById("opcion11").querySelector("form");
-    form11Element.addEventListener("submit", function (e) {
+    // Validar el formulario antes de enviarlo
+    form11.querySelector("form").addEventListener("submit", function (e) {
         e.preventDefault(); // Evitar el envío del formulario por defecto
 
         try {

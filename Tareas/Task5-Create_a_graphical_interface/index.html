@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Estudiantes y Asignaturas</title>
     <script type="module" src="./js/script.js" defer></script>
     <link rel="stylesheet" href="./estilos.css">
-    <title>Gestión de Estudiantes y Asignaturas</title>
 </head>
 
 <body>
@@ -53,11 +53,9 @@
 
                     <button id="submit1" type="submit">Registrar Estudiante</button>
                 </form>
-
                 <article id="salida1"></article>
             </article>
         </section>
-
 
         <section id="eliminarEstu">
             <button id="2">2 - Eliminar estudiante</button>
@@ -73,147 +71,124 @@
             </article>
         </section>
 
-
-        <section id="mostrarEstu" class="opcion">
+        <section id="mostrarEstu">
             <button id="3">3 - Mostrar estudiantes</button>
             <article id="opcion3">
                 <h2>Lista de Estudiantes</h2><br>
-
+                <form action="#" method="get">
+                    <button id="submit3" type="submit">Mostrar Estudiantes</button>
+                </form>
                 <article id="salida3"></article>
             </article>
         </section>
 
-    </section>
-    <section id="addAsig">
-        <button id="4">4 - Añadir asignatura</button>
-        <article id="opcion4">
-            <h2>Añadir Asignatura</h2><br>
-            <form action="#" method="get">
-                <label for="nombreAsig">Nombre de la asignatura: </label>
-                <input type="text" name="nombreAsig" id="nombreAsig" required>
+        <section id="addAsig">
+            <button id="4">4 - Añadir asignatura</button>
+            <article id="opcion4">
+                <h2>Añadir Asignatura</h2>
+                <form action="#" method="get">
+                    <label for="nombreAsignatura">Nombre de la asignatura: </label>
+                    <input type="text" id="nombreAsignatura" required><br>
+                    <button id="submit4" type="submit">Añadir Asignatura</button>
+                </form>
+                <article id="salida4"></article>
+            </article>
+        </section>
 
-                <button id="submit4" type="submit">Añadir Asignatura</button>
-            </form>
-        </article>
-    </section>
+        <section id="eliminarAsig">
+            <button id="5">5 - Eliminar asignatura</button>
+            <article id="opcion5">
+                <h2>Eliminar asignatura</h2>
+                <form action="#" method="get">
+                    <label for="nombreEliminarAsignatura">Nombre de la asignatura a eliminar: </label>
+                    <input type="text" id="nombreEliminarAsignatura" required><br>
+                    <button id="submit5" type="submit">Eliminar Asignatura</button>
+                </form>
+                <article id="salida5"></article>
+            </article>
+        </section>
 
+        <section id="mostrarAsig">
+            <button id="6">6 - Mostrar asignaturas</button>
+            <article id="opcion6">
+                <h2>Lista de Asignaturas</h2><br>
+                <form action="#" method="get">
+                    <button id="submit6" type="submit">Mostrar Asignaturas</button>
+                </form>
+                <article id="salida6"></article>
+            </article>
+        </section>
 
-    <section id="eliminarAsig">
-        <button id="5">5 - Eliminar asignatura</button>
-        <article id="opcion5">
-            <h2>Eliminar asignatura</h2><br>
-            <form action="#" method="get">
-                <label for="nombreAsigEliminar">Nombre de la asignatura a eliminar: </label>
-                <input type="text" id="nombreAsigEliminar" required><br>
+        <section id="matricular">
+            <button id="7">7 - Matricular estudiante en asignatura</button>
+            <article id="opcion7">
+                <h2>Matricular estudiante en asignatura</h2>
+                <form action="#" method="get">
+                    <label for="nombreEstudianteMatricula">Nombre del estudiante: </label>
+                    <input type="text" id="nombreEstudianteMatricula" required><br>
+                    <label for="nombreAsignaturaMatricula">Nombre de la asignatura: </label>
+                    <input type="text" id="nombreAsignaturaMatricula" required><br>
+                    <button id="submit7" type="submit">Matricular</button>
+                </form>
+                <article id="salida7"></article>
+            </article>
+        </section>
 
-                <label for="nombreEstudianteEliminar">Nombre del estudiante: </label>
-                <input type="text" id="nombreEstudianteEliminar" required><br>
+        <section id="desmatricular">
+            <button id="8">8 - Desmatricular estudiante de asignatura</button>
+            <article id="opcion8">
+                <h2>Desmatricular estudiante de asignatura</h2>
+                <form action="#" method="get">
+                    <label for="nombreEstudianteDesmatricula">Nombre del estudiante: </label>
+                    <input type="text" id="nombreEstudianteDesmatricula" required><br>
+                    <label for="nombreAsignaturaDesmatricula">Nombre de la asignatura: </label>
+                    <input type="text" id="nombreAsignaturaDesmatricula" required><br>
+                    <button id="submit8" type="submit">Desmatricular</button>
+                </form>
+                <article id="salida8"></article>
+            </article>
+        </section>
 
-                <button id="submit5" type="submit">Eliminar asignatura</button>
-            </form>
+        <section id="calificarEstu">
+            <button id="9">9 - Calificar a un estudiante</button>
+            <article id="opcion9">
+                <h2>Calificar a un estudiante en una asignatura</h2>
+                <form action="#" method="get">
+                    <label for="nombreEstudianteCal">Nombre del estudiante: </label>
+                    <input type="text" id="nombreEstudianteCal" required><br>
+                    <label for="nombreAsignaturaCal">Nombre de la asignatura: </label>
+                    <input type="text" id="nombreAsignaturaCal" required><br>
+                    <label for="nota">Nota: </label>
+                    <input type="number" id="nota" required min="0" max="10"><br>
+                    <button id="submit9" type="submit">Calificar</button>
+                </form>
+                <article id="salida9"></article>
+            </article>
+        </section>
 
-            <article id="salida5"></article>
-        </article>
-    </section>
+        <section id="calcuPromEstu">
+            <button id="10">10 - Calcular promedio de un estudiante</button>
+            <article id="opcion10">
+                <h2>Calcular promedio de un estudiante</h2>
+                <form action="#" method="get">
+                    <label for="nombreEstudianteProm">Nombre del estudiante: </label>
+                    <input type="text" id="nombreEstudianteProm" required><br>
+                    <button id="submit10" type="submit">Calcular promedio</button>
+                </form>
+                <article id="salida10"></article>
+            </article>
+        </section>
 
-
-    <section id="mostrarAsig">
-        <button id="6">6 - Mostrar asignaturas</button>
-
-        <article id="opcion6">
-            <h2>Lista de Asignaturas</h2><br>
-
-            <article id="salida6"></article>
-        </article>
-    </section>
-
-
-
-    <section id="matricular">
-        <button id="7">7 - Matricular estudiante en asignatura</button>
-        <article id="opcion7">
-            <h2>Matricular estudiante en asignatura</h2><br>
-            <form action="#" method="get">
-                <label for="nombreEstudianteMatricula">Nombre del estudiante: </label>
-                <input type="text" id="nombreEstudianteMatricula" required><br>
-
-                <label for="nombreAsignaturaMatricula">Nombre de la asignatura: </label>
-                <input type="text" id="nombreAsignaturaMatricula" required><br>
-
-                <button id="submit7" type="submit">Matricular</button>
-            </form>
-        </article>
-    </section>
-
-    <section id="desmatricular">
-        <button id="8">8 - Desmatricular estudiante de asignatura</button>
-
-        <article id="opcion8">
-            <h2>Desmatricular estudiante de asignatura</h2><br>
-            <form action="#" method="get">
-                <label for="nombreEstudianteDesmatricula">Nombre del estudiante: </label>
-                <input type="text" id="nombreEstudianteDesmatricula" required><br>
-
-                <label for="nombreAsignaturaDesmatricula">Nombre de la asignatura: </label>
-                <input type="text" id="nombreAsignaturaDesmatricula" required><br>
-
-                <button id="submit8" type="submit">Desmatricular</button>
-            </form>
-
-            <article id="salida8"></article>
-        </article>
-    </section>
-
-
-    <section id="calificarEstu">
-        <button id="9">9 - Calificar a un estudiante</button>
-
-        <article id="opcion9">
-            <h2>Calificar a un estudiante en una asignatura: </h2><br>
-
-            <form action="#" method="get">
-                <label for="nombreEstudianteCalificar">Nombre del estudiante: </label>
-                <input type="text" id="nombreEstudianteCalificar" required><br>
-
-                <label for="nombreAsignaturaCalificar">Nombre de la asignatura: </label>
-                <input type="text" id="nombreAsignaturaCalificar" required><br>
-
-                <label for="calificacion">Calificación: </label>
-                <input type="number" id="calificacion" required min="0" max="10"><br>
-
-                <button id="submit9" type="submit">Calificar</button>
-            </form>
-
-            <article id="salida9"></article>
-        </article>
-    </section>
-
-    <section id="calcuPromEstu">
-        <button id="10">10 - Calcular promedio de un estudiante: </button>
-
-        <article id="opcion10">
-            <h2>Calcular promedio de un estudiante</h2><br>
-
-            <form action="#" method="get">
-                <label for="nombreEstudiantePromedio">Nombre del estudiante: </label>
-                <input type="text" id="nombreEstudiantePromedio" required><br>
-
-                <button id="submit10" type="submit">Calcular promedio</button>
-            </form>
-
-            <article id="salida10"></article>
-        </article>
-    </section>
-
-
-    <section id="calcuPromGen">
-        <button id="11">11 - Calcular promedio general</button>
-
-        <article id="opcion11">
-            <h2>Calcular promedio general de los estudiantes</h2><br>
-
-            <article id="salida11"></article>
-        </article>
+        <section id="calcuPromGen">
+            <button id="11">11 - Calcular promedio general</button>
+            <article id="opcion11">
+                <h2>Calcular promedio general de los estudiantes</h2>
+                <form action="#" method="get">
+                    <button id="submit11" type="submit">Calcular Promedio General</button>
+                </form>
+                <article id="salida11"></article>
+            </article>
+        </section>
     </section>
 </body>
 
