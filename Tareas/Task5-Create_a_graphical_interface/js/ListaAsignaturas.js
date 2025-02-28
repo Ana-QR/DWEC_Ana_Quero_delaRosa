@@ -1,3 +1,5 @@
+import { Asignatura } from "./Asignatura.js";
+
 /** 
 * Clase ListaAsignaturas
 * @class ListaAsignaturas

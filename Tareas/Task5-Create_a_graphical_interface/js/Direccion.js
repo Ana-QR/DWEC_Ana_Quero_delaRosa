@@ -66,7 +66,7 @@ export class Direccion {
      * @param {string} calle - Nombre de la calle.
      * @param {number} numero - Número de la dirección.
      * @param {string} piso - Piso de la dirección.
-     * @param {string} codigoPostal - Código postal de la dirección.
+     * @param {string} codigoPostal - Código postal de la dirección (valida que sea de 5 dígitos, lanza un error si es inválido).
      * @param {string} provincia - Provincia de la dirección.
      * @param {string} localidad - Localidad de la dirección.
      */
@@ -74,9 +74,9 @@ export class Direccion {
         this.#calle = calle;
         this.#numero = numero;
         this.#piso = piso;
+        this.#codigoPostal = this.validarCodigoPostal(codigoPostal);
         this.#provincia = provincia;
         this.#localidad = localidad;
-        this.#codigoPostal = this.validarCodigoPostal(codigoPostal);
     }
 
     /**
@@ -94,11 +94,38 @@ export class Direccion {
      * @returns {string} Información de la dirección en formato texto.
      */
     toString() {
-        return `Calle: ${this.#calle},\n
-        Numero: ${this.#numero},\n
-        Piso: ${this.#piso},\n
-        Código Postal: ${this.#codigoPostal},\n
-        Provincia: ${this.#provincia},\n
-        Localidad: ${this.#localidad}\n`;
+        return `Calle: ${this.#calle},
+        Numero: ${this.#numero},
+        Piso: ${this.#piso},
+        Código Postal: ${this.#codigoPostal},
+        Provincia: ${this.#provincia},
+        Localidad: ${this.#localidad}`;
+    }
+
+    /**
+     * Getters para los atributos privados.
+     */
+    get calle() {
+        return this.#calle;
+    }
+
+    get numero() {
+        return this.#numero;
+    }
+
+    get piso() {
+        return this.#piso;
+    }
+
+    get codigoPostal() {
+        return this.#codigoPostal;
+    }
+
+    get provincia() {
+        return this.#provincia;
+    }
+
+    get localidad() {
+        return this.#localidad;
     }
 }

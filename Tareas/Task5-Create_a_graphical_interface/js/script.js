@@ -24,39 +24,46 @@ let listaAsig = new ListaAsignaturas();
 
 // Función para cargar los datos del LocalStorage
 function cargarDatosLocalStorage() {
-    // Cargar datos de estudiantes
-    let estudiantesGuardados = localStorage.getItem("listaEstudiantes");
+    // Limpiar listas antes de cargar datos
+    listaEstu = new ListaEstudiantes();
+    listaAsig = new ListaAsignaturas();
+
+    //? Carga de datos de estudiantes
+    let estudiantesGuardados = localStorage.getItem("todosLosEstudiantes");
     console.log(estudiantesGuardados);
 
     if (estudiantesGuardados) {
-        estudiantesGuardados = JSON.parse(estudiantesGuardados);
+        estudiantesGuardados = estudiantesGuardados ? JSON.parse(estudiantesGuardados) : []; ///con json.parse convertimos el string en un objeto y asi llamamos a los valores
 
         estudiantesGuardados.forEach(est => {
-            let nuevaDireccion = new Direccion(est.direccion.calle, est.direccion.numero, est.direccion.piso, est.direccion.codigoPostal, est.direccion.provincia, est.direccion.localidad);
+            let nuevaDireccion = new Direccion(est.direccion.calle, est.direccion.numero, est.direccion.piso, est.direccion.cp, est.direccion.provincia, est.direccion.localidad);
             let nuevoEstudiante = new Estudiante(est.nombre, est.edad, nuevaDireccion);
             listaEstu.addEstudiante(nuevoEstudiante);
         });
     }
 
-    // Cargar datos de asignaturas
-    let asignaturasGuardadas = localStorage.getItem("listaAsignaturas");
+    //? Carga de datos de asignaturas
+    let asignaturasGuardadas = localStorage.getItem("todasLasAsignaturas");
     console.log(asignaturasGuardadas);
 
+
+
     if (asignaturasGuardadas) {
-        asignaturasGuardadas = JSON.parse(asignaturasGuardadas);
+        asignaturasGuardadas = asignaturasGuardadas ? JSON.parse(asignaturasGuardadas) : []; ///con json.parse convertimos el string en un objeto y asi llamamos a los valores
 
         asignaturasGuardadas.forEach(asig => {
             let nuevaAsignatura = new Asignatura(asig.nombre);
             listaAsig.addAsignatura(nuevaAsignatura);
         });
+
     }
 
-    // Cargar datos de matriculaciones
-    let matriculacionesGuardadas = localStorage.getItem("matriculas");
+    //? Carga de datos de matriculaciones
+    let matriculacionesGuardadas = localStorage.getItem("matriculaciones");
     console.log(matriculacionesGuardadas);
 
     if (matriculacionesGuardadas) {
-        matriculacionesGuardadas = JSON.parse(matriculacionesGuardadas);
+        matriculacionesGuardadas = JSON.parse(matriculacionesGuardadas); // Convertimos el string en un objeto
 
         for (let matriculacion of matriculacionesGuardadas) {
             let estudiante = listaEstu.busquedaPorNombre(matriculacion.estudiante);
@@ -67,12 +74,12 @@ function cargarDatosLocalStorage() {
         }
     }
 
-    // Cargar datos de calificaciones
+    //? Carga de datos de calificaciones
     let calificacionesGuardadas = localStorage.getItem("calificaciones");
     console.log(calificacionesGuardadas);
 
     if (calificacionesGuardadas) {
-        calificacionesGuardadas = JSON.parse(calificacionesGuardadas);
+        calificacionesGuardadas = JSON.parse(calificacionesGuardadas); // Convertimos el string en un objeto
 
         for (let calificacion of calificacionesGuardadas) {
             let estudiante = listaEstu.busquedaPorNombre(calificacion.estudiante);
@@ -261,10 +268,9 @@ document.addEventListener("DOMContentLoaded", function () { // DOMContentLoaded 
 
         guardarEstudiantes();
     });
-});
+
 
 // Eliminar estudiantes caso 2
-document.addEventListener("DOMContentLoaded", function () {
     const boton2 = document.getElementById("2");
     const form2 = document.getElementById("opcion2");
     const salida2 = document.getElementById("salida2");
@@ -315,13 +321,10 @@ document.addEventListener("DOMContentLoaded", function () {
             salida2.innerHTML += `<li style="color: black;">${estudiante.nombre}</li>`;
         });
     }
-});
 
 // Mostrar estudiantes caso 3
-document.addEventListener("DOMContentLoaded", function () {
     const boton3 = document.getElementById("3");
     const form3 = document.getElementById("opcion3");
-    const mostrar3 = document.getElementById("mostrar3");
     const salida3 = document.getElementById("salida3");
 
     // Verificar que los elementos existen
@@ -336,25 +339,19 @@ document.addEventListener("DOMContentLoaded", function () {
     // Mostrar el formulario al hacer clic en el botón
     boton3.addEventListener("click", function () {
         form3.classList.toggle("hidden");
-    });
 
-    // Mostrar estudiantes al hacer clic en el botón
-    mostrar3.addEventListener("click", function () {
-        try {
-            salida3.innerHTML = "";
-            listaEstu.listadoEstudiantes.forEach(estudiante => {
-                salida3.innerHTML += `<p>Nombre: ${estudiante.nombre}, Edad: ${estudiante.edad}, 
-                Dirección: ${estudiante.direccion.calle} ${estudiante.direccion.numero}${estudiante.direccion.piso ? ', ' + estudiante.direccion.piso : ''}, ${estudiante.direccion.codigoPostal}, ${estudiante.direccion.provincia}, ${estudiante.direccion.localidad}</p>`;
-            });
-        } catch (error) {
-            console.error("Error al mostrar los estudiantes:", error);
-            alert("Ocurrió un error al intentar mostrar los estudiantes. Por favor, inténtalo de nuevo.");
-        }
+        // Mostrar estudiantes al hacer clic en el botón
+        salida3.innerHTML = "";
+        listaEstu.listadoEstudiantes.forEach(estudiante => {
+            salida3.innerHTML += `<h3>Nombre del estudiante: ${estudiante.nombre}</h3>`;
+            salida3.innerHTML += `<p>Edad: ${estudiante.edad}</p>`;
+            salida3.innerHTML += `<p>Dirección: ${estudiante.direccion.toString()}</p>`;
+            salida3.innerHTML += `<h4>Promedio: ${estudiante.calcularPromedioEstudiante()}</h4>`;
+            salida3.innerHTML += `<hr>`;
+        });
     });
-});
 
 // Añadir asignaturas caso 4
-document.addEventListener("DOMContentLoaded", function () {
     const boton4 = document.getElementById("4");
     const form4 = document.getElementById("opcion4");
 
@@ -392,10 +389,8 @@ document.addEventListener("DOMContentLoaded", function () {
             alert(error.message);
         }
     });
-});
 
 // Eliminar asignaturas caso 5
-document.addEventListener("DOMContentLoaded", function () {
     const boton5 = document.getElementById("5");
     const form5 = document.getElementById("opcion5");
     const salida5 = document.getElementById("salida5");
@@ -449,10 +444,9 @@ document.addEventListener("DOMContentLoaded", function () {
             salida5.innerHTML += `<li class="white-text">${asignatura.nombre}</li>`;
         });
     }
-});
+
 
 // Mostrar asignaturas caso 6
-document.addEventListener("DOMContentLoaded", function () {
     const boton6 = document.getElementById("6");
     const form6 = document.getElementById("opcion6");
     const salida6 = document.getElementById("salida6");
@@ -469,30 +463,22 @@ document.addEventListener("DOMContentLoaded", function () {
     // Mostrar el formulario al hacer clic en el botón
     boton6.addEventListener("click", function () {
         form6.classList.toggle("hidden");
-    });
 
-    // Mostrar asignaturas al hacer clic en el botón
-    salida6.addEventListener("click", function () {
-        try {
-            salida6.innerHTML = "";
+        // Mostrar asignaturas al hacer clic en el botón
+        salida6.innerHTML = "";
+        listaAsig.listadoAsignaturas.forEach(asignatura => {
+            salida6.innerHTML += `<h3>Nombre de la asignatura: ${asignatura.nombre}</h3>`;
+            salida6.innerHTML += `<h4>Estudiantes matriculados:</h4>`;
             listaEstu.listadoEstudiantes.forEach(estudiante => {
-                salida6.innerHTML += `<h3>Nombre del estudiante: ${estudiante.nombre}</h3>`;
-                salida6.innerHTML += `<h4>Calificaciones:</h4>`;
-                estudiante.asignaturas.forEach(asignatura => {
-                    salida6.innerHTML += `<p>${asignatura.nombre} - Nota: ${asignatura.nota || "No calificado"}</p>`;
-                });
-                salida6.innerHTML += `<h4>Promedio del estudiante: ${estudiante.calcularPromedioEstudiante().toFixed(2)}</h4>`;
-                salida6.innerHTML += "<hr>";
+                if (estudiante.asignaturas.includes(asignatura)) {
+                    salida6.innerHTML += `<p>${estudiante.nombre}</p>`;
+                }
             });
-        } catch (error) {
-            console.error("Error al mostrar las asignaturas:", error);
-            alert("Ocurrió un error al intentar mostrar las asignaturas. Por favor, inténtalo de nuevo.");
-        }
+            salida6.innerHTML += "<hr>";
+        });
     });
-});
 
 //Matricular estudiante en asignatura caso 7
-document.addEventListener("DOMContentLoaded", function () {
     const boton7 = document.getElementById("7");
     const form7 = document.getElementById("opcion7");
 
@@ -538,10 +524,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         guardarMatriculas();
     });
-});
 
 //Desmatricular estudiante en asignatura caso 8
-document.addEventListener("DOMContentLoaded", function () {
     const boton8 = document.getElementById("8");
     const form8 = document.getElementById("opcion8");
     const salida8 = document.getElementById("salida8");
@@ -600,10 +584,8 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("Ocurrió un error al intentar desmatricular el estudiante. Por favor, inténtalo de nuevo.");
         }
     });
-});
 
 //Calificar a un estudiante caso 9
-document.addEventListener("DOMContentLoaded", function () {
     const boton9 = document.getElementById("9");
     const form9 = document.getElementById("opcion9");
     const salida9 = document.getElementById("salida9");
@@ -665,10 +647,8 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("Ocurrió un error al intentar calificar al estudiante. Por favor, inténtalo de nuevo.");
         }
     });
-});
 
 //Calcular promedio de un estudiante caso 10
-document.addEventListener("DOMContentLoaded", function () {
     const boton10 = document.getElementById("10");
     const form10 = document.getElementById("opcion10");
     const salida10 = document.getElementById("salida10");
@@ -712,10 +692,8 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("Ocurrió un error al intentar calcular el promedio del estudiante. Por favor, inténtalo de nuevo.");
         }
     });
-});
 
 //Calcular promedio general de todos los estudiantes caso 11
-document.addEventListener("DOMContentLoaded", function () {
     const boton11 = document.getElementById("11");
     const form11 = document.getElementById("opcion11");
     const salida11 = document.getElementById("salida11");

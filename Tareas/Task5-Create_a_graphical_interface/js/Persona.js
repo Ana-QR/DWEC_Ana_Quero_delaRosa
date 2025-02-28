@@ -1,3 +1,5 @@
+import { Direccion } from './Direccion.js';
+
 /**
  * Clase Persona
  * @class Persona
@@ -101,6 +103,6 @@ export class Persona {
      * @returns {string} Representación en texto de la persona.
      */
     toString() {
-        return `Nombre: ${this.#nombre},\nEdad: ${this.#edad},\nDirección: ${this.#direccion}`;
+        return `Nombre: ${this.#nombre},\nEdad: ${this.#edad},\nDirección: ${this.#direccion.toString()}`;
     }
 }

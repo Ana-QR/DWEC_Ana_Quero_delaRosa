@@ -1,3 +1,5 @@
+import { Estudiante } from "./Estudiante.js";
+
 /**
  * Clase ListaEstudiantes
  * @class ListaEstudiantes

@@ -25,6 +25,7 @@
  *   - toString(): Devuelve una representación en texto del estudiante.
  */
 import { Persona } from "./Persona.js";
+import { Direccion } from "./Direccion.js";
 
 export class Estudiante extends Persona {
     /**
@@ -52,7 +53,7 @@ export class Estudiante extends Persona {
      * @param {Direccion} direccion - Dirección del estudiante.
      */
     constructor(nombre, edad, direccion) {
-        super(nombre, edad, direccion);
+        super(nombre, edad, direccion instanceof Direccion ? direccion : new Direccion(direccion.calle, direccion.numero, direccion.ciudad, direccion.pais));
         this.#id = Estudiante.contadorId++;
         this.#asignaturas = [];
     }
