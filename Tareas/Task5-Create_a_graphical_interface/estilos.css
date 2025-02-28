@@ -1,5 +1,5 @@
 header {
-    background: #b3cce7;
+    background: #6783a0;
     color: white;
     padding: 10px 10px;
     text-align: center;
@@ -17,9 +17,16 @@ body {
     padding: 0;
 }
 
-h2, h3 {
-    color: #333;
+h2 {
+    color: #ffffff;
     margin-bottom: 20px;
+}
+
+h3 {
+    color: #27292c;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
 }
 
 form {

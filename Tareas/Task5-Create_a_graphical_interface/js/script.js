@@ -312,7 +312,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (localStorage.getItem("listaEstudiantes") !== null) {
         const datos = JSON.parse(localStorage.getItem("listaEstudiantes"));
         datos.forEach(estudiante => {
-            salida2.innerHTML += `<li style="color: white;">${estudiante.nombre}</li>`;
+            salida2.innerHTML += `<li style="color: black;">${estudiante.nombre}</li>`;
         });
     }
 });
@@ -344,7 +344,7 @@ document.addEventListener("DOMContentLoaded", function () {
             salida3.innerHTML = "";
             listaEstu.listadoEstudiantes.forEach(estudiante => {
                 salida3.innerHTML += `<p>Nombre: ${estudiante.nombre}, Edad: ${estudiante.edad}, 
-                Dirección: ${estudiante.direccion.calle} ${estudiante.direccion.numero}, ${estudiante.direccion.piso}, ${estudiante.direccion.codigoPostal}, ${estudiante.direccion.provincia}, ${estudiante.direccion.localidad}</p>`;
+                Dirección: ${estudiante.direccion.calle} ${estudiante.direccion.numero}${estudiante.direccion.piso ? ', ' + estudiante.direccion.piso : ''}, ${estudiante.direccion.codigoPostal}, ${estudiante.direccion.provincia}, ${estudiante.direccion.localidad}</p>`;
             });
         } catch (error) {
             console.error("Error al mostrar los estudiantes:", error);
@@ -446,7 +446,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (localStorage.getItem("listaAsignaturas") !== null) {
         const datos = JSON.parse(localStorage.getItem("listaAsignaturas"));
         datos.forEach(asignatura => {
-            salida5.innerHTML += `<li style="color: white;">${asignatura.nombre}</li>`;
+            salida5.innerHTML += `<li class="white-text">${asignatura.nombre}</li>`;
         });
     }
 });
@@ -593,7 +593,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const datos = JSON.parse(localStorage.getItem("matriculas")) || [];
             salida8.innerHTML = "";
             for (let matricula of datos) {
-                salida8.innerHTML += `<li style="color: white;">${matricula.estudiante} - ${matricula.asignatura}</li>`;
+                salida8.innerHTML += `<li class="white-text">${matricula.estudiante} - ${matricula.asignatura}</li>`;
             }
         } catch (error) {
             console.error("Error al desmatricular el estudiante:", error);
@@ -658,7 +658,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const datos = JSON.parse(localStorage.getItem("calificaciones")) || [];
             salida9.innerHTML = "";
             for (let calificacion of datos) {
-                salida9.innerHTML += `<li style="color: white;">${calificacion.estudiante} - ${calificacion.asignatura} - ${calificacion.nota}</li>`;
+                salida9.innerHTML += `<li class="white-text">${calificacion.estudiante} - ${calificacion.asignatura} - ${calificacion.nota}</li>`;
             }
         } catch (error) {
             console.error("Error al calificar al estudiante:", error);
