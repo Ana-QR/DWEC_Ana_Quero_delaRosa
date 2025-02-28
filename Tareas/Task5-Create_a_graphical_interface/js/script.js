@@ -127,7 +127,92 @@ function guardarCalificaciones() {
     localStorage.setItem("calificaciones", JSON.stringify(calificaciones));
 }
 
+
+console.log("Listas de estudiantes y asignaturas creadas con éxito");
+const direccion1 = new Direccion("Calle Quero", 12, 1, "23790", "Jaén", "Porcuna");
+const direccion2 = new Direccion("Calle Huesa", 13, "", "23790", "Jaén", "Porcuna");
+const direccion3 = new Direccion("Calle Emilio Sebastián", 14, "1C", "18013", "Granada", "Granada");
+const direccion4 = new Direccion("hola", 12, "", "23790", "Jaén", "Porcuna");
+
+/* Definir estudiantes */
+const estudiante1 = new Estudiante("Mario Vaquerizo", 40, direccion1);
+const estudiante2 = new Estudiante("Paula Mola", 20, direccion2);
+const estudiante3 = new Estudiante("Federico Garcia", 50, direccion3);
+const estudiante4 = new Estudiante("ana", 20, direccion4);
+
+/* Agregar estudiantes a la lista usando addEstudiante */
+listaEstu.addEstudiante(estudiante1);
+listaEstu.addEstudiante(estudiante2);
+listaEstu.addEstudiante(estudiante3);
+listaEstu.addEstudiante(estudiante4);
+
+/* Crear asignaturas */
+const matematicas = new Asignatura("Matemáticas");
+const historia = new Asignatura("Historia");
+const artes = new Asignatura("Artes");
+const tecnologia = new Asignatura("Tecnología");
+const musica = new Asignatura("musica");
+
+/* Agregar asignaturas a la lista usando addAsignatura */
+listaAsig.addAsignatura(matematicas);
+listaAsig.addAsignatura(historia);
+listaAsig.addAsignatura(artes);
+listaAsig.addAsignatura(tecnologia);
+listaAsig.addAsignatura(musica);
+
+/* Matricular estudiantes en asignaturas */
+estudiante1.matricular(matematicas, historia, tecnologia);
+estudiante2.matricular(matematicas, artes);
+estudiante3.matricular(historia, artes, tecnologia);
+estudiante4.matricular(musica, matematicas, historia, tecnologia);
+
+/* Asignar notas */
+matematicas.calificar(estudiante1, 8.5);
+matematicas.calificar(estudiante2, 9.0);
+
+historia.calificar(estudiante1, 7.5);
+historia.calificar(estudiante3, 8.0);
+
+artes.calificar(estudiante2, 9.5);
+artes.calificar(estudiante3, 8.5);
+
+tecnologia.calificar(estudiante1, 10.0);
+tecnologia.calificar(estudiante3, 8.8);
+
+prompt("Datos inicializados correctamente. Presiona Enter para continuar.");
+
+/* Eliminar estudiantes y asignaturas */
+try {
+    listaEstu.eliminarEstudiante(estudiante3);
+    listaAsig.eliminarAsignatura(artes);
+    prompt("Estudiantes y asignaturas eliminados con éxito");
+} catch (error) {
+    console.error(error.message);
+}
+
+/*Matricular y desmatricular estudiantes de asignaturas */
+try {
+    estudiante2.matricular(historia);
+    estudiante1.desmatricular(historia);
+} catch (error) {
+    console.error(error.message);
+}
+
+/*Calificación de estudiantes en asignaturas con la funcion calificar de estudiante */
+try {
+    estudiante1.calificar(tecnologia, 7);
+    estudiante3.calificar(tecnologia, 8);
+    estudiante3.calificar(historia, 6);
+    estudiante1.calificar(historia, 8);
+    estudiante2.calificar(matematicas, 6);
+    estudiante2.calificar(historia, 7);
+} catch (error) {
+    console.error(error.message);
+}
+
+
 // ************* INTERACCIÓN CON EL DOM ******************
+
 // Crear estudiantes caso 1
 document.addEventListener("DOMContentLoaded", function () { // DOMContentLoaded se utiliza para asegurarse de que el DOM esté listo antes de intentar manipularlo
     const boton1 = document.getElementById("1");
@@ -140,12 +225,12 @@ document.addEventListener("DOMContentLoaded", function () { // DOMContentLoaded 
     }
 
     // Ocultar el formulario al cargar la página
-    form1.style.display = "none";
+    form1.classList.add("hidden");
 
     // Mostrar el formulario al hacer clic en el botón
     boton1.addEventListener("click", function () {
-        form1.style.display = form1.style.display === "none" ? "block" : "none";
-    }); 
+        form1.classList.toggle("hidden");
+    });
 
     // Validación de formulario
     form1.querySelector("form").addEventListener("submit", function (e) {
@@ -191,11 +276,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Ocultar el formulario al cargar la página
-    form2.style.display = "none";
+    form2.classList.add("hidden");
 
     // Mostrar el formulario al hacer clic en el botón
     boton2.addEventListener("click", function () {
-        form2.style.display = form2.style.display === "none" ? "block" : "none";
+        form2.classList.toggle("hidden");
     });
 
     // Validación de formulario
@@ -236,6 +321,7 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
     const boton3 = document.getElementById("3");
     const form3 = document.getElementById("opcion3");
+    const mostrar3 = document.getElementById("mostrar3");
     const salida3 = document.getElementById("salida3");
 
     // Verificar que los elementos existen
@@ -245,15 +331,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Ocultar el formulario al cargar la página
-    form3.style.display = "none";
+    form3.classList.add("hidden");
 
     // Mostrar el formulario al hacer clic en el botón
     boton3.addEventListener("click", function () {
-        form3.style.display = (form3.style.display === "none") ? "block" : "none";
+        form3.classList.toggle("hidden");
     });
 
     // Mostrar estudiantes al hacer clic en el botón
-    salida3.addEventListener("click", function () {
+    mostrar3.addEventListener("click", function () {
         try {
             salida3.innerHTML = "";
             listaEstu.listadoEstudiantes.forEach(estudiante => {
@@ -279,11 +365,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Ocultar el formulario al cargar la página
-    form4.style.display = "none";
+    form4.classList.add("hidden");
 
     // Mostrar el formulario al hacer clic en el botón
     boton4.addEventListener("click", function () {
-        form4.style.display = (form4.style.display === "none") ? "block" : "none";
+        form4.classList.toggle("hidden");
     });
 
     // Validar formulario antes de enviarlo
@@ -321,11 +407,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Ocultar el formulario al cargar la página
-    form5.style.display = "none";
+    form5.classList.add("hidden");
 
     // Mostrar el formulario al hacer clic en el botón
     boton5.addEventListener("click", function () {
-        form5.style.display = (form5.style.display === "none") ? "block" : "none";
+        form5.classList.toggle("hidden");
     });
 
     // Validar formulario antes de enviarlo
@@ -378,11 +464,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Ocultar el formulario al cargar la página
-    form6.style.display = "none";
+    form6.classList.add("hidden");
 
     // Mostrar el formulario al hacer clic en el botón
     boton6.addEventListener("click", function () {
-        form6.style.display = (form6.style.display === "none") ? "block" : "none";
+        form6.classList.toggle("hidden");
     });
 
     // Mostrar asignaturas al hacer clic en el botón
@@ -417,11 +503,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Ocultar el formulario al cargar la página
-    form7.style.display = "none";
+    form7.classList.add("hidden");
 
     // Mostrar el formulario al hacer clic en el botón
     boton7.addEventListener("click", function () {
-        form7.style.display = (form7.style.display === "none") ? "block" : "none";
+        form7.classList.toggle("hidden");
     });
 
     // Validar formulario antes de enviarlo
@@ -467,11 +553,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Ocultar el formulario al cargar la página
-    form8.style.display = "none";
+    form8.classList.add("hidden");
 
     // Mostrar el formulario al hacer clic en el botón
     boton8.addEventListener("click", function () {
-        form8.style.display = (form8.style.display === "none") ? "block" : "none";
+        form8.classList.toggle("hidden");
     });
 
     // Validar formulario antes de enviarlo
@@ -529,11 +615,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Ocultar el formulario al cargar la página
-    form9.style.display = "none";
+    form9.classList.add("hidden");
 
     // Mostrar el formulario al hacer clic en el botón
     boton9.addEventListener("click", function () {
-        form9.style.display = (form9.style.display === "none") ? "block" : "none";
+        form9.classList.toggle("hidden");
     });
 
     // Validar formulario antes de enviarlo
@@ -594,11 +680,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Ocultar el formulario al cargar la página
-    form10.style.display = "none";
+    form10.classList.add("hidden");
 
     // Mostrar el formulario al hacer clic en el botón
     boton10.addEventListener("click", function () {
-        form10.style.display = (form10.style.display === "none") ? "block" : "none";
+        form10.classList.toggle("hidden");
     });
 
     // Validar el formulario antes de enviarlo
@@ -641,11 +727,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Ocultar el formulario al cargar la página
-    form11.style.display = "none";
-    
+    form11.classList.add("hidden");
+
     // Mostrar el formulario al hacer clic en el botón
     boton11.addEventListener("click", function () {
-        form11.style.display = (form11.style.display === "none") ? "block" : "none";
+        form11.classList.toggle("hidden");
     });
 
     // Validar el formulario antes de enviarlo
