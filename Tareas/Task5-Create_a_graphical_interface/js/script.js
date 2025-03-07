@@ -107,7 +107,7 @@ function guardarEstudiantes() {
             localidad: estu.direccion.localidad
         }
     }));
-    localStorage.setItem("listaEstudiantes", JSON.stringify(estudiantes));
+    localStorage.setItem("todosLosEstudiantes", JSON.stringify(estudiantes));
 }
 
 function guardarAsignaturas() {
