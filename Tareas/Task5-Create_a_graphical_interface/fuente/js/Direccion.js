@@ -45,7 +45,7 @@ export class Direccion {
      * @type {string} 
      * @private
      */
-    #codigoPostal;
+    #cp;
     
     /**
      * Provincia de la dirección.
@@ -66,27 +66,27 @@ export class Direccion {
      * @param {string} calle - Nombre de la calle.
      * @param {number} numero - Número de la dirección.
      * @param {string} piso - Piso de la dirección.
-     * @param {string} codigoPostal - Código postal de la dirección (valida que sea de 5 dígitos, lanza un error si es inválido).
+     * @param {string} cp - Código postal de la dirección (valida que sea de 5 dígitos, lanza un error si es inválido).
      * @param {string} provincia - Provincia de la dirección.
      * @param {string} localidad - Localidad de la dirección.
      */
-    constructor(calle, numero, piso, codigoPostal, provincia, localidad) {
+    constructor(calle, numero, piso, cp, provincia, localidad) {
         this.#calle = calle;
         this.#numero = numero;
         this.#piso = piso;
-        this.#codigoPostal = this.validarCodigoPostal(codigoPostal);
+        this.#cp = this.validarCodigoPostal(cp);
         this.#provincia = provincia;
         this.#localidad = localidad;
     }
 
     /**
      * Valida el código postal.
-     * @param {string} codigoPostal - Código postal a validar.
+     * @param {string} cp - Código postal a validar.
      * @returns {string} Código postal válido o "00000" si es inválido.
      */
-    validarCodigoPostal(codigoPostal) {
+    validarCodigoPostal(cp) {
         const regex = /^\d{5}$/;  // Expresión regular para verificar que sea un código postal de 5 dígitos
-        return regex.test(codigoPostal) ? codigoPostal : "00000";  // Si es válido, devuelve el código postal; si no, pone "00000"
+        return regex.test(cp) ? cp : "00000";  // Si es válido, devuelve el código postal; si no, pone "00000"
     }
 
     /**
@@ -97,7 +97,7 @@ export class Direccion {
         return `Calle: ${this.#calle},
         Numero: ${this.#numero},
         Piso: ${this.#piso},
-        Código Postal: ${this.#codigoPostal},
+        Código Postal: ${this.#cp},
         Provincia: ${this.#provincia},
         Localidad: ${this.#localidad}`;
     }
@@ -117,8 +117,8 @@ export class Direccion {
         return this.#piso;
     }
 
-    get codigoPostal() {
-        return this.#codigoPostal;
+    get cp() {
+        return this.#cp;
     }
 
     get provincia() {

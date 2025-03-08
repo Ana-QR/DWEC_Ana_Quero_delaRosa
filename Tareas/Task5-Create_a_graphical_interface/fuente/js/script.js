@@ -179,7 +179,7 @@ try {
 
 // Crear estudiantes caso 1
 document.addEventListener("DOMContentLoaded", () => { // DOMContentLoaded se utiliza para asegurarse de que el DOM esté listo antes de intentar manipularlo
-    const boton1 = document.getElementById("1");
+    const boton1 = document.getElementById("bot1");
     const form1 = document.getElementById("opcion1");
 
     // Verificar que los elementos existen
@@ -249,7 +249,7 @@ document.addEventListener("DOMContentLoaded", () => { // DOMContentLoaded se uti
 
 // Eliminar estudiantes caso 2
 document.addEventListener("DOMContentLoaded", () => {
-    const boton2 = document.getElementById("2");
+    const boton2 = document.getElementById("bot2");
     const form2 = document.getElementById("opcion2");
     const salida2 = document.getElementById("salida2");
 
@@ -315,7 +315,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Añadir asignaturas caso 4
 document.addEventListener("DOMContentLoaded", () => {
-    const boton4 = document.getElementById("4");
+    const boton4 = document.getElementById("bot4");
     const form4 = document.getElementById("opcion4");
 
     // Verificar que los elementos existen
@@ -362,7 +362,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Eliminar asignaturas caso 5
 document.addEventListener("DOMContentLoaded", () => {
-    const boton5 = document.getElementById("5");
+    const boton5 = document.getElementById("bot5");
     const form5 = document.getElementById("opcion5");
     const salida5 = document.getElementById("salida5");
 
@@ -415,7 +415,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 //Matricular estudiante en asignatura caso 7
 document.addEventListener("DOMContentLoaded", () => {
-    const boton7 = document.getElementById("7");
+    const boton7 = document.getElementById("bot7");
     const form7 = document.getElementById("opcion7");
 
     // Verificar que los elementos existen
@@ -458,7 +458,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 //Desmatricular estudiante en asignatura caso 8
 document.addEventListener("DOMContentLoaded", () => {
-    const boton8 = document.getElementById("8");
+    const boton8 = document.getElementById("bot8");
     const form8 = document.getElementById("opcion8");
     const salida8 = document.getElementById("salida8");
 
@@ -523,7 +523,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 //Calificar a un estudiante caso 9
 document.addEventListener("DOMContentLoaded", () => {
-    const boton9 = document.getElementById("9");
+    const boton9 = document.getElementById("bot9");
     const form9 = document.getElementById("opcion9");
     const salida9 = document.getElementById("salida9");
 
@@ -574,7 +574,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 //Calcular promedio de un estudiante caso 10
 document.addEventListener("DOMContentLoaded", () => {
-    const boton10 = document.getElementById("10");
+    const boton10 = document.getElementById("bot10");
     const form10 = document.getElementById("opcion10");
 
     // Verificar que los elementos existen
@@ -610,7 +610,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 //Calcular promedio general de todos los estudiantes caso 11
 document.addEventListener("DOMContentLoaded", () => {
-    const boton11 = document.getElementById("11");
+    const boton11 = document.getElementById("bot11");
     const form11 = document.getElementById("opcion11");
     const salida11 = document.getElementById("salida11");
 
@@ -635,7 +635,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Reporte completo
 document.addEventListener("DOMContentLoaded", () => {
-    const boton12 = document.getElementById("12");
+    const boton12 = document.getElementById("bot12");
     const contenidoReporte = document.getElementById("opcion12");
     const salida12 = document.getElementById("salida12");
 
