@@ -41,10 +41,12 @@ export class Asignatura {
      * @throws {Error} Si el nombre de la asignatura contiene caracteres no permitidos.
      */
     constructor(nombre) {
-        if (!/^([a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+)$/.test(nombre)) {
+        if (!nombre.match(/^[A-Za-zÁÉÍÓÚáéíóú ]+$/)) {
             throw new Error("El nombre de la asignatura solo puede contener letras y espacios.");
+        } else{
+            this.#nombre = nombre;
         }
-        this.#nombre = nombre;
+        
         this.#calificaciones = []; // Calificaciones generales
         this.#estudiantes = new Map(); // Mapa para asociar los estudiantes a sus calificaciones
     }

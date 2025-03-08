@@ -68,6 +68,25 @@ export class ListaEstudiantes {
     }
 
     /**
+     * Muestra un reporte con el nombre, calificaciones y promedio de cada estudiante.
+     */
+    reporte() {
+        // Recorre la lista de estudiantes y muestra su nombre, calificaciones y promedio
+        this.#listadoEstudiantes.forEach(estudiante => {
+            console.log();
+            console.log(`Nombre del estudiante: ${estudiante.nombre}`);
+            console.log(`Calificaciones:`);
+            // Muestra las calificaciones de cada asignatura
+            estudiante.asignaturas.forEach(asignatura => {
+                const nota = Number(asignatura[1]);
+                console.log(`${asignatura.nombre}: ${nota}`);
+            });
+            console.log(`Promedio: ${estudiante.calcularPromedioEstudiante()}`);
+            console.log("--------------------------------");
+        });
+    }
+
+    /**
      * Añade un estudiante a la lista.
      * @param {Estudiante} estudiante - El estudiante a añadir.
      * @throws {Error} Si el estudiante ya está en la lista.
@@ -100,9 +119,13 @@ export class ListaEstudiantes {
      * @returns {Estudiante[]} Lista de estudiantes que coinciden con el nombre.
      */
     busquedaPorNombre(nombre) {
-        const estudiante = this.#listadoEstudiantes.find(function(estudiante) {
-            return estudiante.nombre.toLowerCase() === nombre.toLowerCase();
-        });
+        // Comprueba si el patrón es una cadena de texto
+        if (typeof nombre !== "string") {
+            throw new Error("El patrón debe ser una cadena de texto");
+        }
+
+        // Encuentra el estudiante que coincide exactamente con el patrón
+        const estudiante = this.#listadoEstudiantes.find(estudiante => estudiante.nombre.toLowerCase() === nombre.toLowerCase());
         if (!estudiante) {
             throw new Error(`No se encontró ningún estudiante con el nombre: ${nombre}`);
         }

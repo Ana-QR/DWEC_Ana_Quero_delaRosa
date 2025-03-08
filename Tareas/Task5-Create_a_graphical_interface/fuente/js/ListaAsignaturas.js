@@ -40,7 +40,16 @@ export class ListaAsignaturas {
    * @param {Asignatura} asignatura - La asignatura a añadir
    */
     addAsignatura(asignatura) {
-        this.#listadoAsignaturas.push(asignatura);
+        try {
+            if (this.#listadoAsignaturas.find(elemento => elemento.nombre.toLowerCase() === asignatura.nombre.toLowerCase())) {
+            throw new Error("Ya existe la asignatura");
+            }
+            this.#listadoAsignaturas.push(asignatura);
+            return true;
+        } catch (error) {
+            console.log(`Error: ${error.message}`);
+            return false;
+        }
     }
 
     /**
@@ -49,8 +58,16 @@ export class ListaAsignaturas {
    * @throws {Error} Si la asignatura no se encuentra en el listado
    */
     eliminarAsignatura(asignatura) {
-        if (this.#listadoAsignaturas.includes(asignatura)) {
-            this.#listadoAsignaturas = this.#listadoAsignaturas.filter(e => e !== asignatura);
+        // Comprueba si el nombre de la asignatura es una cadena de texto
+        if (typeof asignatura.nombre !== "string") throw new Error("El nombre de la asignatura debe ser una cadena de texto");
+        
+        // Encuentra la asignatura que coincide exactamente con el nombre
+        const asignaturaEncontrada = this.#listadoAsignaturas.find(a => a.nombre.toLowerCase() === asignatura.nombre.toLowerCase());
+        
+        // Comprueba si la asignatura está en la lista
+        if (asignaturaEncontrada) {
+            const index = this.#listadoAsignaturas.indexOf(asignaturaEncontrada);
+            this.#listadoAsignaturas.splice(index, 1);
             console.log("Asignatura eliminada con éxito");
         } else {
             throw new Error("La asignatura no se encuentra en el listado");
@@ -63,6 +80,8 @@ export class ListaAsignaturas {
    * @returns {Asignatura[]} Las asignaturas que coinciden con el patrón
    */
     buscarAsignaturas(patron) {
+        if (typeof patron !== "string") throw new Error("El patrón debe ser una cadena de texto");
+
         const asignaturaEncontrada = this.#listadoAsignaturas.find(function (asignatura) {
             return asignatura.nombre.toLowerCase() == patron.toLowerCase();
         });

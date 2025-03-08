@@ -35,10 +35,11 @@ export class Persona {
      * @throws {Error} Si el nombre no contiene solo letras y espacios.
      */
     constructor(nombre, edad, direccion) {
-        if (!/^[a-zA-Z\s]+$/.test(nombre)) {
+        if (!nombre.match(/^[A-Za-zÁÉÍÓÚáéíóú ]+$/)) {
             throw new Error("El nombre solo debe contener letras y espacios");
+        } else{
+            this.#nombre = nombre;
         }
-        this.#nombre = nombre;
         this.#edad = edad >= 0 ? edad : 0;
         this.#direccion = direccion;
     }

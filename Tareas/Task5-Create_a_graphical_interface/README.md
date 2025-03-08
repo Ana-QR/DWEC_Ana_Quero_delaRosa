@@ -40,7 +40,7 @@ Para completar la tarea, debes cumplir con los siguientes requisitos:
    - Genera una carpeta para el proyecto
    - Dentro de la carpeta, crea los archivos principales:
      - `index.html` (estructura de la interfaz)
-     - `styles.css` (hoja de estilos para la interfaz)
+     - `estilos.css` (hoja de estilos para la interfaz)
      - `script.js` (lógica e interacción de la interfaz)
 
 2. **Diseñar la interfaz**

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Estudiantes y Asignaturas</title>
     <script type="module" src="./js/script.js" defer></script>
-    <link rel="stylesheet" href="./estilos.css">
+    <link rel="stylesheet" href="./css/estilos.css">
     <link rel="icon" href="data:,">
 </head>
 
@@ -65,19 +65,10 @@
                 <br>
                 <form action="#" method="get">
                     <label for="nombreEliminar">Nombre del estudiante a eliminar: </label>
-                    <input type="text" id="nombreEliminar" required><br>
+                    <input type="text" name="nombreEliminar" id="nombreEliminar" required><br>
                     <button id="submit2" type="submit">Eliminar Estudiante</button>
                 </form>
                 <article id="salida2"></article>
-            </article>
-        </section>
-
-        <section id="mostrarEstu">
-
-            <article id="opcion3">
-                <h3>Lista de Estudiantes</h3><br>
-                <button id="3">3 - Mostrar estudiantes</button>
-                <article id="salida3"></article>
             </article>
         </section>
 
@@ -87,10 +78,9 @@
                 <h3>Añadir Asignatura</h3>
                 <form action="#" method="get">
                     <label for="nombreAsignatura">Nombre de la asignatura: </label>
-                    <input type="text" id="nombreAsignatura" required><br>
+                    <input type="text" name="nombreAsignatura" id="nombreAsignatura" required><br>
                     <button id="submit4" type="submit">Añadir Asignatura</button>
                 </form>
-                <article id="salida4"></article>
             </article>
         </section>
 
@@ -100,18 +90,10 @@
                 <h3>Eliminar asignatura</h3>
                 <form action="#" method="get">
                     <label for="nombreEliminarAsignatura">Nombre de la asignatura a eliminar: </label>
-                    <input type="text" id="nombreEliminarAsignatura" required><br>
+                    <input type="text" name="nombreEliminarAsignatura" id="nombreEliminarAsignatura" required><br>
                     <button id="submit5" type="submit">Eliminar Asignatura</button>
                 </form>
                 <article id="salida5"></article>
-            </article>
-        </section>
-
-        <section id="mostrarAsig">
-            <article id="opcion6">
-                <h3>Lista de Asignaturas</h3><br>
-                <button id="6">6 - Mostrar asignaturas</button>
-                <article id="salida6"></article>
             </article>
         </section>
 
@@ -120,13 +102,12 @@
             <article id="opcion7">
                 <h3>Matricular estudiante en asignatura</h3>
                 <form action="#" method="get">
-                    <label for="nombreEstudianteMatricula">Nombre del estudiante: </label>
-                    <input type="text" id="nombreEstudianteMatricula" required><br>
-                    <label for="nombreAsignaturaMatricula">Nombre de la asignatura: </label>
-                    <input type="text" id="nombreAsignaturaMatricula" required><br>
+                    <label for="nombreEstudianteMatricular">Nombre del estudiante: </label>
+                    <input type="text" id="nombreEstudianteMatricular" required><br>
+                    <label for="nombreAsignaturaMatricular">Nombre de la asignatura: </label>
+                    <input type="text" id="nombreAsignaturaMatricular" required><br>
                     <button id="submit7" type="submit">Matricular</button>
                 </form>
-                <article id="salida7"></article>
             </article>
         </section>
 
@@ -135,10 +116,10 @@
             <article id="opcion8">
                 <h3>Desmatricular estudiante de asignatura</h3>
                 <form action="#" method="get">
-                    <label for="nombreEstudianteDesmatricula">Nombre del estudiante: </label>
-                    <input type="text" id="nombreEstudianteDesmatricula" required><br>
-                    <label for="nombreAsignaturaDesmatricula">Nombre de la asignatura: </label>
-                    <input type="text" id="nombreAsignaturaDesmatricula" required><br>
+                    <label for="nombreEstudianteDesmatricular">Nombre del estudiante: </label>
+                    <input type="text" id="nombreEstudianteDesmatricular" required><br>
+                    <label for="nombreAsignaturaDesmatricular">Nombre de la asignatura: </label>
+                    <input type="text" id="nombreAsignaturaDesmatricular" required><br>
                     <button id="submit8" type="submit">Desmatricular</button>
                 </form>
                 <article id="salida8"></article>
@@ -179,12 +160,18 @@
             <button id="11">11 - Calcular promedio general</button>
             <article id="opcion11">
                 <h3>Calcular promedio general de los estudiantes</h3>
-                <form action="#" method="get">
-                    <button id="submit11" type="submit">Calcular Promedio General</button>
-                </form>
                 <article id="salida11"></article>
             </article>
         </section>
+
+        <section id="reporteCompleto">
+            <button id="12">12 - Generar reporte completo</button>
+            <article id="opcion12">
+                <h3>Reporte de Todos los Estudiantes</h3>
+                <article id="salida12"></article>
+            </article>
+        </section>
+            
     </section>
 </body>
 

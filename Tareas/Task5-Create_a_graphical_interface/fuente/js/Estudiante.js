@@ -41,6 +41,12 @@ export class Estudiante extends Persona {
     #asignaturas;
 
     /**
+     * Historial de acciones realizadas por el estudiante.
+     * @type {Array<[string, Date]>}
+     */
+    #relacion;
+
+    /**
      * Contador estático para asignar un ID único a cada estudiante.
      * @type {number}
      */
@@ -56,6 +62,7 @@ export class Estudiante extends Persona {
         super(nombre, edad, direccion instanceof Direccion ? direccion : new Direccion(direccion.calle, direccion.numero, direccion.ciudad, direccion.pais));
         this.#id = Estudiante.contadorId++;
         this.#asignaturas = [];
+        this.#relacion = [];
     }
 
     ///////GETTER///////
@@ -81,12 +88,8 @@ export class Estudiante extends Persona {
      */
     matricular(...asignaturas) {
         for (let asignatura of asignaturas) {
-            if (this.#asignaturas.find(asig => asig.nombre === asignatura.nombre) === undefined) {
-                this.#asignaturas.push(asignatura);
-                console.log(`Matriculación de ${asignatura.nombre} realizada el ${new Date()}`);
-            } else {
-                console.log(`El estudiante ya está matriculado en ${asignatura.nombre}`);
-            }
+            this.#asignaturas.push(asignatura);
+            this.#relacion.push([`Matriculación de ${asignatura.nombre}`, new Date()]);
         }
     }
 
@@ -96,12 +99,8 @@ export class Estudiante extends Persona {
      */
     desmatricular(...asignaturas) {
         for (let asignatura of asignaturas) {
-            if (this.#asignaturas.find(asig => asig.nombre === asignatura.nombre) !== undefined) {
-                this.#asignaturas = this.#asignaturas.filter(asig => asig.nombre !== asignatura.nombre);
-                console.log(`Desmatriculación de ${asignatura.nombre} realizada el ${new Date()}`);
-            } else {
-                console.log(`El estudiante no está matriculado en ${asignatura.nombre}`);
-            }
+            this.#asignaturas = this.#asignaturas.filter(a => a.nombre !== asignatura.nombre);
+            this.#relacion.push([`Desmatriculación de ${asignatura.nombre}`, new Date()]);
         }
     }
 
@@ -112,19 +111,19 @@ export class Estudiante extends Persona {
      * @throws {Error} Si la calificación no está entre 0 y 10.
      */
     calificar(asignatura, calificacion) {
-        if (typeof calificacion !== "number" || calificacion < 0 || calificacion > 10) {
+        if (arguments.length === 1) {
+            throw new Error("Faltan datos para calificar al estudiante");
+        }
+        const asignaturaMatriculada = this.#asignaturas.find(a => a.nombre === asignatura.nombre);
+        if (!asignaturaMatriculada) {
+            alert(`El estudiante no está matriculado en ${asignatura.nombre}`); 
+            return;
+        }
+        if (calificacion < 0 || calificacion > 10) {
             throw new Error("La calificación debe estar entre 0 y 10.");
         }
-    
-        const index = this.#asignaturas.findIndex(asig => asig.nombre === asignatura.nombre);
-        
-        if (index !== -1) {
-            console.log(`Calificación añadida a ${asignatura.nombre} para ${this.nombre}: ${calificacion}`);
-            this.#asignaturas[index].calificaciones.push(calificacion);
-            asignatura.calificar(this, calificacion);
-        } else {
-            console.log(`El estudiante ${this.nombre} no está matriculado en ${asignatura.nombre}`);
-        }
+        asignaturaMatriculada.calificaciones.push(calificacion);
+        this.#relacion.push([`Calificación añadida a ${asignatura.nombre}`, new Date()]);
     }
 
     /**
@@ -157,6 +156,22 @@ export class Estudiante extends Persona {
         console.log(`Suma final: ${sum}, Contador final: ${contador}`);
         let media = sum / contador;
         return contador === 0 ? 0 : Number(media.toFixed(2));
+    }
+
+    /**
+     * Devuelve el historial de acciones del estudiante.
+     * @returns {string[]} El historial de matriculaciones y desmatriculaciones.
+     */
+    get relacion() {
+        return this.#relacion.map(([accion, fecha]) => {
+            const fechaFormateada = fecha.toLocaleDateString('es-ES', {
+                weekday: 'long',
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+            });
+            return `${accion} - ${fechaFormateada}`;
+        });
     }
 
     /**
