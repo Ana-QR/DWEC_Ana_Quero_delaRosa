@@ -92,87 +92,87 @@ function cargarDatosLocalStorage() {
 cargarDatosLocalStorage();
 
 
-// console.log("Listas de estudiantes y asignaturas creadas con éxito");
-// const direccion1 = new Direccion("Calle Quero", 12, 1, "23790", "Jaén", "Porcuna");
-// const direccion2 = new Direccion("Calle Huesa", 13, "", "23790", "Jaén", "Porcuna");
-// const direccion3 = new Direccion("Calle Emilio Sebastián", 14, "1C", "18013", "Granada", "Granada");
-// const direccion4 = new Direccion("hola", 12, "", "23790", "Jaén", "Porcuna");
+console.log("Listas de estudiantes y asignaturas creadas con éxito");
+const direccion1 = new Direccion("Calle Quero", 12, 1, "23790", "Jaén", "Porcuna");
+const direccion2 = new Direccion("Calle Huesa", 13, "", "23790", "Jaén", "Porcuna");
+const direccion3 = new Direccion("Calle Emilio Sebastián", 14, "1C", "18013", "Granada", "Granada");
+const direccion4 = new Direccion("hola", 12, "", "23790", "Jaén", "Porcuna");
 
-// /* Definir estudiantes */
-// const estudiante1 = new Estudiante("Mario Vaquerizo", 40, direccion1);
-// const estudiante2 = new Estudiante("Paula Mola", 20, direccion2);
-// const estudiante3 = new Estudiante("Federico Garcia", 50, direccion3);
-// const estudiante4 = new Estudiante("ana", 20, direccion4);
+/* Definir estudiantes */
+const estudiante1 = new Estudiante("Mario Vaquerizo", 40, direccion1);
+const estudiante2 = new Estudiante("Paula Mola", 20, direccion2);
+const estudiante3 = new Estudiante("Federico Garcia", 50, direccion3);
+const estudiante4 = new Estudiante("ana", 20, direccion4);
 
-// /* Agregar estudiantes a la lista usando addEstudiante */
-// listaEstu.addEstudiante(estudiante1);
-// listaEstu.addEstudiante(estudiante2);
-// listaEstu.addEstudiante(estudiante3);
-// listaEstu.addEstudiante(estudiante4);
+/* Agregar estudiantes a la lista usando addEstudiante */
+listaEstu.addEstudiante(estudiante1);
+listaEstu.addEstudiante(estudiante2);
+listaEstu.addEstudiante(estudiante3);
+listaEstu.addEstudiante(estudiante4);
 
-// /* Crear asignaturas */
-// const matematicas = new Asignatura("Matemáticas");
-// const historia = new Asignatura("Historia");
-// const artes = new Asignatura("Artes");
-// const tecnologia = new Asignatura("Tecnología");
-// const musica = new Asignatura("musica");
+/* Crear asignaturas */
+const matematicas = new Asignatura("Matemáticas");
+const historia = new Asignatura("Historia");
+const artes = new Asignatura("Artes");
+const tecnologia = new Asignatura("Tecnología");
+const musica = new Asignatura("musica");
 
-// /* Agregar asignaturas a la lista usando addAsignatura */
-// listaAsig.addAsignatura(matematicas);
-// listaAsig.addAsignatura(historia);
-// listaAsig.addAsignatura(artes);
-// listaAsig.addAsignatura(tecnologia);
-// listaAsig.addAsignatura(musica);
+/* Agregar asignaturas a la lista usando addAsignatura */
+listaAsig.addAsignatura(matematicas);
+listaAsig.addAsignatura(historia);
+listaAsig.addAsignatura(artes);
+listaAsig.addAsignatura(tecnologia);
+listaAsig.addAsignatura(musica);
 
-// /* Matricular estudiantes en asignaturas */
-// estudiante1.matricular(matematicas, historia, tecnologia);
-// estudiante2.matricular(matematicas, artes);
-// estudiante3.matricular(historia, artes, tecnologia);
-// estudiante4.matricular(musica, matematicas, historia, tecnologia);
+/* Matricular estudiantes en asignaturas */
+estudiante1.matricular(matematicas, historia, tecnologia);
+estudiante2.matricular(matematicas, artes);
+estudiante3.matricular(historia, artes, tecnologia);
+estudiante4.matricular(musica, matematicas, historia, tecnologia);
 
-// /* Asignar notas */
-// matematicas.calificar(estudiante1, 8.5);
-// matematicas.calificar(estudiante2, 9.0);
+/* Asignar notas */
+matematicas.calificar(estudiante1, 8.5);
+matematicas.calificar(estudiante2, 9.0);
 
-// historia.calificar(estudiante1, 7.5);
-// historia.calificar(estudiante3, 8.0);
+historia.calificar(estudiante1, 7.5);
+historia.calificar(estudiante3, 8.0);
 
-// artes.calificar(estudiante2, 9.5);
-// artes.calificar(estudiante3, 8.5);
+artes.calificar(estudiante2, 9.5);
+artes.calificar(estudiante3, 8.5);
 
-// tecnologia.calificar(estudiante1, 10.0);
-// tecnologia.calificar(estudiante3, 8.8);
+tecnologia.calificar(estudiante1, 10.0);
+tecnologia.calificar(estudiante3, 8.8);
 
-// prompt("Datos inicializados correctamente. Presiona Enter para continuar.");
+prompt("Datos inicializados correctamente. Presiona Enter para continuar.");
 
-// /* Eliminar estudiantes y asignaturas */
-// try {
-//     listaEstu.eliminarEstudiante(estudiante3);
-//     listaAsig.eliminarAsignatura(artes);
-//     prompt("Estudiantes y asignaturas eliminados con éxito");
-// } catch (error) {
-//     console.error(error.message);
-// }
+/* Eliminar estudiantes y asignaturas */
+try {
+    listaEstu.eliminarEstudiante(estudiante3);
+    listaAsig.eliminarAsignatura(artes);
+    prompt("Estudiantes y asignaturas eliminados con éxito");
+} catch (error) {
+    console.error(error.message);
+}
 
-// /*Matricular y desmatricular estudiantes de asignaturas */
-// try {
-//     estudiante2.matricular(historia);
-//     estudiante1.desmatricular(historia);
-// } catch (error) {
-//     console.error(error.message);
-// }
+/*Matricular y desmatricular estudiantes de asignaturas */
+try {
+    estudiante2.matricular(historia);
+    estudiante1.desmatricular(historia);
+} catch (error) {
+    console.error(error.message);
+}
 
-// /*Calificación de estudiantes en asignaturas con la funcion calificar de estudiante */
-// try {
-//     estudiante1.calificar(tecnologia, 7);
-//     estudiante3.calificar(tecnologia, 8);
-//     estudiante3.calificar(historia, 6);
-//     estudiante1.calificar(historia, 8);
-//     estudiante2.calificar(matematicas, 6);
-//     estudiante2.calificar(historia, 7);
-// } catch (error) {
-//     console.error(error.message);
-// }
+/*Calificación de estudiantes en asignaturas con la funcion calificar de estudiante */
+try {
+    estudiante1.calificar(tecnologia, 7);
+    estudiante3.calificar(tecnologia, 8);
+    estudiante3.calificar(historia, 6);
+    estudiante1.calificar(historia, 8);
+    estudiante2.calificar(matematicas, 6);
+    estudiante2.calificar(historia, 7);
+} catch (error) {
+    console.error(error.message);
+}
 
 
 // ************* INTERACCIÓN CON EL DOM ******************
@@ -651,7 +651,7 @@ document.addEventListener("DOMContentLoaded", () => {
         salida12.innerHTML += `<h3>Nombre del estudiante: ${estudiante.nombre}</h3>`;
         salida12.innerHTML += `<h4>Calificaciones:</h4>`;
         estudiante.asignaturas.forEach(asignatura => {
-            const nota = Number(asignatura.calcularPromedioEstudiante());
+            const nota = asignatura.calificacion; // Assuming 'calificacion' is the property that holds the grade
             salida12.innerHTML += `<p>${asignatura.nombre}: ${nota}</p>`;
         });
         salida12.innerHTML += `<h4>Promedio: ${estudiante.calcularPromedioEstudiante()}</h4>`;
