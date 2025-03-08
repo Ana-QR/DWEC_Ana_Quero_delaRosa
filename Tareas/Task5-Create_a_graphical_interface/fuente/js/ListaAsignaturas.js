@@ -40,16 +40,18 @@ export class ListaAsignaturas {
    * @param {Asignatura} asignatura - La asignatura a añadir
    */
     addAsignatura(asignatura) {
-        try {
-            if (this.#listadoAsignaturas.find(elemento => elemento.nombre.toLowerCase() === asignatura.nombre.toLowerCase())) {
-            throw new Error("Ya existe la asignatura");
-            }
-            this.#listadoAsignaturas.push(asignatura);
-            return true;
-        } catch (error) {
-            console.log(`Error: ${error.message}`);
+        if (!asignatura || !asignatura.nombre) {
+            console.error("Error: La asignatura debe tener un nombre válido.");
             return false;
         }
+
+        if (this.#listadoAsignaturas.some(elemento => elemento.nombre.toLowerCase() === asignatura.nombre.toLowerCase())) {
+            console.error("Error: Ya existe la asignatura");
+            return false;
+        }
+
+        this.#listadoAsignaturas.push(asignatura);
+        return true;
     }
 
     /**
@@ -60,10 +62,10 @@ export class ListaAsignaturas {
     eliminarAsignatura(asignatura) {
         // Comprueba si el nombre de la asignatura es una cadena de texto
         if (typeof asignatura.nombre !== "string") throw new Error("El nombre de la asignatura debe ser una cadena de texto");
-        
+
         // Encuentra la asignatura que coincide exactamente con el nombre
         const asignaturaEncontrada = this.#listadoAsignaturas.find(a => a.nombre.toLowerCase() === asignatura.nombre.toLowerCase());
-        
+
         // Comprueba si la asignatura está en la lista
         if (asignaturaEncontrada) {
             const index = this.#listadoAsignaturas.indexOf(asignaturaEncontrada);
@@ -82,13 +84,16 @@ export class ListaAsignaturas {
     buscarAsignaturas(patron) {
         if (typeof patron !== "string") throw new Error("El patrón debe ser una cadena de texto");
 
-        const asignaturaEncontrada = this.#listadoAsignaturas.find(function (asignatura) {
-            return asignatura.nombre.toLowerCase() == patron.toLowerCase();
-        });
-        if (!asignaturaEncontrada) {
-            throw new Error(`Asignatura(s) con el patrón '${patron}' no encontrada(s).`);
+        const asignaturasEncontradas = this.#listadoAsignaturas.filter(asignatura =>
+            asignatura.nombre.toLowerCase().includes(patron.toLowerCase())
+        );
+
+        if (asignaturasEncontradas.length === 0) {
+            console.warn(`No se encontraron asignaturas con el patrón '${patron}'.`);
+            return [];
         }
-        return asignaturaEncontrada;
+
+        return asignaturasEncontradas;
     }
 
     /**

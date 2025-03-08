@@ -22,75 +22,6 @@ import { ListaAsignaturas } from "./ListaAsignaturas.js";
 let listaEstu = new ListaEstudiantes();
 let listaAsig = new ListaAsignaturas();
 
-// Función para cargar los datos del LocalStorage
-function cargarDatosLocalStorage() {
-
-    //? Carga de datos de estudiantes
-    let estudiantesGuardados = localStorage.getItem("todosLosEstudiantes");
-    console.log(estudiantesGuardados);
-
-    if (estudiantesGuardados) {
-        estudiantesGuardados = estudiantesGuardados ? JSON.parse(estudiantesGuardados) : []; ///con json.parse convertimos el string en un objeto y asi llamamos a los valores
-
-        estudiantesGuardados.forEach(est => {
-            let nuevaDireccion = new Direccion(est.direccion.calle, est.direccion.numero, est.direccion.piso, est.direccion.cp, est.direccion.provincia, est.direccion.localidad);
-            let nuevoEstudiante = new Estudiante(est.nombre, est.edad, nuevaDireccion);
-            listaEstu.addEstudiante(nuevoEstudiante);
-        });
-    }
-
-    //? Carga de datos de asignaturas
-    let asignaturasGuardadas = localStorage.getItem("todasLasAsignaturas");
-    console.log(asignaturasGuardadas);
-
-
-
-    if (asignaturasGuardadas) {
-        asignaturasGuardadas = asignaturasGuardadas ? JSON.parse(asignaturasGuardadas) : []; ///con json.parse convertimos el string en un objeto y asi llamamos a los valores
-
-        asignaturasGuardadas.forEach(asig => {
-            let nuevaAsignatura = new Asignatura(asig.nombre);
-            listaAsig.addAsignatura(nuevaAsignatura);
-        });
-
-    }
-
-    //? Carga de datos de matriculaciones
-    let matriculacionesGuardadas = localStorage.getItem("matriculaciones");
-    console.log(matriculacionesGuardadas);
-
-    if (matriculacionesGuardadas) {
-        matriculacionesGuardadas = JSON.parse(matriculacionesGuardadas); // Convertimos el string en un objeto
-
-        for (let matriculacion of matriculacionesGuardadas) {
-            let estudiante = listaEstu.busquedaPorNombre(matriculacion.estudiante);
-            let asignatura = listaAsig.busquedaPorNombre(matriculacion.asignatura);
-            if (estudiante && asignatura) {
-                estudiante.matricular(asignatura);
-            }
-        }
-    }
-
-    //? Carga de datos de calificaciones
-    let calificacionesGuardadas = localStorage.getItem("calificaciones");
-    console.log(calificacionesGuardadas);
-
-    if (calificacionesGuardadas) {
-        calificacionesGuardadas = JSON.parse(calificacionesGuardadas); // Convertimos el string en un objeto
-
-        for (let calificacion of calificacionesGuardadas) {
-            let estudiante = listaEstu.busquedaPorNombre(calificacion.estudiante);
-            let asignatura = listaAsig.busquedaPorNombre(calificacion.asignatura);
-            if (estudiante && asignatura) {
-                estudiante.calificar(asignatura, calificacion.nota);
-            }
-        }
-    }
-}
-
-// Cargar los estudiantes y asignaturas al iniciar
-cargarDatosLocalStorage();
-
 
 console.log("Listas de estudiantes y asignaturas creadas con éxito");
 const direccion1 = new Direccion("Calle Quero", 12, 1, "23790", "Jaén", "Porcuna");
@@ -173,6 +104,75 @@ try {
 } catch (error) {
     console.error(error.message);
 }
+
+// Función para cargar los datos del LocalStorage
+function cargarDatosLocalStorage() {
+
+    //? Carga de datos de estudiantes
+    let estudiantesGuardados = localStorage.getItem("todosLosEstudiantes");
+    console.log(estudiantesGuardados);
+
+    if (estudiantesGuardados) {
+        estudiantesGuardados = estudiantesGuardados ? JSON.parse(estudiantesGuardados) : []; ///con json.parse convertimos el string en un objeto y asi llamamos a los valores
+
+        estudiantesGuardados.forEach(est => {
+            let nuevaDireccion = new Direccion(est.direccion.calle, est.direccion.numero, est.direccion.piso, est.direccion.cp, est.direccion.provincia, est.direccion.localidad);
+            let nuevoEstudiante = new Estudiante(est.nombre, est.edad, nuevaDireccion);
+            listaEstu.addEstudiante(nuevoEstudiante);
+        });
+    }
+
+    //? Carga de datos de asignaturas
+    let asignaturasGuardadas = localStorage.getItem("todasLasAsignaturas");
+    console.log(asignaturasGuardadas);
+
+
+
+    if (asignaturasGuardadas) {
+        asignaturasGuardadas = asignaturasGuardadas ? JSON.parse(asignaturasGuardadas) : []; ///con json.parse convertimos el string en un objeto y asi llamamos a los valores
+
+        asignaturasGuardadas.forEach(asig => {
+            let nuevaAsignatura = new Asignatura(asig.nombre);
+            listaAsig.addAsignatura(nuevaAsignatura);
+        });
+
+    }
+
+    //? Carga de datos de matriculaciones
+    let matriculacionesGuardadas = localStorage.getItem("matriculaciones");
+    console.log(matriculacionesGuardadas);
+
+    if (matriculacionesGuardadas) {
+        matriculacionesGuardadas = JSON.parse(matriculacionesGuardadas); // Convertimos el string en un objeto
+
+        for (let matriculacion of matriculacionesGuardadas) {
+            let estudiante = listaEstu.busquedaPorNombre(matriculacion.estudiante);
+            let asignatura = listaAsig.busquedaPorNombre(matriculacion.asignatura);
+            if (estudiante && asignatura) {
+                estudiante.matricular(asignatura);
+            }
+        }
+    }
+
+    //? Carga de datos de calificaciones
+    let calificacionesGuardadas = localStorage.getItem("calificaciones");
+    console.log(calificacionesGuardadas);
+
+    if (calificacionesGuardadas) {
+        calificacionesGuardadas = JSON.parse(calificacionesGuardadas); // Convertimos el string en un objeto
+
+        for (let calificacion of calificacionesGuardadas) {
+            let estudiante = listaEstu.busquedaPorNombre(calificacion.estudiante);
+            let asignatura = listaAsig.busquedaPorNombre(calificacion.asignatura);
+            if (estudiante && asignatura) {
+                estudiante.calificar(asignatura, calificacion.nota);
+            }
+        }
+    }
+}
+
+// Cargar los estudiantes y asignaturas al iniciar
+cargarDatosLocalStorage();
 
 
 // ************* INTERACCIÓN CON EL DOM ******************
@@ -434,6 +434,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Validar formulario antes de enviarlo
     document.getElementById("opcion7").querySelector("form").addEventListener("submit", function (e) {
+        e.preventDefault();
 
         const nombreEstudiante = document.getElementById("nombreEstudianteMatricular").value;
         const nombreAsignatura = document.getElementById("nombreAsignaturaMatricular").value;

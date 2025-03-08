@@ -92,7 +92,7 @@ export class ListaEstudiantes {
      * @throws {Error} Si el estudiante ya está en la lista.
      */
     addEstudiante(estudiante) {
-        if (this.#listadoEstudiantes.includes(estudiante)) {
+        if (this.#listadoEstudiantes.some(e => e.nombre.toLowerCase() === estudiante.nombre.toLowerCase())) {
             throw new Error("El estudiante ya se encuentra en la lista, no puede haber duplicados");
         } else {
             this.#listadoEstudiantes.push(estudiante);
@@ -125,11 +125,13 @@ export class ListaEstudiantes {
         }
 
         // Encuentra el estudiante que coincide exactamente con el patrón
-        const estudiante = this.#listadoEstudiantes.find(estudiante => estudiante.nombre.toLowerCase() === nombre.toLowerCase());
-        if (!estudiante) {
+        const estudiantesEncontrados = this.#listadoEstudiantes.filter(
+            estudiante => estudiante.nombre.toLowerCase() === nombre.toLowerCase()
+        );
+        if (estudiantesEncontrados.length === 0) {
             throw new Error(`No se encontró ningún estudiante con el nombre: ${nombre}`);
         }
-        return estudiante;
+        return estudiantesEncontrados;
     }
 
     /**
