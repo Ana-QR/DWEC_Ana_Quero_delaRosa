@@ -5,53 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galería de Gatos - JS</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="./js/index.js"></script>
 </head>
 <body class="bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-400 text-center font-sans">
     <header class="bg-gradient-to-r from-indigo-600 to-purple-700 p-6 text-white font-bold shadow-lg">
         <h1 class="text-3xl sm:text-4xl font-extrabold">Galería de Gatos (JavaScript)</h1>
-        <p class="mt-2 text-lg sm:text-xl">Descubre increíbles gatos. <a href="jquery.html" class="underline text-yellow-300 hover:text-yellow-500 transition duration-200">Ver versión en jQuery</a></p>
+        <p class="mt-2 text-lg sm:text-xl">
+            Descubre increíbles gatos. 
+            <a href="jquery.html" class="underline text-yellow-300 hover:text-yellow-500 transition duration-200">
+                Ver versión en jQuery
+            </a>
+        </p>
     </header>
     <main class="p-6 sm:p-8 md:p-12">
-        <div id="cat-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+        <section id="cat-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
             <!-- Las imágenes de los gatos se cargarán aquí dinámicamente -->
-        </div>
+        </section>
     </main>
-    <footer class="bg-gradient-to-r from-indigo-600 to-purple-700 p-6 text-white mt-4 shadow-lg">
-        <p class="text-center">&copy; 2025 Cat API | Todos los derechos reservados</p>
-    </footer>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const container = document.getElementById('cat-container');
-            async function fetchCats() {
-                try {
-                    let response = await fetch('https://api.thecatapi.com/v1/images/search?limit=10');
-                    let data = await response.json();
-                    data.forEach(cat => {
-                        let card = document.createElement('div');
-                        card.className = 'bg-white p-6 rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out transform hover:shadow-2xl';
-                        card.innerHTML = `
-                            <img src="${cat.url}" alt="Cat" class="w-full h-auto rounded-lg shadow-md mb-4">
-                            <h2 class="text-xl font-semibold mt-2 text-gray-800">Imagen de gato</h2>
-                            <p class="text-gray-600 text-sm">ID: ${cat.id}</p>
-                            <p class="text-gray-600 text-sm">Width: ${cat.width}px</p>
-                            <p class="text-gray-600 text-sm">Height: ${cat.height}px</p>
-                            <a href="${cat.url}" target="_blank" class="text-blue-500 underline mt-4 block text-sm hover:text-blue-700">Ver imagen al completo</a>
-                        `;
-                        container.appendChild(card);
-                    });
-                } catch (error) {
-                    console.error('Error fetching cat images:', error);
-                }
-            }
-            fetchCats();
+    
 
-            // Infinite Scroll
-            window.addEventListener('scroll', () => {
-                if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50) {
-                    fetchCats();
-                }
-            });
-        });
-    </script>
+<footer class="bg-white rounded-lg shadow-sm m-4 dark:bg-gray-800">
+    <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+      <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="https://flowbite.com/" class="hover:underline">Flowbite™</a>. All Rights Reserved.
+    </span>
+    <ul class="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
+        <li>
+            <a href="#" class="hover:underline me-4 md:me-6">About</a>
+        </li>
+        <li>
+            <a href="#" class="hover:underline me-4 md:me-6">Privacy Policy</a>
+        </li>
+        <li>
+            <a href="#" class="hover:underline me-4 md:me-6">Licensing</a>
+        </li>
+        <li>
+            <a href="#" class="hover:underline">Contact</a>
+        </li>
+    </ul>
+    </div>
+</footer>
+
+<script src="../path/to/flowbite/dist/flowbite.min.js"></script>
 </body>
 </html>

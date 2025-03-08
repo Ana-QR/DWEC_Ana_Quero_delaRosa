@@ -6,61 +6,45 @@
     <title>Galería de Gatos - jQuery</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script defer src="./js/jquery.js"></script>
 </head>
 <body class="bg-gradient-to-r from-teal-400 via-blue-500 to-indigo-600 text-center font-sans">
     <header class="bg-gradient-to-r from-blue-700 to-teal-600 p-6 text-white font-semibold shadow-xl">
         <h1 class="text-4xl sm:text-5xl font-extrabold">Galería de Gatos (jQuery)</h1>
-        <p class="mt-2 text-lg sm:text-xl">Descubre increíbles gatos. <a href="index.html" class="underline text-yellow-300 hover:text-yellow-500 transition duration-200">Ver versión en JavaScript</a></p>
+        <p class="mt-2 text-lg sm:text-xl">Descubre increíbles gatos. 
+            <a href="index.html" class="underline text-yellow-300 hover:text-yellow-500 transition duration-200">
+                Ver versión en JavaScript
+            </a>
+        </p>
     </header>
 
     <main class="p-6 sm:p-8 md:p-12">
-        <div id="cat-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+        <section id="cat-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
             <!-- Las imágenes de los gatos se cargarán aquí dinámicamente -->
-        </div>
+        </section>
     </main>
 
-    <footer class="bg-gradient-to-r from-blue-700 to-teal-600 p-6 text-white mt-4 shadow-xl">
-        <p class="text-center text-lg sm:text-xl">&copy; 2025 Cat API | Todos los derechos reservados</p>
+    <footer class="bg-white rounded-lg shadow-sm m-4 dark:bg-gray-800">
+        <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+          <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="https://flowbite.com/" class="hover:underline">Flowbite™</a>. All Rights Reserved.
+        </span>
+        <ul class="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
+            <li>
+                <a href="#" class="hover:underline me-4 md:me-6">About</a>
+            </li>
+            <li>
+                <a href="#" class="hover:underline me-4 md:me-6">Privacy Policy</a>
+            </li>
+            <li>
+                <a href="#" class="hover:underline me-4 md:me-6">Licensing</a>
+            </li>
+            <li>
+                <a href="#" class="hover:underline">Contact</a>
+            </li>
+        </ul>
+        </div>
     </footer>
 
-    <script>
-        $(document).ready(function() {
-            const container = $('#cat-container');
-            let currentPage = 1;
-
-            function fetchCats() {
-                $.ajax({
-                    url: `https://api.thecatapi.com/v1/images/search?limit=10&page=${currentPage}`,
-                    method: 'GET',
-                    success: function(data) {
-                        data.forEach(cat => {
-                            let card = `<div class='bg-white p-6 rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out transform hover:shadow-2xl'>
-                                            <img src='${cat.url}' alt='Cat' class='w-full h-auto rounded-lg shadow-md mb-4'>
-                                            <h2 class='text-xl font-semibold mt-2 text-gray-800'>Imagen de gato</h2>
-                                            <p class='text-gray-600 text-sm'>ID: ${cat.id}</p>
-                                            <p class='text-gray-600 text-sm'>Width: ${cat.width}px</p>
-                                            <p class='text-gray-600 text-sm'>Height: ${cat.height}px</p>
-                                            <a href='${cat.url}' target='_blank' class='text-blue-500 underline mt-4 block text-sm hover:text-blue-700'>Ver imagen al completo</a>
-                                        </div>`;
-                            container.append(card);
-                        });
-                        currentPage++;  // Incrementamos la página para la próxima carga de imágenes
-                    },
-                    error: function(error) {
-                        console.error('Error fetching cat images:', error);
-                    }
-                });
-            }
-
-            fetchCats();  // Cargar imágenes inicialmente
-
-            // Infinite Scroll
-            $(window).on('scroll', function() {
-                if ($(window).scrollTop() + $(window).height() >= $(document).height() - 50) {
-                    fetchCats();  // Cargar más imágenes cuando se llegue al final de la página
-                }
-            });
-        });
-    </script>
+    <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
 </body>
 </html>
