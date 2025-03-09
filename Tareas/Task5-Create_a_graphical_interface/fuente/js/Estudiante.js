@@ -26,6 +26,8 @@
  */
 import { Persona } from "./Persona.js";
 import { Direccion } from "./Direccion.js";
+import { Asignatura } from "./Asignatura.js";
+import { guardarMatriculacionesEnLocalStorage, guardarCalificacionesEnLocalStorage} from "./script.js";
 
 export class Estudiante extends Persona {
     /**
@@ -51,7 +53,7 @@ export class Estudiante extends Persona {
      * @type {number}
      */
     static contadorId = 0;
-    
+
     /**
      * Constructor de la clase Estudiante.
      * @param {string} nombre - Nombre del estudiante.
@@ -83,80 +85,101 @@ export class Estudiante extends Persona {
     }
 
     /**
-     * Matricula al estudiante en una o más asignaturas.
-     * @param {...Object} asignaturas - Lista de asignaturas a matricular.
-     */
-    matricular(...asignaturas) {
-        for (let asignatura of asignaturas) {
-            this.#asignaturas.push(asignatura);
-            this.#relacion.push([`Matriculación de ${asignatura.nombre}`, new Date()]);
-        }
+ * Matricula al estudiante en una asignatura y guarda en localStorage.
+ * @param {Asignatura} asignatura - Asignatura a matricular.
+ */
+matricular(asignatura) {
+    if (!asignatura || !(asignatura instanceof Asignatura)) {
+        throw new Error("Debe proporcionarse una asignatura válida.");
     }
 
-    /**
-     * Desmatricula al estudiante de una o más asignaturas.
-     * @param {...Object} asignaturas - Lista de asignaturas a desmatricular.
-     */
-    desmatricular(...asignaturas) {
-        for (let asignatura of asignaturas) {
-            this.#asignaturas = this.#asignaturas.filter(a => a.nombre !== asignatura.nombre);
-            this.#relacion.push([`Desmatriculación de ${asignatura.nombre}`, new Date()]);
-        }
+    if (this.#asignaturas.some(a => a.nombre.toLowerCase() === asignatura.nombre.toLowerCase())) {
+        throw new Error(`El estudiante ya está matriculado en ${asignatura.nombre}`);
     }
 
-    /**
-     * Añade una calificación a una asignatura.
-     * @param {Object} asignatura - Asignatura a calificar.
-     * @param {number} calificacion - Calificación entre 0 y 10.
-     * @throws {Error} Si la calificación no está entre 0 y 10.
-     */
-    calificar(asignatura, calificacion) {
-        if (arguments.length === 1) {
-            throw new Error("Faltan datos para calificar al estudiante");
-        }
-        const asignaturaMatriculada = this.#asignaturas.find(a => a.nombre === asignatura.nombre);
-        if (!asignaturaMatriculada) {
-            alert(`El estudiante no está matriculado en ${asignatura.nombre}`); 
-            return;
-        }
-        if (calificacion < 0 || calificacion > 10) {
-            throw new Error("La calificación debe estar entre 0 y 10.");
-        }
-        asignaturaMatriculada.calificaciones.push(calificacion);
-        this.#relacion.push([`Calificación añadida a ${asignatura.nombre}`, new Date()]);
-    }
+    this.#asignaturas.push(asignatura);
+    console.log(`Matriculado en: ${asignatura.nombre}`);
+
+    // Guardar en localStorage
+    guardarMatriculacionesEnLocalStorage();
+}
+
+
 
     /**
-     * Calcula el promedio de las calificaciones del estudiante.
-     * @returns {number|string} Promedio de calificaciones o mensaje si no hay calificaciones.
-     */
+ * Desmatricula al estudiante de una asignatura y actualiza localStorage.
+ * @param {Asignatura} asignatura - Asignatura de la que se va a desmatricular.
+ */
+desmatricular(asignatura) {
+    if (!asignatura || !(asignatura instanceof Asignatura)) {
+        throw new Error("Debe proporcionarse una asignatura válida.");
+    }
+
+    const index = this.#asignaturas.findIndex(a => a.nombre.toLowerCase() === asignatura.nombre.toLowerCase());
+
+    if (index !== -1) {
+        this.#asignaturas.splice(index, 1);
+        console.log(`Desmatriculado de: ${asignatura.nombre}`);
+
+        // Guardar en localStorage
+        guardarMatriculacionesEnLocalStorage();
+    } else {
+        throw new Error(`El estudiante no está matriculado en ${asignatura.nombre}`);
+    }
+}
+
+
+
+    /**
+ * Añade una calificación a una asignatura y actualiza LocalStorage.
+ * @param {Asignatura} asignatura - Asignatura a calificar.
+ * @param {number|string} calificacion - Calificación entre 0 y 10.
+ */
+calificar(asignatura, calificacion) {
+    // Convertir la calificación a número
+    const nota = Number(calificacion);
+
+    if (!this.#asignaturas.some(a => a.nombre.toLowerCase() === asignatura.nombre.toLowerCase())) {
+        throw new Error(`El estudiante no está matriculado en ${asignatura.nombre}`);
+    }
+
+    if (isNaN(nota) || nota < 0 || nota > 10) {
+        throw new Error("La calificación debe ser un número entre 0 y 10.");
+    }
+
+    let asignaturaMatriculada = this.#asignaturas.find(a => a.nombre.toLowerCase() === asignatura.nombre.toLowerCase());
+    if (!asignaturaMatriculada.calificaciones) {
+        asignaturaMatriculada.calificaciones = [];
+    }
+
+    asignaturaMatriculada.calificaciones.push(nota);
+    console.log(`Calificación de ${nota} añadida a ${asignatura.nombre}`);
+
+    // Guardar en LocalStorage
+    guardarCalificacionesEnLocalStorage();
+}
+
+
+
+
+    /**
+ * Calcula el promedio de las calificaciones del estudiante.
+ * @returns {number} Promedio de calificaciones o 0 si no hay calificaciones.
+ */
     calcularPromedioEstudiante() {
-        let sum = 0;
-        let contador = 0;
+        let totalNotas = 0;
+        let totalCalificaciones = 0;
 
         for (let asignatura of this.#asignaturas) {
-            console.log("Asignatura:", asignatura);
-
-            if (Array.isArray(asignatura.calificaciones)) {  // Aseguramos que sea un array
-                for (let calificacion of asignatura.calificaciones) {
-                    console.log("Calificación encontrada:", calificacion, "Tipo:", typeof calificacion);
-
-                    if (typeof calificacion === "number" && !isNaN(calificacion)) {
-                        sum += calificacion;
-                        contador++;
-                    } else {
-                        console.log("Calificación inválida (descartada):", calificacion);
-                    }
-                }
-            } else {
-                console.log("asignatura.calificaciones no es un array:", asignatura.calificaciones);
+            if (Array.isArray(asignatura.calificaciones)) {
+                totalNotas += asignatura.calificaciones.reduce((sum, nota) => sum + nota, 0);
+                totalCalificaciones += asignatura.calificaciones.length;
             }
         }
 
-        console.log(`Suma final: ${sum}, Contador final: ${contador}`);
-        let media = sum / contador;
-        return contador === 0 ? 0 : Number(media.toFixed(2));
+        return totalCalificaciones === 0 ? 0 : Number((totalNotas / totalCalificaciones).toFixed(2));
     }
+
 
     /**
      * Devuelve el historial de acciones del estudiante.

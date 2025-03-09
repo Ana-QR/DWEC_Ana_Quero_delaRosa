@@ -108,51 +108,37 @@ let listaAsig = new ListaAsignaturas();
 // Función para cargar los datos del LocalStorage
 function cargarDatosLocalStorage() {
 
-    //? Carga de datos de estudiantes
-    let estudiantesGuardados = localStorage.getItem("todosLosEstudiantes");
-    console.log(estudiantesGuardados);
 
-    if (estudiantesGuardados) {
-        estudiantesGuardados = estudiantesGuardados ? JSON.parse(estudiantesGuardados) : []; ///con json.parse convertimos el string en un objeto y asi llamamos a los valores
+    // Cargar estudiantes
+    let estudiantesGuardados = JSON.parse(localStorage.getItem("todosLosEstudiantes")) || [];
+    listaEstu = new ListaEstudiantes(); // Reiniciar lista
 
-        estudiantesGuardados.forEach(est => {
-            let nuevaDireccion = new Direccion(est.direccion.calle, est.direccion.numero, est.direccion.piso, est.direccion.cp, est.direccion.provincia, est.direccion.localidad);
-            let nuevoEstudiante = new Estudiante(est.nombre, est.edad, nuevaDireccion);
-            listaEstu.addEstudiante(nuevoEstudiante);
-        });
-    }
+    estudiantesGuardados.forEach(est => {
+        let nuevaDireccion = new Direccion(est.direccion.calle, est.direccion.numero, est.direccion.piso, est.direccion.cp, est.direccion.provincia, est.direccion.localidad);
+        let nuevoEstudiante = new Estudiante(est.nombre, est.edad, nuevaDireccion);
+        listaEstu.addEstudiante(nuevoEstudiante);
+    });
 
-    //? Carga de datos de asignaturas
-    let asignaturasGuardadas = localStorage.getItem("todasLasAsignaturas");
-    console.log(asignaturasGuardadas);
+    // Cargar asignaturas
+    let asignaturasGuardadas = JSON.parse(localStorage.getItem("todasLasAsignaturas")) || [];
+    listaAsig = new ListaAsignaturas(); // Reiniciar lista
 
+    asignaturasGuardadas.forEach(asig => {
+        let nuevaAsignatura = new Asignatura(asig.nombre);
+        listaAsig.addAsignatura(nuevaAsignatura);
+    });
 
-
-    if (asignaturasGuardadas) {
-        asignaturasGuardadas = asignaturasGuardadas ? JSON.parse(asignaturasGuardadas) : []; ///con json.parse convertimos el string en un objeto y asi llamamos a los valores
-
-        asignaturasGuardadas.forEach(asig => {
-            let nuevaAsignatura = new Asignatura(asig.nombre);
-            listaAsig.addAsignatura(nuevaAsignatura);
-        });
-
-    }
-
-    //? Carga de datos de matriculaciones
-    let matriculacionesGuardadas = localStorage.getItem("matriculaciones");
-    console.log(matriculacionesGuardadas);
-
-    if (matriculacionesGuardadas) {
-        matriculacionesGuardadas = JSON.parse(matriculacionesGuardadas); // Convertimos el string en un objeto
-
-        for (let matriculacion of matriculacionesGuardadas) {
-            let estudiante = listaEstu.busquedaPorNombre(matriculacion.estudiante);
-            let asignatura = listaAsig.busquedaPorNombre(matriculacion.asignatura);
-            if (estudiante && asignatura) {
-                estudiante.matricular(asignatura);
-            }
+    // Cargar matriculaciones
+    let matriculacionesGuardadas = JSON.parse(localStorage.getItem("matriculaciones")) || [];
+    matriculacionesGuardadas.forEach(matricula => {
+        let estudiante = listaEstu.busquedaPorNombre(matricula.estudiante);
+        let asignatura = listaAsig.busquedaPorNombre(matricula.asignatura);
+        if (estudiante && asignatura) {
+            estudiante.matricular(asignatura);
         }
-    }
+    });
+
+
 
     //? Carga de datos de calificaciones
     let calificacionesGuardadas = localStorage.getItem("calificaciones");
@@ -173,6 +159,121 @@ function cargarDatosLocalStorage() {
 
 // Cargar los estudiantes y asignaturas al iniciar
 cargarDatosLocalStorage();
+
+/**
+ * Guarda la lista de estudiantes en localStorage
+ */
+export function guardarEstudiantesEnLocalStorage() {
+    if (!listaEstu || !listaEstu.listadoEstudiantes) {
+        console.error("Error: La lista de estudiantes no está definida.");
+        return;
+    }
+
+    const estudiantesArray = listaEstu.listadoEstudiantes.map(estudiante => ({
+        nombre: estudiante.nombre,
+        edad: estudiante.edad,
+        direccion: {
+            calle: estudiante.direccion.calle,
+            numero: estudiante.direccion.numero,
+            piso: estudiante.direccion.piso,
+            cp: estudiante.direccion.cp,
+            provincia: estudiante.direccion.provincia,
+            localidad: estudiante.direccion.localidad
+        }
+    }));
+
+    localStorage.setItem("todosLosEstudiantes", JSON.stringify(estudiantesArray));
+    console.log("Estudiantes guardados en localStorage:", estudiantesArray);
+}
+
+
+
+/**
+ * Guarda la lista de asignaturas en localStorage
+ */
+export function guardarAsignaturasEnLocalStorage() {
+    const asignaturasArray = listaAsig.listadoAsignaturas.map(asignatura => ({
+        nombre: asignatura.nombre
+    }));
+
+    localStorage.setItem("todasLasAsignaturas", JSON.stringify(asignaturasArray));
+}
+
+/**
+ * Guarda la lista de matriculaciones en localStorage
+ */
+export function guardarMatriculacionesEnLocalStorage() {
+    const matriculaciones = [];
+    listaEstu.listadoEstudiantes.forEach(estudiante => {
+        estudiante.asignaturas.forEach(asignatura => {
+            matriculaciones.push({
+                estudiante: estudiante.nombre,
+                asignatura: asignatura.nombre
+            });
+        });
+    });
+
+    localStorage.setItem("matriculaciones", JSON.stringify(matriculaciones));
+}
+
+
+/**
+ * Guarda las calificaciones de los estudiantes en localStorage
+ */
+export function guardarCalificacionesEnLocalStorage() {
+    const calificaciones = [];
+
+    listaEstu.listadoEstudiantes.forEach(estudiante => {
+        estudiante.asignaturas.forEach(asignatura => {
+            if (Array.isArray(asignatura.calificaciones) && asignatura.calificaciones.length > 0) {
+                asignatura.calificaciones.forEach(nota => {
+                    calificaciones.push({
+                        estudiante: estudiante.nombre,
+                        asignatura: asignatura.nombre,
+                        nota: nota
+                    });
+                });
+            }
+        });
+    });
+
+    localStorage.setItem("calificaciones", JSON.stringify(calificaciones));
+}
+
+/**
+ * Actualiza la lista de estudiantes en la interfaz.
+ */
+export function actualizarListaEstudiantesUI() {
+    const salida2 = document.getElementById("salida2");
+    salida2.innerHTML = "";
+
+    const estudiantes = JSON.parse(localStorage.getItem("todosLosEstudiantes")) || [];
+    estudiantes.forEach(estudiante => {
+        salida2.innerHTML += `<li>${estudiante.nombre}</li>`;
+    });
+}
+
+/**
+ * Actualiza la lista de asignaturas en la interfaz.
+ */
+export function actualizarListaAsignaturasUI() {
+    const salidaAsignaturas = document.getElementById("salida5");
+    if (!salidaAsignaturas) {
+        console.error("Error: No se encontró el elemento 'salida5' en el DOM.");
+        return;
+    }
+
+    // Obtener datos del LocalStorage
+    if (localStorage.getItem("todasLasAsignaturas") !== null) {
+        const datos = JSON.parse(localStorage.getItem("todasLasAsignaturas"));
+
+        // Mostrar las asignaturas en el HTML
+        salidaAsignaturas.innerHTML = "";
+        datos.forEach(asignatura => {
+            salidaAsignaturas.innerHTML += `<li style="color: black;">${asignatura.nombre}</li>`;
+        });
+    }
+}
 
 
 // ************* INTERACCIÓN CON EL DOM ******************
@@ -228,21 +329,8 @@ document.addEventListener("DOMContentLoaded", () => { // DOMContentLoaded se uti
             alert(error.message);
         }
 
-        const estudiantesArray = listaEstu.listadoEstudiantes.map(estudiante => ({
-            nombre: estudiante.nombre,
-            edad: estudiante.edad,
-            direccion: {
-                calle: estudiante.direccion.calle,
-                numero: estudiante.direccion.numero,
-                piso: estudiante.direccion.piso,
-                cp: estudiante.direccion.cp,
-                provincia: estudiante.direccion.provincia,
-                localidad: estudiante.direccion.localidad
-            }
-        }));
-
         // Guardar en LocalStorage
-        localStorage.setItem("todosLosEstudiantes", JSON.stringify(estudiantesArray));
+        guardarEstudiantesEnLocalStorage();
     });
 });
 
@@ -271,7 +359,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("opcion2").querySelector("form").addEventListener("submit", function (e) {
         e.preventDefault();
 
-        const nombreEstudiante = document.getElementById("nombreEliminar").value;
+        const nombreEstudiante = document.getElementById("nombreEliminar").value.trim(); // Asegurar que no hay espacios extras
 
         if (!nombreEstudiante) {
             alert("Por favor, introduce el nombre del estudiante a eliminar.");
@@ -281,26 +369,17 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             listaEstu.eliminarEstudiante(nombreEstudiante);
             alert("Estudiante eliminado con éxito");
+
+            // Guardar en LocalStorage
+            guardarEstudiantesEnLocalStorage();
+
+            // Refrescar la lista en la UI
+            actualizarListaEstudiantesUI();
         } catch (error) {
             alert(error.message);
         }
-
-        const estudiantesArray = listaEstu.listadoEstudiantes.map(estudiante => ({
-            nombre: estudiante.nombre,
-            edad: estudiante.edad,
-            direccion: {
-                calle: estudiante.direccion.calle,
-                numero: estudiante.direccion.numero,
-                piso: estudiante.direccion.piso,
-                cp: estudiante.direccion.cp,
-                provincia: estudiante.direccion.provincia,
-                localidad: estudiante.direccion.localidad
-            }
-        }));
-
-        // Eliminar del LocalStorage
-        localStorage.setItem("todosLosEstudiantes", JSON.stringify(estudiantesArray));
     });
+
 
     // Obtener datos del LocalStorage
     if (localStorage.getItem("todosLosEstudiantes") !== null) {
@@ -308,7 +387,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Mostrar los estudiantes en el HTML
         salida2.innerHTML = "";
         datos.forEach(estudiante => {
-            salida2.innerHTML += `<li style="color: white;">${estudiante.nombre}</li>`;
+            salida2.innerHTML += `<li style="color: black;">${estudiante.nombre}</li>`;
         });
     }
 });
@@ -348,12 +427,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (asignaturaAñadida) {
             alert("Asignatura añadida con éxito");
 
-            const asignaturasArray = listaAsig.listadoAsignaturas.map(asignatura => ({
-                nombre: asignatura.nombre
-            }));
-
             // Guardar en LocalStorage
-            localStorage.setItem("todasLasAsignaturas", JSON.stringify(asignaturasArray));
+            guardarAsignaturasEnLocalStorage();
         } else {
             alert("La asignatura ya existe");
         }
@@ -387,17 +462,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
             listaAsig.eliminarAsignatura(nombreAsignatura);
+
+            // Guardar en LocalStorage
+            guardarAsignaturasEnLocalStorage();
+
+            // Refrescar la lista en la UI
+            actualizarListaAsignaturasUI();
+
             alert("Asignatura eliminada con éxito");
         } catch (error) {
             alert(error.message);
         }
-
-        const asignaturasArray = listaAsig.listadoAsignaturas.map(asignatura => ({
-            nombre: asignatura.nombre
-        }));
-        
-        // Eliminar del LocalStorage
-        localStorage.setItem("todasLasAsignaturas", JSON.stringify(asignaturasArray));
     });
 
     // Mostrar las asignaturas en el HTML
@@ -439,19 +514,25 @@ document.addEventListener("DOMContentLoaded", () => {
         const nombreEstudiante = document.getElementById("nombreEstudianteMatricular").value;
         const nombreAsignatura = document.getElementById("nombreAsignaturaMatricular").value;
 
+        if (!nombreEstudiante || !nombreAsignatura) {
+            alert("Por favor, introduce el nombre del estudiante y la asignatura.");
+            return;
+        }
+
         const estudiante = listaEstu.busquedaPorNombre(nombreEstudiante);
         const asignatura = listaAsig.busquedaPorNombre(nombreAsignatura);
 
-        if (estudiante && asignatura) {
-            estudiante.matricular(asignatura);
-            alert("Estudiante matriculado con éxito");
+        if (!estudiante || !asignatura) {
+            alert("No se encontró el estudiante o la asignatura especificada.");
+            return;
+        }
 
-            // Guardar en LocalStorage
-            const matriculaciones = JSON.parse(localStorage.getItem("matriculaciones")) || [];
-            matriculaciones.push({ estudiante: nombreEstudiante, asignatura: nombreAsignatura });
-            localStorage.setItem("matriculaciones", JSON.stringify(matriculaciones));
-        } else {
-            alert("No se encontró el estudiante o la asignatura especificada");
+        try {
+            estudiante.matricular(asignatura);
+            guardarMatriculacionesEnLocalStorage();
+            alert("Estudiante matriculado con éxito");
+        } catch (error) {
+            alert(error.message);
         }
     });
 
@@ -484,22 +565,25 @@ document.addEventListener("DOMContentLoaded", () => {
         const nombreEstudiante = document.getElementById("nombreEstudianteDesmatricular").value;
         const nombreAsignatura = document.getElementById("nombreAsignaturaDesmatricular").value;
 
+        if (!nombreEstudiante || !nombreAsignatura) {
+            alert("Por favor, introduce el nombre del estudiante y la asignatura.");
+            return;
+        }
+
         const estudiante = listaEstu.busquedaPorNombre(nombreEstudiante);
         const asignatura = listaAsig.busquedaPorNombre(nombreAsignatura);
 
-        if (estudiante && asignatura) {
-            estudiante.desmatricular(asignatura);
-            alert("Estudiante desmatriculado con éxito");
+        if (!estudiante || !asignatura) {
+            alert("No se encontró el estudiante o la asignatura especificada.");
+            return;
+        }
 
-            //Eliminar del LocalStorage
-            const matriculaciones = JSON.parse(localStorage.getItem("matriculaciones")) || [];
-            const index = matriculaciones.findIndex(matriculacion => matriculacion.estudiante === nombreEstudiante && matriculacion.asignatura === nombreAsignatura);
-            if (index !== -1){
-                matriculaciones.splice(index, 1);
-                localStorage.setItem("matriculaciones", JSON.stringify(matriculaciones));
-            }
-        }else{
-            alert("No se encontró el estudiante o la asignatura especificada o el estudiante no está matriculado en la asignatura");
+        try {
+            estudiante.desmatricular(asignatura);
+            guardarMatriculacionesEnLocalStorage();
+            alert("Estudiante desmatriculado con éxito");
+        } catch (error) {
+            alert(error.message);
         }
 
         // Obtener datos del LocalStorage
@@ -543,23 +627,31 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Validar formulario antes de enviarlo
-    document.getElementById("opcion9").querySelector("form").addEventListener("submit", function () {
+    document.getElementById("opcion9").querySelector("form").addEventListener("submit", function (e) {
+        e.preventDefault();
         const nombreEstudiante = document.getElementById("nombreEstudianteCal").value;
         const nombreAsignatura = document.getElementById("nombreAsignaturaCal").value;
         const nota = document.getElementById("nota").value;
 
+        if (!nombreEstudiante || !nombreAsignatura || isNaN(nota)) {
+            alert("Por favor, introduce un nombre de estudiante, asignatura y una nota válida.");
+            return;
+        }
+
         const estudiante = listaEstu.busquedaPorNombre(nombreEstudiante);
         const asignatura = listaAsig.busquedaPorNombre(nombreAsignatura);
 
-        if (estudiante && asignatura){
-            estudiante.calificar(asignatura, nota)? alert("Calificación añadida con éxito"): alert("El estudiante no está matriculado en la asignatura");
+        if (!estudiante || !asignatura) {
+            alert("No se encontró el estudiante o la asignatura especificada.");
+            return;
+        }
 
-            // Guardar en LocalStorage
-            const calificaciones = JSON.parse(localStorage.getItem("calificaciones")) || [];
-            calificaciones.push({ estudiante: nombreEstudiante, asignatura: nombreAsignatura, nota: nota });
-            localStorage.setItem("calificaciones", JSON.stringify(calificaciones));
-        }else{
-            alert("No se encontró el estudiante o la asignatura especificada o el estudiante no está matriculado en la asignatura");
+        try {
+            estudiante.calificar(asignatura, nota);
+            guardarCalificacionesEnLocalStorage();
+            alert(`Calificación de ${nota} añadida con éxito`);
+        } catch (error) {
+            alert(error.message);
         }
     });
 
@@ -651,11 +743,19 @@ document.addEventListener("DOMContentLoaded", () => {
     listaEstu.listadoEstudiantes.forEach(estudiante => {
         salida12.innerHTML += `<h3>Nombre del estudiante: ${estudiante.nombre}</h3>`;
         salida12.innerHTML += `<h4>Calificaciones:</h4>`;
+
         estudiante.asignaturas.forEach(asignatura => {
-            const nota = asignatura.calificacion; // Assuming 'calificacion' is the property that holds the grade
-            salida12.innerHTML += `<p>${asignatura.nombre}: ${nota}</p>`;
+            // Si la asignatura tiene calificaciones, mostrarlas
+            if (Array.isArray(asignatura.calificaciones) && asignatura.calificaciones.length > 0) {
+                const notas = asignatura.calificaciones.join(", "); // Mostrar todas las notas
+                salida12.innerHTML += `<p>${asignatura.nombre}: ${notas}</p>`;
+            } else {
+                salida12.innerHTML += `<p>${asignatura.nombre}: No hay calificaciones registradas</p>`;
+            }
         });
+
         salida12.innerHTML += `<h4>Promedio: ${estudiante.calcularPromedioEstudiante()}</h4>`;
         salida12.innerHTML += "<hr>";
     });
+
 });

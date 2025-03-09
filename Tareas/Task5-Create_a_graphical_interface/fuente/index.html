@@ -26,7 +26,7 @@
             <article id="opcion1">
                 <h3>Añadir Estudiante</h3>
 
-                <form action="#" method="get">
+                <form action="#" method="post">
                     <label for="nombre">Nombre: </label>
                     <input type="text" id="nombre" required><br>
 
@@ -63,7 +63,7 @@
             <article id="opcion2">
                 <h3>Eliminar estudiante</h3>
                 <br>
-                <form action="#" method="get">
+                <form action="#" method="post">
                     <label for="nombreEliminar">Nombre del estudiante a eliminar: </label>
                     <input type="text" name="nombreEliminar" id="nombreEliminar" required><br>
                     <button id="submit2" type="submit">Eliminar Estudiante</button>
@@ -76,11 +76,12 @@
             <button id="bot4">Añadir asignatura</button>
             <article id="opcion4">
                 <h3>Añadir Asignatura</h3>
-                <form action="#" method="get">
+                <form action="#" method="post">
                     <label for="nombreAsignatura">Nombre de la asignatura: </label>
                     <input type="text" name="nombreAsignatura" id="nombreAsignatura" required><br>
                     <button id="submit4" type="submit">Añadir Asignatura</button>
                 </form>
+                <article id="salida4"></article>
             </article>
         </section>
 
@@ -88,12 +89,14 @@
             <button id="bot5">Eliminar asignatura</button>
             <article id="opcion5">
                 <h3>Eliminar asignatura</h3>
-                <form action="#" method="get">
+                <form action="#" method="post">
                     <label for="nombreEliminarAsignatura">Nombre de la asignatura a eliminar: </label>
                     <input type="text" name="nombreEliminarAsignatura" id="nombreEliminarAsignatura" required><br>
                     <button id="submit5" type="submit">Eliminar Asignatura</button>
                 </form>
-                <article id="salida5"></article>
+                <article id="salida5">
+                    <ul id="listaAsignaturas"></ul>
+                </article>
             </article>
         </section>
 
@@ -101,13 +104,14 @@
             <button id="bot7">Matricular estudiante en asignatura</button>
             <article id="opcion7">
                 <h3>Matricular estudiante en asignatura</h3>
-                <form action="#" method="get">
+                <form action="#" method="post">
                     <label for="nombreEstudianteMatricular">Nombre del estudiante: </label>
                     <input type="text" id="nombreEstudianteMatricular" required><br>
                     <label for="nombreAsignaturaMatricular">Nombre de la asignatura: </label>
                     <input type="text" id="nombreAsignaturaMatricular" required><br>
                     <button id="submit7" type="submit">Matricular</button>
                 </form>
+                <article id="salida7"></article>
             </article>
         </section>
 
@@ -115,7 +119,7 @@
             <button id="bot8">Desmatricular estudiante de asignatura</button>
             <article id="opcion8">
                 <h3>Desmatricular estudiante de asignatura</h3>
-                <form action="#" method="get">
+                <form action="#" method="post">
                     <label for="nombreEstudianteDesmatricular">Nombre del estudiante: </label>
                     <input type="text" id="nombreEstudianteDesmatricular" required><br>
                     <label for="nombreAsignaturaDesmatricular">Nombre de la asignatura: </label>
@@ -130,7 +134,7 @@
             <button id="bot9">Calificar a un estudiante</button>
             <article id="opcion9">
                 <h3>Calificar a un estudiante en una asignatura</h3>
-                <form action="#" method="get">
+                <form action="#" method="post">
                     <label for="nombreEstudianteCal">Nombre del estudiante: </label>
                     <input type="text" id="nombreEstudianteCal" required><br>
                     <label for="nombreAsignaturaCal">Nombre de la asignatura: </label>
@@ -139,7 +143,9 @@
                     <input type="number" id="nota" required min="0" max="10"><br>
                     <button id="submit9" type="submit">Calificar</button>
                 </form>
-                <article id="salida9"></article>
+                <article id="salida9">
+                    <ul id="listaCalificaciones"></ul>
+                </article>
             </article>
         </section>
 
@@ -147,7 +153,7 @@
             <button id="bot10">Calcular promedio de un estudiante</button>
             <article id="opcion10">
                 <h3>Calcular promedio de un estudiante</h3>
-                <form action="#" method="get">
+                <form action="#" method="post">
                     <label for="nombreEstudianteProm">Nombre del estudiante: </label>
                     <input type="text" id="nombreEstudianteProm" required><br>
                     <button id="submit10" type="submit">Calcular promedio</button>

@@ -1,4 +1,5 @@
 import { Asignatura } from "./Asignatura.js";
+import { actualizarListaAsignaturasUI, guardarAsignaturasEnLocalStorage } from "./script.js";
 
 /** 
 * Clase ListaAsignaturas
@@ -55,26 +56,50 @@ export class ListaAsignaturas {
     }
 
     /**
-   * Elimina una asignatura de la lista
-   * @param {Asignatura} asignatura - La asignatura a eliminar
-   * @throws {Error} Si la asignatura no se encuentra en el listado
-   */
-    eliminarAsignatura(asignatura) {
-        // Comprueba si el nombre de la asignatura es una cadena de texto
-        if (typeof asignatura.nombre !== "string") throw new Error("El nombre de la asignatura debe ser una cadena de texto");
-
-        // Encuentra la asignatura que coincide exactamente con el nombre
-        const asignaturaEncontrada = this.#listadoAsignaturas.find(a => a.nombre.toLowerCase() === asignatura.nombre.toLowerCase());
-
-        // Comprueba si la asignatura está en la lista
-        if (asignaturaEncontrada) {
-            const index = this.#listadoAsignaturas.indexOf(asignaturaEncontrada);
+ * Elimina una asignatura de la lista y actualiza localStorage.
+ * @param {string} nombre - Nombre de la asignatura a eliminar.
+ */
+    eliminarAsignatura(nombre) {
+        if (typeof nombre !== "string") throw new Error("El nombre de la asignatura debe ser una cadena de texto");
+    
+        const index = this.#listadoAsignaturas.findIndex(a => a.nombre.trim().toLowerCase() === nombre.trim().toLowerCase());
+    
+        if (index !== -1) {
             this.#listadoAsignaturas.splice(index, 1);
-            console.log("Asignatura eliminada con éxito");
+            console.log(`Asignatura '${nombre}' eliminada con éxito`);
+    
+            // Guardar cambios en LocalStorage
+            guardarAsignaturasEnLocalStorage();
+
+            // Actualizar la lista de asignaturas en la interfaz
+            actualizarListaAsignaturasUI();
         } else {
-            throw new Error("La asignatura no se encuentra en el listado");
+            throw new Error(`La asignatura '${nombre}' no se encuentra en el listado`);
         }
     }
+    
+    
+    
+    /**
+     * Añade una calificación a una asignatura.
+     * @param {Object} asignatura - Asignatura a calificar.
+     * @param {number} calificacion - Calificación entre 0 y 10.
+     */
+    calificar(asignatura, calificacion) {
+        if (!this.asignaturas.some(a => a.nombre === asignatura.nombre)) {
+            alert(`El estudiante no está matriculado en ${asignatura.nombre}`);
+            return;
+        }
+        if (calificacion < 0 || calificacion > 10) {
+            throw new Error("La calificación debe estar entre 0 y 10.");
+        }
+        let asignaturaMatriculada = this.asignaturas.find(a => a.nombre === asignatura.nombre);
+        if (!asignaturaMatriculada.calificaciones) {
+            asignaturaMatriculada.calificaciones = []; // Asegurar que calificaciones es un array
+        }
+        asignaturaMatriculada.calificaciones.push(calificacion);
+    }
+
 
     /**
    * Busca asignaturas según un patrón de texto
@@ -94,6 +119,15 @@ export class ListaAsignaturas {
         }
 
         return asignaturasEncontradas;
+    }
+
+    /**
+     * Busca una asignatura por su nombre exacto
+     * @param {string} nombre - Nombre de la asignatura a buscar
+     * @returns {Asignatura|null} La asignatura si se encuentra, de lo contrario null.
+     */
+    busquedaPorNombre(nombre) {
+        return this.#listadoAsignaturas.find(asig => asig.nombre.toLowerCase() === nombre.toLowerCase()) || null;
     }
 
     /**

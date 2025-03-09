@@ -1,5 +1,5 @@
 import { Estudiante } from "./Estudiante.js";
-
+import { guardarEstudiantesEnLocalStorage, actualizarListaEstudiantesUI } from "./script.js";
 /**
  * Clase ListaEstudiantes
  * @class ListaEstudiantes
@@ -100,39 +100,43 @@ export class ListaEstudiantes {
     }
 
     /**
-     * Elimina un estudiante de la lista.
-     * @param {Estudiante} estudiante - El estudiante a eliminar.
-     * @throws {Error} Si el estudiante no se encuentra en la lista.
-     */
-    eliminarEstudiante(estudiante) {
-        if (this.#listadoEstudiantes.includes(estudiante)) {
-            this.#listadoEstudiantes = this.#listadoEstudiantes.filter(e => e !== estudiante);
-            console.log("Estudiante eliminado con éxito");
+ * Elimina un estudiante de la lista por su nombre y actualiza localStorage.
+ * @param {string} nombre - Nombre del estudiante a eliminar.
+ */
+    eliminarEstudiante(nombre) {
+        if (typeof nombre !== "string") throw new Error("El nombre del estudiante debe ser una cadena de texto");
+    
+        const index = this.#listadoEstudiantes.findIndex(est => est.nombre.trim().toLowerCase() === nombre.trim().toLowerCase());
+    
+        if (index !== -1) {
+            this.#listadoEstudiantes.splice(index, 1);
+            console.log(`Estudiante '${nombre}' eliminado con éxito`);
+    
+            // Guardar cambios en localStorage
+            guardarEstudiantesEnLocalStorage();
+    
+            // Actualizar UI
+            actualizarListaEstudiantesUI();
         } else {
-            throw new Error("El estudiante no se encuentra en el listado");
+            throw new Error(`El estudiante '${nombre}' no se encuentra en el listado`);
         }
     }
+    
+    
+
 
     /**
-     * Busca un estudiante por nombre.
-     * @param {string} nombre - El nombre del estudiante a buscar.
-     * @returns {Estudiante[]} Lista de estudiantes que coinciden con el nombre.
-     */
+ * Busca un estudiante por nombre exacto.
+ * @param {string} nombre - Nombre del estudiante a buscar.
+ * @returns {Estudiante|null} Retorna el estudiante si se encuentra, de lo contrario null.
+ */
     busquedaPorNombre(nombre) {
-        // Comprueba si el patrón es una cadena de texto
-        if (typeof nombre !== "string") {
-            throw new Error("El patrón debe ser una cadena de texto");
-        }
-
-        // Encuentra el estudiante que coincide exactamente con el patrón
-        const estudiantesEncontrados = this.#listadoEstudiantes.filter(
-            estudiante => estudiante.nombre.toLowerCase() === nombre.toLowerCase()
-        );
-        if (estudiantesEncontrados.length === 0) {
-            throw new Error(`No se encontró ningún estudiante con el nombre: ${nombre}`);
-        }
-        return estudiantesEncontrados;
+        if (typeof nombre !== "string") throw new Error("El nombre debe ser una cadena de texto");
+    
+        return this.#listadoEstudiantes.find(estudiante => estudiante.nombre.trim().toLowerCase() === nombre.trim().toLowerCase()) || null;
     }
+    
+
 
     /**
      * Muestra la lista de estudiantes en la consola.
