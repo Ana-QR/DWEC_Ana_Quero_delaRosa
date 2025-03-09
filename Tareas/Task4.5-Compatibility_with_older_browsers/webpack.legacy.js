@@ -40,7 +40,7 @@ export default {
   plugins: [new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
         template: "index.html", // Copia automáticamente `index.html`
-        filename: "index.html",
+        filename: "../index.html", // Guarda en la raíz del proyecto
     }),
   ],
 };
