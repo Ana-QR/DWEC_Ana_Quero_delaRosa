@@ -4,7 +4,7 @@ const CompressionPlugin = require("compression-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 export default {
-    entry: "./js/Task4-5-Compatibility_with_older_browsers.js",
+    entry: "./js/index.js",
     output: {
         path: path.resolve(process.cwd(), 'compilado', process.env.modo),
         filename: "[name].js"

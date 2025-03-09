@@ -1,37 +1,40 @@
-const path = require("path");
-const { merge } = require("webpack-merge");
-const TerserPlugin = require("terser-webpack-plugin");
-const common = require("./webpack.common.js");
+import path from "path";
+import { fileURLToPath } from "url";
+import { CleanWebpackPlugin } from "clean-webpack-plugin";
 
-export default merge(common, {
-    mode: "production",
-    output: {
-        filename: "legacy.js"
-    },
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: "babel-loader",
-                    options: {
-                        presets: [
-                            ["@babel/preset-env", {
-                                targets: {
-                                    browsers: ["> 1%", "last 2 versions", "ie >= 11"]
-                                },
-                                useBuiltIns: "entry",
-                                corejs: 3
-                            }]
-                        ]
-                    }
-                }
-            }
-        ]
-    },
-    optimization: {
-        minimize: true,
-        minimizer: [new TerserPlugin()]
-    }
-});
+// Obtener __dirname en módulos ES6
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export default {
+  mode: "production",
+  entry: "./js/index.js",
+  output: {
+    filename: "bundle.legacy.js",
+    path: path.resolve(__dirname, "dist/legacy"), // Guardar en otra subcarpeta
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: [
+              [
+                "@babel/preset-env",
+                {
+                  targets: "defaults",
+                  useBuiltIns: "entry",
+                  corejs: 3,
+                },
+              ],
+            ],
+          },
+        },
+      },
+    ],
+  },
+  plugins: [new CleanWebpackPlugin()],
+};

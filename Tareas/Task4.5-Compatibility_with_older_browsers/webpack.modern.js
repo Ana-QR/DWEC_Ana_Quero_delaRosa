@@ -1,29 +1,28 @@
-const path = require("path");
-const { merge } = require("webpack-merge");
-const common = require("./webpack.common.js");
+import path from "path";
+import { fileURLToPath } from "url";
+import { CleanWebpackPlugin } from "clean-webpack-plugin";
 
-export default merge(common, {
-    output: {
-        filename: "./modern.js",
-    },
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: "babel-loader",
-                    options: {
-                        presets: [
-                            ["@babel/preset-env", {
-                                targets: {
-                                    esmodules: true
-                                }
-                            }]
-                        ]
-                    }
-                }
-            }
-        ]
-    }
-});
+// Obtener __dirname en módulos ES6
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export default {
+  mode: "production",
+  entry: "./js/index.js",
+  output: {
+    filename: "bundle.modern.js",
+    path: path.resolve(__dirname, "dist/modern"), // Guardar en una subcarpeta
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+        },
+      },
+    ],
+  },
+  plugins: [new CleanWebpackPlugin()],
+};
