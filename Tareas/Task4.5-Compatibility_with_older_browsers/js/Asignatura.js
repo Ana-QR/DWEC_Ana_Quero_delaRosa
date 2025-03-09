@@ -14,6 +14,9 @@
  * - eliminarCalificacion(calificacion): Elimina una calificación de la asignatura.
  * - toString(): Devuelve una representación en texto de la asignatura.
  */
+import { Estudiante } from "./Estudiante.js";
+
+
 export class Asignatura {
     /**
      * Nombre de la asignatura.
@@ -83,15 +86,20 @@ export class Asignatura {
             throw new Error("La calificación debe estar entre 0 y 10.");
         }
     
-        const index = this.#estudiantes.findIndex(e => e.nombre === estudiante.nombre);
-    
-        if (index !== -1) {
-            console.log(`Calificación añadida: ${calificacion} para ${estudiante.nombre} en ${this.nombre}`);
-            this.#calificaciones.push(calificacion); // Asegurar que solo se agregan números
-        } else {
-            console.log(`${estudiante.nombre} no está matriculado en ${this.nombre}`);
+        if (!this.#estudiantes.has(estudiante.nombre)) {
+            throw new Error(`${estudiante.nombre} no está matriculado en ${this.nombre}`);
         }
+    
+        console.log(`Calificación añadida: ${calificacion} para ${estudiante.nombre} en ${this.nombre}`);
+    
+        // Si el estudiante no tiene calificaciones aún, inicializar un array
+        if (!Array.isArray(this.#calificaciones)) {
+            this.#calificaciones = [];
+        }
+    
+        this.#calificaciones.push(calificacion); // Agrega correctamente la calificación
     }
+    
 
     /**
      * Elimina una calificación de la asignatura.

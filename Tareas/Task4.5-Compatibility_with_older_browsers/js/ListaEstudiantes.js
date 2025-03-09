@@ -13,6 +13,7 @@
  *   - eliminarEstudiante: Eliminar un estudiante de la lista.
  *   - busquedaPorNombre: Buscar un estudiante por nombre.
  */
+import { Estudiante } from "./Estudiante.js";
 
 export class ListaEstudiantes {
     /**

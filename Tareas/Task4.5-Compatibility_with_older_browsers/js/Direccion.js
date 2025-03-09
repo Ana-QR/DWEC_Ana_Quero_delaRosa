@@ -17,7 +17,6 @@
  *   - validarCodigoPostal(): Valida el código postal.
  *   - toString(): Devuelve una representación en texto de la dirección.
  */
-
 export class Direccion {
     /**
      * Calle de la dirección.

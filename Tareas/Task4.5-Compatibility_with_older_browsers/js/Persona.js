@@ -15,6 +15,8 @@
  *  - Getter y Setter: Nombre, edad y dirección.
  *  - toString(): Devuelve una representación en texto de la persona.
  */
+import { Direccion } from "./Direccion.js";
+
 export default class Persona {
     /** @type {string}*/
     #nombre;
@@ -33,7 +35,7 @@ export default class Persona {
      * @throws {Error} Si el nombre no contiene solo letras y espacios.
      */
     constructor(nombre, edad, direccion) {
-        if (!/^([a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+)$/.test(nombreNuevo)) {
+        if (!/^([a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+)$/.test(nombre)) {
             throw new Error("El nombre solo debe contener letras y espacios");
         }
         this.#nombre = nombre;

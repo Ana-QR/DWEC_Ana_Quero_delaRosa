@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "task4.5-compatibility_with_older_browsers",
+  "name": "index",
   "version": "1.0.0",
   "main": "./js/index.js",
   "scripts": {

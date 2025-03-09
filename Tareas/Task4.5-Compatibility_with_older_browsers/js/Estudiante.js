@@ -24,6 +24,9 @@
  *   - buscarAsignaturas: Busca asignaturas según un patrón de texto.
  *   - toString(): Devuelve una representación en texto del estudiante.
  */
+import Persona from "./Persona.js";
+import { Direccion } from "./Direccion.js";
+
 export class Estudiante extends Persona {
     /**
      * ID único del estudiante, generado automáticamente.
@@ -80,12 +83,14 @@ export class Estudiante extends Persona {
         for (let asignatura of asignaturas) {
             if (this.#asignaturas.find(asig => asig.nombre === asignatura.nombre) === undefined) {
                 this.#asignaturas.push(asignatura);
-                console.log(`Matriculación de ${asignatura.nombre} realizada el ${new Date()}`);
+                asignatura.estudiantes.set(this.nombre, this); // ✅ Registrar matrícula en Asignatura.js
+                console.log(`Matriculación de ${this.nombre} en ${asignatura.nombre} realizada el ${new Date()}`);
             } else {
-                console.log(`El estudiante ya está matriculado en ${asignatura.nombre}`);
+                console.log(`El estudiante ${this.nombre} ya está matriculado en ${asignatura.nombre}`);
             }
         }
     }
+    
 
     /**
      * Desmatricula al estudiante de una o más asignaturas.

@@ -13,6 +13,8 @@
 *   - eliminarAsignatura: Eliminar una asignatura de la lista.
 *   - buscarAsignaturas: Buscar asignaturas según un patrón de texto.
 */
+import { Asignatura } from "./Asignatura.js";
+
 
 export class ListaAsignaturas {
     #listadoAsignaturas;
