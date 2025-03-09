@@ -42,7 +42,7 @@ export default {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: "index.html",
-      filename: "index.html" // Se guarda dentro de `dist/legacy/`
+      filename: "../index.html" // Se guarda dentro de `dist/legacy/`
     })
   ]
 };
