@@ -5,8 +5,11 @@
   "main": "./js/index.js",
   "scripts": {
     "build:modern": "webpack --config webpack.modern.js",
-    "build:legacy": "webpack --config webpack.legacy.js"
-    
+    "build:legacy": "webpack --config webpack.legacy.js",
+    "des": "cross-env modo=development run-s build:legacy build:modern",
+    "prod": "run-s build:legacy build:modern",
+    "clean:comp": "rimraf compilado",
+    "start": "run-s clean:comp des prod"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +22,10 @@
     "clean-webpack-plugin": "^4.0.0",
     "compression-webpack-plugin": "^11.1.0",
     "core-js": "^3.41.0",
+    "cross-env": "^7.0.3",
+    "cross-env-shell": "^7.0.3",
+    "html-webpack-plugin": "^5.6.3",
+    "npm-run-all": "^4.1.5",
     "terser-webpack-plugin": "^5.3.11",
     "webpack": "^5.98.0",
     "webpack-cli": "^6.0.1",
