@@ -12,7 +12,7 @@ export default {
   entry: "./js/index.js",
   output: {
     filename: "bundle.legacy.js",
-    path: path.resolve(__dirname, "dist/legacy"), // Guardar en otra subcarpeta
+    path: path.resolve(__dirname, "dist/legacy"), // Guardar en la carpeta correcta
   },
   module: {
     rules: [
@@ -26,21 +26,24 @@ export default {
               [
                 "@babel/preset-env",
                 {
-                  targets: "defaults",
+                  targets: {
+                    browsers: ["> 0.2%", "not dead", "ie 11", "firefox 43"]
+                  },
                   useBuiltIns: "entry",
-                  corejs: 3,
-                },
-              ],
-            ],
-          },
-        },
-      },
-    ],
+                  corejs: 3
+                }
+              ]
+            ]
+          }
+        }
+      }
+    ]
   },
-  plugins: [new CleanWebpackPlugin(),
+  plugins: [
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-        template: "index.html", // Copia automáticamente `index.html`
-        filename: "../index.html", // Guarda en la raíz del proyecto
-    }),
-  ],
+      template: "index.html", // Copia automáticamente `index.html`
+      filename: "index.html" // Se guarda dentro de `dist/legacy/`
+    })
+  ]
 };

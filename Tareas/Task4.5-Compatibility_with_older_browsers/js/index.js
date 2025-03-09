@@ -2,6 +2,9 @@
  * Hecho por: Ana Quero de la Rosa
 */
 
+import "core-js/stable/index.js";
+import "regenerator-runtime/runtime.js";
+
 // ************* IMPORTACIÓN DE FICHEROS ******************
 import { Estudiante } from "./Estudiante.js";
 import { Asignatura } from "./Asignatura.js";
