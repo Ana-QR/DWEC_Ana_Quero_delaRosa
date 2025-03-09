@@ -20,7 +20,7 @@ export default {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: "index.html", // Usa el `index.html` original
-      filename: "../index.html", // Guarda en la raíz del proyecto
+      filename: "index.html", 
     }),
   ],
 };

@@ -3,7 +3,6 @@ import { fileURLToPath } from "url";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 
-// Obtener __dirname en módulos ES6
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -42,7 +41,7 @@ export default {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      template: "index.html", // Copia automáticamente `index.html`
+      template: "index.html",
       filename: "index.html" // Se guarda dentro de `dist/legacy/`
     })
   ]
