@@ -1,15 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="module" src="./dist/modern/bundle.modern.js"></script>
-    <script nomodule src="./dist/legacy/bundle.legacy.js"></script>
+    <title>Compatibilidad con Navegadores Antiguos</title>
+    
+    <!-- Favicon para evitar errores 404 -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
 
-    <title>Proyecto Gestión de Estudiantes y Asignaturas</title>
+    <script>
+        // Detectar si el navegador soporta ES6 (módulos)
+        (function() {
+            var supportsES6 = function() {
+                try {
+                    new Function("(a = 0) => a");
+                    return true;
+                } catch (err) {
+                    return false;
+                }
+            };
+
+            if (supportsES6()) {
+                var script = document.createElement("script");
+                script.type = "module";
+                script.src = "./dist/modern/bundle.modern.js";
+                document.head.appendChild(script);
+            } else {
+                var script = document.createElement("script");
+                script.src = "./dist/legacy/bundle.legacy.js";
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
 </head>
 <body>
-    <h1>Abrir terminal para ejecutar el sistema de gestión</h1>
+
+    <h1>Prueba de Compatibilidad con Navegadores Antiguos</h1>
+    <p>Si ves este mensaje en un navegador antiguo, debería estar cargando la versión correcta del código.</p>
+
 </body>
 </html>
