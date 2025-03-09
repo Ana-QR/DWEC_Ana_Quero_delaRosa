@@ -59,48 +59,135 @@ npm install --save-dev webpack webpack-cli webpack-merge @babel/core @babel/pres
 
 ## Configuración de Webpack
 
-### `webpack.comun.js`
+### `webpack.common.js`
 
 ```javascript
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import path from "path";
+const CompressionPlugin = require("compression-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+
 export default {
-  entry: './js/main.js',
-  output: {
-    path: path.resolve(process.cwd(), 'compilado', process.env.modo),
-  },
-  mode: process.env.modo,
-  plugins: [
-    new CopyWebpackPlugin({
-        patterns: [{ from: './index.html', to: '.' }],
-    }),
-  ],
+    entry: "./js/index.js",
+    output: {
+        path: path.resolve(process.cwd(), 'compilado', process.env.modo),
+        filename: "[name].js"
+    },
+    mode: process.env.modo,
+
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader"
+                }
+            }
+        ]
+    },
+    plugins: [
+        new CompressionPlugin({
+            algorithm: "gzip",
+            test: /\.(js|css|html)$/,
+        }),
+        new CopyWebpackPlugin({
+            patterns: [
+                { from: './index.html', to: '.' }, 
+            ],
+        }),
+        new CleanWebpackPlugin({
+            cleanOnceBeforeBuildPatterns: ['**/*', '!index.html']
+        })
+    ],
 };
 ```
 
-### `webpack.moderno.js`
+### `webpack.modern.js`
 
 ```javascript
-import { merge } from 'webpack-merge';  
-import comun from './webpack.comun.js';
+import path from "path";
+import { fileURLToPath } from "url";
+import { CleanWebpackPlugin } from "clean-webpack-plugin";
+import HtmlWebpackPlugin from "html-webpack-plugin";
 
-export default merge(comun, {
-    output: { filename: 'bundle.moderno.js' },
-});
+// Obtener __dirname en módulos ES6
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
+
+export default {
+  mode: "production",
+  entry: "./js/index.js",
+  output: {
+    filename: "bundle.modern.js",
+    path: path.resolve(__dirname, "dist/modern"),
+  },
+  plugins: [
+    new CleanWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      template: "index.html", // Usa el `index.html` original
+      filename: "../index.html", 
+    }),
+  ],
+};
+
+
 ```
 
-### `webpack.antiguo.js`
+### `webpack.legacy.js`
 
 ```javascript
-import { merge } from 'webpack-merge';
-import common from './webpack.comun.js';
+import path from "path";
+import { fileURLToPath } from "url";
+import { CleanWebpackPlugin } from "clean-webpack-plugin";
+import HtmlWebpackPlugin from "html-webpack-plugin";
 
-export default merge(common, {
-    output: { filename: 'bundle.antiguo.js' },
-    module: {
-        rules: [
-            { test: /\.js$/, exclude: /node_modules/, use: { loader: 'babel-loader' } }
-        ],
-    },
-});
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export default {
+  mode: "production",
+  entry: "./js/index.js",
+  output: {
+    filename: "bundle.legacy.js",
+    path: path.resolve(__dirname, "dist/legacy"), // Guardar en la carpeta correcta
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: [
+              [
+                "@babel/preset-env",
+                {
+                  targets: {
+                    browsers: ["> 0.2%", "not dead", "ie 11", "firefox 43"]
+                  },
+                  useBuiltIns: "entry",
+                  corejs: 3
+                }
+              ]
+            ]
+          }
+        }
+      }
+    ]
+  },
+  plugins: [
+    new CleanWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      template: "index.html",
+      filename: "../index.html" // Se guarda dentro de `dist/legacy/`
+    })
+  ]
+};
+
 ```
 
 ## Configuración de Babel
@@ -108,18 +195,23 @@ export default merge(common, {
 Se crea el archivo `babel.config.js` con la siguiente configuración:
 
 ```javascript
-export default {
-    presets: [
-      [
-        '@babel/preset-env',
-        {
-          targets: '> 0.25%, not dead',
-          useBuiltIns: 'usage',        
-          corejs: 3                    
-        }
-      ]
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": "> 0.25%, not dead",
+        "useBuiltIns": "usage",
+        "corejs": 3
+      }
     ]
-};
+  ],
+  
+  "plugins": [
+    "@babel/plugin-proposal-private-methods",
+    "@babel/plugin-proposal-class-properties"
+  ]
+}
 ```
 
 ## Configuración del HTML
@@ -127,18 +219,18 @@ export default {
 Para asegurar la compatibilidad, el `index.html` debe incluir:
 
 ```html
-<script defer type="module" src="bundle.moderno.js"></script>
-<script defer src="bundle.antiguo.js"></script>
+<script type="module" src="./dist/modern/bundle.modern.js"></script>
+<script nomodule src="./dist/legacy/bundle.legacy.js"></script>
 ```
 
 ## Creación de Scripts en `package.json`
 
 ```json
 "scripts": {
-    "antiguo": "cross-env-shell webpack --config webpack.antiguo.js --mode $modo",
-    "moderno": "cross-env-shell webpack --config webpack.moderno.js --mode $modo",
-    "des": "cross-env-shell modo=development run-s antiguo moderno",
-    "prod": "cross-env-shell modo=production run-s antiguo moderno",
+    "build:modern": "webpack --config webpack.modern.js",
+    "build:legacy": "webpack --config webpack.legacy.js",
+    "des": "cross-env modo=development run-s build:legacy build:modern",
+    "prod": "run-s build:legacy build:modern",
     "clean:comp": "rimraf compilado",
     "start": "run-s clean:comp des prod"
 }
