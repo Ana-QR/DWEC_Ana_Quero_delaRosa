@@ -7,31 +7,8 @@
     
     <!-- Favicon para evitar errores 404 -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-
-    <script>
-        // Detectar si el navegador soporta ES6 (módulos)
-        (function() {
-            var supportsES6 = function() {
-                try {
-                    new Function("(a = 0) => a");
-                    return true;
-                } catch (err) {
-                    return false;
-                }
-            };
-
-            if (supportsES6()) {
-                var script = document.createElement("script");
-                script.type = "module";
-                script.src = "./dist/modern/bundle.modern.js";
-                document.head.appendChild(script);
-            } else {
-                var script = document.createElement("script");
-                script.src = "./dist/legacy/bundle.legacy.js";
-                document.head.appendChild(script);
-            }
-        })();
-    </script>
+    <script type="module" src="./dist/modern/bundle.modern.js"></script>
+    <script nomodule src="./dist/legacy/bundle.legacy.js"></script>
 </head>
 <body>
 

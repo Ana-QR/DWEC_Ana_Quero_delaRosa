@@ -1,13 +1,13 @@
-# Proyecto de Organización del Código
+# Polyfilling y Transpilación en SGAEA
 
 ## Descripción del Proyecto
 
-El objetivo de este proyecto es aprender a organizar el código JavaScript de manera efectiva, asegurando su funcionamiento en navegadores más antiguos. Se utiliza Webpack para la gestión de módulos y transpilación con Babel, lo que mejora la compatibilidad entre versiones modernas y antiguas de los navegadores.
+Este proyecto tiene como objetivo implementar, configurar y verificar el uso de Node.js, Webpack y Babel para realizar polyfilling y transpilación del código del Sistema de Gestión Académica de Estudiantes y Asignaturas (SGAEA). Con esta configuración, se garantiza que el código pueda ejecutarse tanto en navegadores modernos como en versiones antiguas.
 
 ## Estructura del Proyecto
 
 ```
-/Task4-5-Compatibility_with_older_browsers
+/Task4.5-Compatibility_with_older_browsers
 │
 ├── /js
 │   ├── Asignatura.js
@@ -16,167 +16,173 @@ El objetivo de este proyecto es aprender a organizar el código JavaScript de ma
 │   ├── ListaAsignaturas.js
 │   ├── ListaEstudiantes.js
 │   ├── Persona.js
-│   └── Task4-5-Compatibility_with_older_browsers.js
+│   └── index.js
 ├── .babelrc
 ├── .gitignore
 ├── package-lock.json
 ├── package.json
 ├── webpack.common.js
 ├── webpack.legacy.js
-└── webpack.modern.js
+├── webpack.modern.js
+└── index.html
 ```
 
 ## Configuración del Entorno
 
-1. Instalar [Node.js](https://nodejs.org/) en su versión recomendada.
-2. Clonar este repositorio en tu máquina local usando el siguiente comando:
-    ```sh
-    git clone <url-del-repositorio>
-    ```
-3. Navegar a la carpeta del proyecto y ejecutar `npm install` para instalar todas las dependencias necesarias.
-4. Instalar Webpack y Webpack CLI:
-    ```sh
-    npm install --save-dev webpack webpack-cli
-    ```
-5. Instalar Babel y sus complementos para la transpilación de código:
-    ```sh
-    npm install --save-dev @babel/core @babel/preset-env babel-loader
-    ```
-6. Configurar Webpack y Babel mediante los archivos `webpack.common.js`, `webpack.legacy.js`, `webpack.modern.js` y `.babelrc`.
+### 1. Instalación de Node.js y Creación del Proyecto
 
-## Scripts
+Descargar e instalar [Node.js](https://nodejs.org/). Una vez instalado, inicializar el proyecto ejecutando:
 
-- `npm run build:modern`: Compila el código para navegadores modernos.
-- `npm run build:legacy`: Compila el código para navegadores antiguos.
-- `npm start`: Inicia un servidor de desarrollo.
+```sh
+npm init -y
+```
+
+### 2. Instalación de Dependencias
+
+Se instalan los paquetes necesarios para la transpilación y compatibilidad:
+
+```sh
+npm install --save-dev webpack webpack-cli webpack-merge @babel/core @babel/preset-env babel-loader core-js regenerator-runtime copy-webpack-plugin cross-env html-webpack-plugin
+```
+
+**Explicación de los paquetes:**
+
+- `webpack`: Genera bundles de JavaScript.
+- `webpack-cli`: Permite ejecutar Webpack desde la terminal.
+- `webpack-merge`: Facilita la combinación de configuraciones de Webpack.
+- `@babel/core` y `@babel/preset-env`: Configuran Babel para transpilación.
+- `babel-loader`: Integra Babel con Webpack.
+- `core-js`: Aporta polyfills.
+- `regenerator-runtime`: Provee polyfills para funciones asíncronas.
+- `copy-webpack-plugin`: Copia archivos estáticos.
+- `html-webpack-plugin`: Genera archivos HTML.
 
 ## Configuración de Webpack
 
-El proyecto utiliza tres configuraciones de Webpack para manejar diferentes entornos y compatibilidades:
-
-1. **webpack.common.js**: Contiene la configuración común que se comparte entre las configuraciones modernas y heredadas.
-2. **webpack.legacy.js**: Configuración específica para navegadores más antiguos.
-3. **webpack.modern.js**: Configuración específica para navegadores modernos.
-
-### webpack.common.js
+### `webpack.comun.js`
 
 ```javascript
-const path = require('path');
-
-module.exports = {
-    entry: './js/Task4-5-Compatibility_with_older_browsers.js',
-    output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist')
-    },
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader'
-                }
-            }
-        ]
-    }
+export default {
+  entry: './js/main.js',
+  output: {
+    path: path.resolve(process.cwd(), 'compilado', process.env.modo),
+  },
+  mode: process.env.modo,
+  plugins: [
+    new CopyWebpackPlugin({
+        patterns: [{ from: './index.html', to: '.' }],
+    }),
+  ],
 };
 ```
 
-### webpack.legacy.js
+### `webpack.moderno.js`
 
 ```javascript
-const { merge } = require('webpack-merge');
-const common = require('./webpack.common.js');
+import { merge } from 'webpack-merge';  
+import comun from './webpack.comun.js';
 
-module.exports = merge(common, {
-    mode: 'production',
-    target: ['web', 'es5'],
-    output: {
-        filename: 'bundle.legacy.js'
-    }
+export default merge(comun, {
+    output: { filename: 'bundle.moderno.js' },
 });
 ```
 
-### webpack.modern.js
+### `webpack.antiguo.js`
 
 ```javascript
-const { merge } = require('webpack-merge');
-const common = require('./webpack.common.js');
+import { merge } from 'webpack-merge';
+import common from './webpack.comun.js';
 
-module.exports = merge(common, {
-    mode: 'production',
-    target: 'web',
-    output: {
-        filename: 'bundle.modern.js'
-    }
+export default merge(common, {
+    output: { filename: 'bundle.antiguo.js' },
+    module: {
+        rules: [
+            { test: /\.js$/, exclude: /node_modules/, use: { loader: 'babel-loader' } }
+        ],
+    },
 });
 ```
 
-## Uso de Babel
+## Configuración de Babel
 
-Babel se utiliza para transpirar el código JavaScript moderno a una versión compatible con navegadores más antiguos. La configuración de Babel se encuentra en el archivo `.babelrc`:
+Se crea el archivo `babel.config.js` con la siguiente configuración:
+
+```javascript
+export default {
+    presets: [
+      [
+        '@babel/preset-env',
+        {
+          targets: '> 0.25%, not dead',
+          useBuiltIns: 'usage',        
+          corejs: 3                    
+        }
+      ]
+    ]
+};
+```
+
+## Configuración del HTML
+
+Para asegurar la compatibilidad, el `index.html` debe incluir:
+
+```html
+<script defer type="module" src="bundle.moderno.js"></script>
+<script defer src="bundle.antiguo.js"></script>
+```
+
+## Creación de Scripts en `package.json`
 
 ```json
-{
-    "presets": [
-        ["@babel/preset-env", {
-            "targets": {
-                "browsers": ["last 2 versions", "ie >= 11"]
-            }
-        }]
-    ]
+"scripts": {
+    "antiguo": "cross-env-shell webpack --config webpack.antiguo.js --mode $modo",
+    "moderno": "cross-env-shell webpack --config webpack.moderno.js --mode $modo",
+    "des": "cross-env-shell modo=development run-s antiguo moderno",
+    "prod": "cross-env-shell modo=production run-s antiguo moderno",
+    "clean:comp": "rimraf compilado",
+    "start": "run-s clean:comp des prod"
 }
 ```
 
-Con esta configuración, Babel se encargará de convertir el código ES6+ a una versión compatible con los navegadores especificados.
+## Generación de Bundles y Pruebas de Compatibilidad
 
-## Subir el Código a un Proveedor de Hosting
+Para generar los bundles:
 
-1. Crear una cuenta en Netlify.
-2. Conectar el repositorio de GitHub, GitLab o Bitbucket.
-3. Configurar los ajustes de compilación:
-    - Comando de build: `npm run build:modern` o `npm run build:legacy`
-    - Directorio de publicación: `dist`
-4. Hacer clic en "Deploy site" para desplegar el sitio web.
+```sh
+npm run start
+```
 
-## Pruebas de Compatibilidad
+Esto creará la carpeta `compilado` con dos subcarpetas:
 
-1. Crear una cuenta en BrowserStack.
-2. Seleccionar la opción "Live" para probar el sitio web en tiempo real.
-3. Ingresar la URL del sitio desplegado en Netlify.
-4. Seleccionar los navegadores y dispositivos para realizar las pruebas.
-5. Comprobar que todo funcione correctamente en los diferentes navegadores.
+- `development` (modo desarrollo)
+- `production` (modo producción)
 
-## Resultados de las Pruebas
+Para verificar la compatibilidad en navegadores antiguos, se utilizó **BrowserStack** tras desplegar el proyecto en **Netlify**. Pasos:
 
-### Resultados de las Pruebas en BrowserStack
+1. Crear una cuenta en [Netlify](https://www.netlify.com/).
+2. Subir el repositorio.
+3. Configurar el directorio de publicación (`compilado/production`).
+4. Desplegar el sitio web.
 
-- **Navegador: Internet Explorer 11**
-  - Resultado: El sitio web se carga correctamente, aunque algunos estilos CSS no se aplican como se esperaba.
-  - Problemas Encontrados:
-    - Los bordes redondeados no se muestran correctamente.
-    - Algunos elementos de flexbox no se alinean bien.
+### Pruebas en Navegadores Antiguos
 
-- **Navegador: Firefox 45**
-  - Resultado: El sitio web funciona bien, pero con algunos problemas menores de tipografía.
-  - Problemas Encontrados:
-    - Las fuentes personalizadas no se cargan de forma consistente.
+Se probaron los siguientes navegadores en **BrowserStack**:
 
-- **Navegador: Safari 9**
-  - Resultado: El sitio web presenta problemas de rendimiento y algunos elementos no se muestran correctamente.
-  - Problemas Encontrados:
-    - Las animaciones CSS son lentas.
-    - Algunos íconos SVG no se renderizan correctamente.
+#### **Opera 28**
 
-- **Navegador: Chrome 49**
-  - Resultado: El sitio web funciona correctamente sin problemas significativos.
-  - Problemas Encontrados: Ninguno.
+![Opera 28](./img/opera28.png)
+
+#### **Mozilla Firefox 42**
+
+![Firefox 42](./img/firefox42.png)
 
 ## Conclusiones
 
-En general, el sitio web es compatible con la mayoría de los navegadores más antiguos, aunque se han encontrado algunos problemas menores. Estos problemas pueden solucionarse mediante ajustes adicionales en el CSS y la optimización de la transpilación con Babel.
+- El sistema es compatible con navegadores antiguos y modernos.
+- La configuración de Webpack y Babel permite la correcta transpilación.
+- Algunos navegadores antiguos muestran problemas menores en estilos CSS.
 
 ## Autor
 
 Ana Quero de la Rosa
+
